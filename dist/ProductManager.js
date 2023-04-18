@@ -12,13 +12,12 @@ class ProductManager {
             const parsedData = JSON.parse(data);
             this.products = parsedData.products;
             this.currentId = parsedData.lastId;
-            console.log(this.currentId);
         }
         catch (error) {
             console.log("Error loading data!");
             console.log("Creating new data file...");
             try {
-                await fs.promises.writeFile(this.path, JSON.stringify({ lastId: 0, products: [] }, null, 2), 'utf-8');
+                await fs.promises.writeFile(this.path, JSON.stringify({ lastId: 0, products: [] }, null, 2), "utf-8");
                 console.log("Data file created");
             }
             catch (error) {
@@ -28,7 +27,7 @@ class ProductManager {
     }
     async saveData() {
         try {
-            await fs.promises.writeFile(this.path, JSON.stringify({ lastId: this.currentId, products: this.products }, null, 2), 'utf-8');
+            await fs.promises.writeFile(this.path, JSON.stringify({ lastId: this.currentId, products: this.products }, null, 2), "utf-8");
         }
         catch (error) {
             console.log("Error saving data!");
@@ -37,8 +36,7 @@ class ProductManager {
     async addProduct(product) {
         // Check if product already exists
         if (this.products.some((item) => item.code === product.code)) {
-            console.log("Product already exists");
-            return;
+            return "Product already exists";
         }
         // Check if product has all required properties
         if (!product.title ||
@@ -47,20 +45,52 @@ class ProductManager {
             !product.thumbnail ||
             !product.code ||
             !product.stock) {
-            console.log("Product is missing required properties");
-            return;
+            return "Product is missing required properties";
         }
         // Else, add product
         product = { id: ++this.currentId, ...product };
         this.products.push(product);
         await this.saveData();
+        return "Product added successfully";
     }
-    getProductById(id) {
-        // Check if product exists
+    async getProductById(id) {
+        // Get products file data or create new one if it doesn't exist.
+        await this.loadData();
+        // Return product if exists, otherwise return error.
         return this.products.find((product) => product.id === id) ?? "Not Found";
     }
-    getProducts() {
+    async getProducts() {
+        // Get products file data or create new one if it doesn't exist.
+        await this.loadData();
+        // Return products if exists, otherwise return error.
         return this.products.length > 0 ? this.products : "No products";
+    }
+    // Update one or more properties of a product id
+    async updateProduct(id, product) {
+        // Get products file data or create new one if it doesn't exist.
+        await this.loadData();
+        // Check if product exists
+        const productIndex = this.products.findIndex((product) => product.id === id);
+        if (productIndex === -1) {
+            return "Product not found";
+        }
+        // Else, update product and secure id property is not modified
+        this.products[productIndex] = { ...this.products[productIndex], ...product, id: this.products[productIndex].id };
+        await this.saveData();
+        return "Product updated successfully";
+    }
+    async deleteProduct(id) {
+        // Get products file data or create new one if it doesn't exist.
+        await this.loadData();
+        // Check if product exists
+        const productIndex = this.products.findIndex((product) => product.id === id);
+        if (productIndex === -1) {
+            return "Product not found";
+        }
+        // Else, delete product
+        this.products.splice(productIndex, 1);
+        await this.saveData();
+        return "Product deleted successfully";
     }
 }
 // TESTS //
@@ -68,11 +98,9 @@ test();
 async function test() {
     // Create product manager instance
     const myProductManager = new ProductManager("data.json");
-    // Load data.json file if exists. Else, it creates a new data.json file
-    await myProductManager.loadData();
-    // Show current products
-    console.log(myProductManager.getProducts());
-    // Created product1
+    // Show current products. Should return no products first time data file was created, otherwise should return one product
+    console.log(await myProductManager.getProducts());
+    // Create product1
     const product1 = {
         title: "producto prueba",
         description: "Este es un producto prueba 1",
@@ -81,41 +109,30 @@ async function test() {
         code: "abc123",
         stock: 25,
     };
-    // Add product and await to save changes in data file.
-    await myProductManager.addProduct(product1);
-    // Show current products
-    console.log(myProductManager.getProducts());
-    // Check product by ID
-    console.log(myProductManager.getProductById(0));
+    // Add product and await to save changes in data file. Second time should return Error product already exists
+    console.log(await myProductManager.addProduct(product1));
+    // Show current products. Should return one product first time. Second time should return two products.
+    console.log(await myProductManager.getProducts());
+    // Check product by ID. Should return product1
+    console.log(await myProductManager.getProductById(1));
+    // Create product1 fields to update
+    const productOneUpdates = {
+        title: "Nombre actualizado",
+        description: "Descripción actualizada",
+    };
+    // Update product1
+    console.log(await myProductManager.updateProduct(1, productOneUpdates));
+    // Create product2. First time id should be 2, after that should be always 3.
     const product2 = {
         title: "producto prueba 2",
         description: "Este es un producto prueba 2",
         price: 200,
         thumbnail: "Sin imagen",
-        code: "abc321",
+        code: "abc1234",
         stock: 25,
     };
-    myProductManager.addProduct(product2);
-    console.log(myProductManager.getProducts());
-    console.log(myProductManager.getProductById(1));
+    // Add product2 and await to save changes in data file. Second time, should return Error product already exists
+    console.log(await myProductManager.addProduct(product2));
+    // Remove product2 first time. Second time should return Error product not found
+    console.log(await myProductManager.deleteProduct(2));
 }
-// Create product manager
-// const myProductManager = new ProductManager("data.json");
-// Show current products. Should be empty
-// console.log(myProductManager.getProducts());
-// Add product
-// myProductManager.addProduct(product1);
-// Show current products. Should have one product
-// console.log(myProductManager.getProducts());
-// Add product again. Should show error message
-// myProductManager.addProduct(product1);
-// Get product by id. Should return product1
-// console.log(myProductManager.getProductById(0));
-// Get product by unexisting id. Should return error message
-// console.log(myProductManager.getProductById(1));
-// Add product 2
-// myProductManager.addProduct(product2);
-// Show current products. Should have two products
-// console.log(myProductManager.getProducts());
-// Get product by previously unexisting id. Now should return product2
-// console.log(myProductManager.getProductById(1));
