@@ -1,0 +1,23 @@
+{
+  "lastId": 2,
+  "products": [
+    {
+      "id": 1,
+      "title": "producto prueba",
+      "description": "Este es un producto prueba 1",
+      "price": 200,
+      "thumbnail": "Sin imagen",
+      "code": "abc123",
+      "stock": 25
+    },
+    {
+      "id": 2,
+      "title": "producto prueba 2",
+      "description": "Este es un producto prueba 2",
+      "price": 200,
+      "thumbnail": "Sin imagen",
+      "code": "abc321",
+      "stock": 25
+    }
+  ]
+}
