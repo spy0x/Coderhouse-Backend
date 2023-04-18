@@ -38,6 +38,8 @@ class ProductManager {
   }
 
   async addProduct(product) {
+    // Get products file data or create new one if it doesn't exist.
+    await this.loadData();
     // Check if product already exists
     if (this.products.some((item) => item.code === product.code)) {
       return "Product already exists";
@@ -66,6 +68,7 @@ class ProductManager {
     // Return product if exists, otherwise return error.
     return this.products.find((product) => product.id === id) ?? "Not Found";
   }
+
   async getProducts() {
     // Get products file data or create new one if it doesn't exist.
     await this.loadData();
@@ -73,7 +76,7 @@ class ProductManager {
     return this.products.length > 0 ? this.products : "No products";
   }
 
-  // Update one or more properties of a product by id
+  // Update one or more properties of a product id
   async updateProduct(id, product) {
     // Get products file data or create new one if it doesn't exist.
     await this.loadData();
@@ -87,7 +90,7 @@ class ProductManager {
     await this.saveData();
     return "Product updated successfully";
   }
-
+  
   async deleteProduct(id) {
     // Get products file data or create new one if it doesn't exist.
     await this.loadData();
@@ -102,10 +105,8 @@ class ProductManager {
     return "Product deleted successfully";
   }
 }
-
 // TESTS //
 test();
-
 async function test() {
   // Create product manager instance
   const myProductManager = new ProductManager("data.json");
@@ -142,7 +143,7 @@ async function test() {
     code: "abc1234",
     stock: 25,
   };
-  // Add product2 and await to save changes in data file. Second time, should return Error product already exists
+  // Add product2 and await to save changes in data file. Second time, should return with id 3 and third time should return Error product already exists.
   console.log(await myProductManager.addProduct(product2));
   // Remove product2 first time. Second time should return Error product not found
   console.log(await myProductManager.deleteProduct(2));

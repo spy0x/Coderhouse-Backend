@@ -54,6 +54,8 @@ class ProductManager {
   }
 
   async addProduct(product: Product) {
+    // Get products file data or create new one if it doesn't exist.
+    await this.loadData();
     // Check if product already exists
     if (this.products.some((item) => item.code === product.code)) {
       return "Product already exists";
@@ -158,7 +160,7 @@ async function test() {
     code: "abc1234",
     stock: 25,
   };
-  // Add product2 and await to save changes in data file. Second time, should return Error product already exists
+  // Add product2 and await to save changes in data file. Second time, should return with id 3 and third time should return Error product already exists.
   console.log(await myProductManager.addProduct(product2));
   // Remove product2 first time. Second time should return Error product not found
   console.log(await myProductManager.deleteProduct(2));
