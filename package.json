@@ -2,9 +2,9 @@
   "name": "coderhouse-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "ProductManager.js",
+  "main": "App.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npx tsc"
   },
   "repository": {
     "type": "git",
@@ -18,5 +18,8 @@
   "homepage": "https://github.com/spy0x/Coderhouse-Backend#readme",
   "devDependencies": {
     "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
   }
 }
