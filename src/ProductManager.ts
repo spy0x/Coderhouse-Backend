@@ -1,4 +1,4 @@
-const fs = require("fs");
+import fs from "fs";
 
 type Product = {
   readonly id?: number;

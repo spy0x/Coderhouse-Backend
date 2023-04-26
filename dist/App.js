@@ -1,7 +1,7 @@
 import express from "express";
 import fs from "fs";
 const PATH = "data.json";
-const PORT = 3000;
+const PORT = 8080;
 const app = express();
 let products = [];
 StartServer();
