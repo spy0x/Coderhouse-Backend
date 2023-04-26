@@ -4,8 +4,8 @@ const PATH = "data.json";
 const PORT = 8080;
 const app = express();
 let products = [];
-StartServer();
-async function StartServer() {
+startServer();
+async function startServer() {
     await loadData();
     app.use(express.urlencoded({ extended: true }));
     app.get("/products", (req, res) => {

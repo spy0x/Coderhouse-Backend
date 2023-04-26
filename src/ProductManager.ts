@@ -1,17 +1,6 @@
 import fs from "fs";
 
-type Product = {
-  readonly id?: number;
-  title: string;
-  description: string;
-  price: number;
-  thumbnail: string;
-  code: string;
-  stock: number;
-};
-
 type ProductKeys = Partial<Omit<Product, "id">>;
-
 class ProductManager {
   private path: string;
   private products: Product[];

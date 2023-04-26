@@ -6,9 +6,9 @@ const PORT = 8080;
 const app = express();
 let products: Product[] = [];
 
-StartServer();
+startServer();
 
-async function StartServer() {
+async function startServer() {
   await loadData();
   app.use(express.urlencoded({ extended: true }));
   app.get("/products", (req, res) => {
