@@ -1,5 +1,5 @@
 import fs from "fs";
-class ProductManager {
+export default class ProductManager {
     constructor(path) {
         this.path = path;
         this.products = [];
@@ -95,7 +95,9 @@ class ProductManager {
     }
 }
 // TESTS //
-test();
+if (require.main === module) {
+    test();
+}
 async function test() {
     // Create product manager instance
     const myProductManager = new ProductManager("data.json");

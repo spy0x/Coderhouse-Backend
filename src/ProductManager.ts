@@ -1,7 +1,7 @@
 import fs from "fs";
 
 type ProductKeys = Partial<Omit<Product, "id">>;
-class ProductManager {
+export default class ProductManager {
   private path: string;
   private products: Product[];
   private currentId: number;
@@ -111,7 +111,9 @@ class ProductManager {
 }
 
 // TESTS //
-test();
+if (require.main === module) {
+  test();
+}
 
 async function test() {
   // Create product manager instance
