@@ -3,7 +3,9 @@ type Product = {
     title: string;
     description: string;
     price: number;
-    thumbnail: string;
+    thumbnail?: string[];
     code: string;
     stock: number;
+    category: string;
+    status?: boolean;
   };

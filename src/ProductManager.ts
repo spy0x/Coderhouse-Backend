@@ -55,13 +55,21 @@ export default class ProductManager {
       !product.title ||
       !product.description ||
       !product.price ||
-      !product.thumbnail ||
       !product.code ||
+      !product.category ||
       !product.stock
     ) {
       return "Product is missing required properties";
     }
-    // Else, add product
+    // If no thumbnail, set default value to empty array
+    if (!product.thumbnail) {
+      product.thumbnail = [];
+    }
+    // if no status, set default value to true
+    if (!product.status) {
+      product.status = true;
+    }
+    // Add product
     product = { id: ++this.currentId, ...product };
     this.products.push(product);
     await this.saveData();
@@ -125,9 +133,10 @@ async function test() {
     title: "producto prueba",
     description: "Este es un producto prueba 1",
     price: 200,
-    thumbnail: "Sin imagen",
+    thumbnail: ["Sin imagen"],
     code: "abc123",
     stock: 25,
+    category: "Pruebas"
   };
   // Add product and await to save changes in data file. Second time should return Error product already exists
   console.log(await myProductManager.addProduct(product1));
@@ -147,9 +156,10 @@ async function test() {
     title: "producto prueba 2",
     description: "Este es un producto prueba 2",
     price: 200,
-    thumbnail: "Sin imagen",
+    thumbnail: ["Sin imagen"],
     code: "abc1234",
     stock: 25,
+    category: "Pruebas 2"
   };
   // Add product2 and await to save changes in data file. Second time, should return with id 3 and third time should return Error product already exists.
   console.log(await myProductManager.addProduct(product2));

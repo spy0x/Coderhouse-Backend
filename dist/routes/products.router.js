@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { products } from "../App.js";
+import { products, productManager } from "../App.js";
 const productsRouter = Router();
 productsRouter.get("/", (req, res) => {
     const countLimit = req.query.limit;
@@ -23,7 +23,7 @@ productsRouter.get("/", (req, res) => {
         }
     }
     else {
-        return res.json(products);
+        return products.length ? res.json(products) : res.status(404).json({ status: "error", message: "No products found." });
     }
 });
 productsRouter.get("/:pid", (req, res) => {
@@ -36,6 +36,29 @@ productsRouter.get("/:pid", (req, res) => {
     }
     const product = products.find((item) => item.id === id);
     if (product) {
+        return res.json(product);
+    }
+    else {
+        return res.status(404).json({ status: "error", message: "Product not found" });
+    }
+});
+//add a product
+productsRouter.post("/", (req, res) => {
+    const product = req.body;
+    productManager.addProduct(product);
+});
+// delete a product
+productsRouter.delete("/:pid", (req, res) => {
+    const id = parseInt(req.params.pid);
+    if (isNaN(id)) {
+        return res.status(400).json({ status: "error", message: "Invalid id" });
+    }
+    if (id < 0) {
+        return res.status(400).json({ status: "error", message: "Id must be greater than 0" });
+    }
+    const product = products.find((item) => item.id === id);
+    if (product) {
+        productManager.deleteProduct(id);
         return res.json(product);
     }
     else {
