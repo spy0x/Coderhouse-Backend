@@ -3,15 +3,16 @@ import ProductManager from "./ProductManager.js";
 
 const PORT = 8080;
 const app = express();
+const router = express.Router();
 const productManager = new ProductManager("data.json");
 
 startServer();
 
 async function startServer() {
   const products = await productManager.getProducts();
-  
-  app.use(express.urlencoded({ extended: true }));
+  app.use('/static', express.static("public"));
   app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
   app.get("/products", (req, res) => {
     const countLimit = req.query.limit;
 
