@@ -6,8 +6,8 @@ import productsRouter from "./routes/products.router.js";
 
 const PORT = 8080;
 const app = express();
-const productManager = new ProductManager("data.json");
-export let products: Product[] | "No products" = [];
+export const productManager = new ProductManager("data.json");
+export let products: Product[];
 
 startServer();
 

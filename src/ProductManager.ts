@@ -23,6 +23,7 @@ export default class ProductManager {
       console.log("Creating new data file...");
       try {
         await fs.promises.writeFile(this.path, JSON.stringify({ lastId: 0, products: [] }, null, 2), "utf-8");
+        await this.loadData();
         console.log("Data file created");
       } catch (error) {
         console.log("Error creating data file!");
@@ -64,7 +65,7 @@ export default class ProductManager {
     product = { id: ++this.currentId, ...product };
     this.products.push(product);
     await this.saveData();
-    return "Product added successfully"
+    return "Product added successfully";
   }
 
   async getProductById(id: number) {
@@ -78,7 +79,7 @@ export default class ProductManager {
     // Get products file data or create new one if it doesn't exist.
     await this.loadData();
     // Return products if exists, otherwise return error.
-    return this.products.length > 0 ? this.products : "No products";
+    return this.products;
   }
 
   // Update one or more properties of a product id
@@ -112,8 +113,7 @@ export default class ProductManager {
 
 // TESTS //
 
-  // test();
-
+// test();
 
 async function test() {
   // Create product manager instance
