@@ -1,40 +1,27 @@
 import express from "express";
 import ProductManager from "./ProductManager.js";
+import { uploader } from "./Utils.js";
+import cartRouter from "./routes/carts.router.js";
+import productsRouter from "./routes/products.router.js";
 
 const PORT = 8080;
 const app = express();
-const router = express.Router();
 const productManager = new ProductManager("data.json");
+export let products: Product[] | "No products" = [];
 
 startServer();
 
 async function startServer() {
-  const products = await productManager.getProducts();
+  products = await productManager.getProducts();
   app.use('/static', express.static("public"));
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
-  app.get("/products", (req, res) => {
-    const countLimit = req.query.limit;
-
-    // if countLimit exists, convert it to number, and list products with the specified limit. Else, list all products.
-    if (countLimit) {
-      const limit = parseInt(countLimit as string);
-      const result = products.slice(0, limit);
-      return res.json(result);
-    } else {
-      return res.json(products);
-    }
+  app.use("/carts", cartRouter);
+  app.use("/products", productsRouter);
+  app.get("*", (req, res, next) => {
+    res.status(404).json({status: 404, message: "Page Not found"});
   });
-  app.get("/products/:pid", (req, res) => {
-    const id = parseInt(req.params.pid);
-    let product : Product | undefined = undefined;
-    if(typeof products === "object")
-    {
-      product = products.find((item) => item.id === id);
-    }
-    const result = product ? product : "Product not found";
-    res.json(result);
-  });
+  
   app.listen(PORT, () => {
     console.log("Server http://localhost/ is running on port " + PORT);
   });

@@ -95,9 +95,7 @@ export default class ProductManager {
     }
 }
 // TESTS //
-if (require.main === module) {
-    test();
-}
+// test();
 async function test() {
     // Create product manager instance
     const myProductManager = new ProductManager("data.json");
