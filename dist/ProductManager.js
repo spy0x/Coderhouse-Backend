@@ -63,17 +63,43 @@ export default class ProductManager {
         await this.saveData();
         return "Product added successfully";
     }
-    async getProductById(id) {
-        // Get products file data or create new one if it doesn't exist.
-        await this.loadData();
-        // Return product if exists, otherwise return error.
-        return this.products.find((product) => product.id === id) ?? "Not Found";
+    async getProductById(id, res) {
+        if (isNaN(id)) {
+            return res.status(400).json({ status: "error", message: "Invalid id" });
+        }
+        if (id < 0) {
+            return res.status(400).json({ status: "error", message: "Id must be equal or greater than 0" });
+        }
+        const product = this.products.find((item) => item.id === id);
+        if (product) {
+            return res.json(product);
+        }
+        else {
+            return res.status(404).json({ status: "error", message: "Product not found" });
+        }
     }
-    async getProducts() {
-        // Get products file data or create new one if it doesn't exist.
-        await this.loadData();
-        // Return products if exists, otherwise return error.
-        return this.products;
+    async getProducts(res, countLimit) {
+        // if countLimit exists, convert it to number, and list products with the specified limit. Else, list all products.
+        if (countLimit) {
+            if (isNaN(countLimit)) {
+                return res.status(400).json({ status: "error", message: "Invalid limit" });
+            }
+            else {
+                if (countLimit < 1) {
+                    return res.status(400).json({ status: "error", message: "Limit must be greater than 0" });
+                }
+                else if (countLimit > this.products.length) {
+                    return res.status(400).json({ status: "error", message: "Limit must be less than or equal to the number of products" });
+                }
+                const result = this.products.slice(0, countLimit);
+                return res.json(result);
+            }
+        }
+        else {
+            return this.products.length
+                ? res.json(this.products)
+                : res.status(404).json({ status: "error", message: "No products found." });
+        }
     }
     // Update one or more properties of a product id
     async updateProduct(id, product) {
@@ -102,49 +128,4 @@ export default class ProductManager {
         await this.saveData();
         return "Product deleted successfully";
     }
-}
-// TESTS //
-// test();
-async function test() {
-    // Create product manager instance
-    const myProductManager = new ProductManager("data.json");
-    // Show current products. Should return no products first time data file was created, otherwise should return one product
-    console.log(await myProductManager.getProducts());
-    // Create product1
-    const product1 = {
-        title: "producto prueba",
-        description: "Este es un producto prueba 1",
-        price: 200,
-        thumbnail: ["Sin imagen"],
-        code: "abc123",
-        stock: 25,
-        category: "Pruebas"
-    };
-    // Add product and await to save changes in data file. Second time should return Error product already exists
-    console.log(await myProductManager.addProduct(product1));
-    // Show current products. Should return one product first time. Second time should return two products.
-    console.log(await myProductManager.getProducts());
-    // Check product by ID. Should return product1
-    console.log(await myProductManager.getProductById(1));
-    // Create product1 fields to update
-    const productOneUpdates = {
-        title: "Nombre actualizado",
-        description: "Descripción actualizada",
-    };
-    // Update product1
-    console.log(await myProductManager.updateProduct(1, productOneUpdates));
-    // Create product2. First time id should be 2, after that should be always 3.
-    const product2 = {
-        title: "producto prueba 2",
-        description: "Este es un producto prueba 2",
-        price: 200,
-        thumbnail: ["Sin imagen"],
-        code: "abc1234",
-        stock: 25,
-        category: "Pruebas 2"
-    };
-    // Add product2 and await to save changes in data file. Second time, should return with id 3 and third time should return Error product already exists.
-    console.log(await myProductManager.addProduct(product2));
-    // Remove product2 first time. Second time should return Error product not found
-    console.log(await myProductManager.deleteProduct(2));
 }

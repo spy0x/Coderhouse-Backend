@@ -5,10 +5,9 @@ import productsRouter from "./routes/products.router.js";
 const PORT = 8080;
 const app = express();
 export const productManager = new ProductManager("data.json");
-export let products;
 startServer();
 async function startServer() {
-    products = await productManager.getProducts();
+    await productManager.loadData();
     app.use('/static', express.static("public"));
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
