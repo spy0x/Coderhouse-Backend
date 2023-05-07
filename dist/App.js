@@ -11,8 +11,8 @@ async function startServer() {
     app.use('/static', express.static("public"));
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
-    app.use("/carts", cartRouter);
-    app.use("/products", productsRouter);
+    app.use("api/carts", cartRouter);
+    app.use("api/products", productsRouter);
     app.get("*", (req, res, next) => {
         res.status(404).json({ status: 404, message: "Page Not found" });
     });
