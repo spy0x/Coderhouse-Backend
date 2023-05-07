@@ -1,6 +1,6 @@
 import fs from "fs";
 
-type ProductKeys = Partial<Omit<Product, "id">>;
+
 export default class ProductManager {
   private path: string;
   private products: Product[];
@@ -74,7 +74,7 @@ export default class ProductManager {
     return res.json({ status: "success", message: "Product added successfully", data: product });
   }
 
-  async getProductById(id: number, res: any) {
+  getProductById(id: number, res: any) {
     if (isNaN(id)) {
       return res.status(400).json({ status: "error", message: "Invalid id" });
     }
@@ -89,7 +89,7 @@ export default class ProductManager {
     }
   }
 
-  async getProducts(res: any, countLimit: any) {
+  getProducts(res: any, countLimit: any) {
     // if countLimit exists, convert it to number, and list products with the specified limit. Else, list all products.
     if (countLimit) {
       if (isNaN(countLimit)) {
@@ -111,19 +111,18 @@ export default class ProductManager {
   }
 
   // Update one or more properties of a product id
-  async updateProduct(id: number, product: ProductKeys) {
-    // Get products file data or create new one if it doesn't exist.
-    await this.loadData();
+  async updateProduct(res: any, id: number, product: ProductKeys) {
     // Check if product exists
     const productIndex = this.products.findIndex((product) => product.id === id);
     if (productIndex === -1) {
-      return "Product not found";
+      return res.status(404).json({ status: "error", message: "Product not found" });
     }
     // Else, update product and secure id property is not modified
     this.products[productIndex] = { ...this.products[productIndex], ...product, id: this.products[productIndex].id };
     await this.saveData();
-    return "Product updated successfully";
+    return res.json({ status: "success", message: "Product updated successfully", data: this.products[productIndex] });
   }
+
   async deleteProduct(res: any, id: number) {
     // Check if product exists
     const productIndex = this.products.findIndex((product) => product.id === id);
