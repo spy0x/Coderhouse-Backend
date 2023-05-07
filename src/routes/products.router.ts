@@ -19,6 +19,10 @@ productsRouter.post("/", (req, res) => {
   productManager.addProduct(res, product);
 });
 
+productsRouter.delete("/:pid", (req, res) => {
+  const id = parseInt(req.params.pid);
+  productManager.deleteProduct(res, id);
+});
 // // delete a product
 // productsRouter.delete("/:pid", (req, res) => {
 //   const id = parseInt(req.params.pid);

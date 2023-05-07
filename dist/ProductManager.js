@@ -113,17 +113,15 @@ export default class ProductManager {
         await this.saveData();
         return "Product updated successfully";
     }
-    async deleteProduct(id) {
-        // Get products file data or create new one if it doesn't exist.
-        await this.loadData();
+    async deleteProduct(res, id) {
         // Check if product exists
         const productIndex = this.products.findIndex((product) => product.id === id);
         if (productIndex === -1) {
-            return "Product not found";
+            return res.status(404).json({ status: "error", message: "Product not found" });
         }
         // Else, delete product
-        this.products.splice(productIndex, 1);
+        const deletedProduct = this.products.splice(productIndex, 1);
         await this.saveData();
-        return "Product deleted successfully";
+        return res.json({ status: "success", message: "Product deleted successfully", data: deletedProduct });
     }
 }

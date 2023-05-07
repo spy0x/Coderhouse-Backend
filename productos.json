@@ -2,17 +2,6 @@
   "lastId": 3,
   "products": [
     {
-      "id": 1,
-      "title": "Squeeze Bottle",
-      "description": "Microscopic polyangiitis",
-      "price": "6.9",
-      "code": "abc123",
-      "stock": "71",
-      "category": "kitchen",
-      "thumbnail": [],
-      "status": true
-    },
-    {
       "id": 2,
       "title": "Sauce - Bernaise, Mix",
       "description": "Personal history of malignant neoplasm of unsp dgstv org",
