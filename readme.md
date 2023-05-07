@@ -5,7 +5,7 @@
 [DESCARGAR](https://drive.google.com/file/d/1tIjkPSiXppfhBKqVPk9caQpB4blnr5T0/view?usp=share_link "DESCARGAR")
 
 #### PARA EJECUTAR EL PROGRAMA:
-`node ./dist/App.js`
+`node ./dist/App.js` o `npm start` (nodemon ./dist/App.js)
 
 ------------
 
@@ -24,6 +24,8 @@
 > Siempre se incrementará el ID al crearse un objeto nuevo, esto gracias a la persistencia de los datos en los archivos json generados por el programa.
 
 ##### El programa se asegura de retornar un error (código 400) si se entregan IDs inválidos.
+
+> *PD2 Se instaló el package multer en el proyecto y se añadió el archivo utils.js para utilizarlo, pero actualmente no está implementado para esta entrega, lamentablemente.
 
 
 
