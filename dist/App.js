@@ -4,7 +4,7 @@ import cartRouter from "./routes/carts.router.js";
 import productsRouter from "./routes/products.router.js";
 const PORT = 8080;
 const app = express();
-export const productManager = new ProductManager("data.json");
+export const productManager = new ProductManager("productos.json");
 startServer();
 async function startServer() {
     await productManager.loadData();

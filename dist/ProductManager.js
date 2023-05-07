@@ -33,12 +33,10 @@ export default class ProductManager {
             console.log("Error saving data!");
         }
     }
-    async addProduct(product) {
-        // Get products file data or create new one if it doesn't exist.
-        await this.loadData();
+    async addProduct(res, product) {
         // Check if product already exists
         if (this.products.some((item) => item.code === product.code)) {
-            return "Product already exists";
+            return res.status(400).json({ status: "error", message: "Product already exists" });
         }
         // Check if product has all required properties
         if (!product.title ||
@@ -47,7 +45,7 @@ export default class ProductManager {
             !product.code ||
             !product.category ||
             !product.stock) {
-            return "Product is missing required properties";
+            return res.status(400).json({ status: "error", message: "Product is missing required properties" });
         }
         // If no thumbnail, set default value to empty array
         if (!product.thumbnail) {
@@ -61,7 +59,7 @@ export default class ProductManager {
         product = { id: ++this.currentId, ...product };
         this.products.push(product);
         await this.saveData();
-        return "Product added successfully";
+        return res.json({ status: "success", message: "Product added successfully", data: product });
     }
     async getProductById(id, res) {
         if (isNaN(id)) {

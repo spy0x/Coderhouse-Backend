@@ -16,7 +16,7 @@ productsRouter.get("/:pid", (req, res) => {
 //add a product
 productsRouter.post("/", (req, res) => {
   const product = req.body as Product;
-  productManager.addProduct(product);
+  productManager.addProduct(res, product);
 });
 
 // // delete a product

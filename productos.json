@@ -1,0 +1,38 @@
+{
+  "lastId": 3,
+  "products": [
+    {
+      "id": 1,
+      "title": "Squeeze Bottle",
+      "description": "Microscopic polyangiitis",
+      "price": "6.9",
+      "code": "abc123",
+      "stock": "71",
+      "category": "kitchen",
+      "thumbnail": [],
+      "status": true
+    },
+    {
+      "id": 2,
+      "title": "Sauce - Bernaise, Mix",
+      "description": "Personal history of malignant neoplasm of unsp dgstv org",
+      "price": "9.9",
+      "code": "42dac30a-882a-4ec5-98a3-a8a9111607f9",
+      "stock": "77",
+      "category": "Food",
+      "thumbnail": "http://dummyimage.com/202x100.png",
+      "status": true
+    },
+    {
+      "id": 3,
+      "title": "Creme De Menth - White",
+      "description": "Chronic venous hypertension w/o comp of bilateral low extrm",
+      "price": "3.2",
+      "code": "8fefa475-d7f4-4ac1-8f9d-6a3ead8fa475",
+      "stock": "66",
+      "category": "Food",
+      "thumbnail": "http://dummyimage.com/228x100.png",
+      "status": "true"
+    }
+  ]
+}
