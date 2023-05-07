@@ -11,3 +11,13 @@ type Product = {
 };
 
 type ProductKeys = Partial<Omit<Product, "id">>;
+
+type ProductIdOnly = {
+  productId: number;
+  quantity: number;
+}
+
+type Cart = {
+  id: number;
+  products: ProductIdOnly[];
+}
