@@ -13,11 +13,11 @@ type Product = {
 type ProductKeys = Partial<Omit<Product, "id">>;
 
 type ProductIdOnly = {
-  productId: number;
+  idProduct: number;
   quantity: number;
 }
 
 type Cart = {
-  id: number;
-  products: ProductIdOnly[];
+  idCarrito: number;
+  productos: ProductIdOnly[];
 }

@@ -134,4 +134,9 @@ export default class ProductManager {
     await this.saveData();
     return res.json({ status: "success", message: "Product deleted successfully", data: deletedProduct });
   }
+
+  productExists(id: number) {
+    return this.products.some((item) => item.id === id);
+  }
+  
 }

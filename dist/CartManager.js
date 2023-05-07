@@ -1,4 +1,5 @@
 import fs from "fs";
+import { productManager } from "./App.js";
 export default class CartManager {
     constructor(path) {
         this.path = path;
@@ -34,7 +35,7 @@ export default class CartManager {
         }
     }
     async addCart(res) {
-        this.carts.push({ id: ++this.currentId, products: [] });
+        this.carts.push({ idCarrito: ++this.currentId, productos: [] });
         await this.saveData();
         return res.json({ status: "success", message: "Cart created successfully", data: this.carts[this.carts.length - 1] });
     }
@@ -45,12 +46,35 @@ export default class CartManager {
         if (id < 0) {
             return res.status(400).json({ status: "error", message: "Id must be equal or greater than 0" });
         }
-        const cart = this.carts.find((item) => item.id === id);
+        const cart = this.carts.find((item) => item.idCarrito === id);
         if (cart) {
-            return res.json(cart.products);
+            return res.json(cart.productos);
         }
         else {
             return res.status(404).json({ status: "error", message: "Cart not found" });
         }
+    }
+    async addProductToCart(res, cartID, productID) {
+        // Check if product exists
+        if (!productManager.productExists(productID)) {
+            return res.status(404).json({ status: "error", message: "Product not found" });
+        }
+        // Check if cart exists
+        const cartIndex = this.carts.findIndex((cart) => cart.idCarrito === cartID);
+        if (cartIndex === -1) {
+            return res.status(404).json({ status: "error", message: "Cart not found" });
+        }
+        // Check if product is already in cart, add ++ to quantity
+        const productIndex = this.carts[cartIndex].productos.findIndex((product) => product.idProduct === productID);
+        if (productIndex !== -1) {
+            this.carts[cartIndex].productos[productIndex].quantity++;
+            await this.saveData();
+            return res.json({ status: "success", message: "Product updated quantity", data: this.carts[cartIndex].productos[productIndex] });
+        }
+        // Else, add product to cart
+        this.carts[cartIndex].productos.push({ idProduct: productID, quantity: 1 });
+        await this.saveData();
+        const selectedCart = this.carts[cartIndex];
+        return res.json({ status: "success", message: "Product added to cart", data: selectedCart.productos[selectedCart.productos.length - 1] });
     }
 }

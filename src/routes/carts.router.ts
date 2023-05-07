@@ -12,4 +12,10 @@ cartsRouter.get("/:cid", (req, res) => {
     const cart = cartManager.getCartProducts(res, cartID);
 });
 
+cartsRouter.post("/:cid/product/:pid", (req, res) => {
+    const cartID = parseInt(req.params.cid);
+    const productID = parseInt(req.params.pid);
+    cartManager.addProductToCart(res, cartID, productID);
+});
+
 export default cartsRouter;
