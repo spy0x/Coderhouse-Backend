@@ -2,7 +2,9 @@
 ## Coderhouse
 
 ##### Colección de REQUESTS de Postman para testear el programa:
-[DESCARGAR](https://drive.google.com/file/d/1tIjkPSiXppfhBKqVPk9caQpB4blnr5T0/view?usp=share_link "DESCARGAR")
+[DESCARGAR](https://drive.google.com/file/d/1C1sJNh0dh0x3uiReGmPRReEO3ml8sXU9/view?usp=share_link "DESCARGAR")
+##### Documentación ONLINE de Postman para testear el programa:
+[https://documenter.getpostman.com/view/19344400/2s93eYUXPz](https://documenter.getpostman.com/view/19344400/2s93eYUXPz)
 
 #### PARA EJECUTAR EL PROGRAMA:
 `node ./dist/App.js` o `npm start` (nodemon ./dist/App.js)
