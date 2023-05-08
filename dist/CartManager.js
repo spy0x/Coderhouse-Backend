@@ -48,7 +48,7 @@ export default class CartManager {
         }
         const cart = this.carts.find((item) => item.idCarrito === id);
         if (cart) {
-            return res.json(cart.productos);
+            return res.json({ status: "success", payload: cart.productos });
         }
         else {
             return res.status(404).json({ status: "error", message: "Cart not found" });

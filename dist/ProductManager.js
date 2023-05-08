@@ -70,7 +70,7 @@ export default class ProductManager {
         }
         const product = this.products.find((item) => item.id === id);
         if (product) {
-            return res.json(product);
+            return res.json({ status: "success", payload: product });
         }
         else {
             return res.status(404).json({ status: "error", message: "Product not found" });
@@ -90,12 +90,12 @@ export default class ProductManager {
                     return res.status(400).json({ status: "error", message: "Limit must be less than or equal to the number of products" });
                 }
                 const result = this.products.slice(0, countLimit);
-                return res.json(result);
+                return res.json({ status: "success", payload: result });
             }
         }
         else {
             return this.products.length
-                ? res.json(this.products)
+                ? res.json({ status: "success", payload: this.products })
                 : res.status(404).json({ status: "error", message: "No products found." });
         }
     }
