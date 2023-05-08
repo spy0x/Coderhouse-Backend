@@ -37,7 +37,7 @@ export default class CartManager {
     async addCart(res) {
         this.carts.push({ idCarrito: ++this.currentId, productos: [] });
         await this.saveData();
-        return res.json({ status: "success", message: "Cart created successfully", data: this.carts[this.carts.length - 1] });
+        return res.status(201).json({ status: "success", message: "Cart created successfully", payload: this.carts[this.carts.length - 1] });
     }
     getCartProducts(res, id) {
         if (isNaN(id)) {
@@ -69,12 +69,11 @@ export default class CartManager {
         if (productIndex !== -1) {
             this.carts[cartIndex].productos[productIndex].quantity++;
             await this.saveData();
-            return res.json({ status: "success", message: "Product updated quantity", data: this.carts[cartIndex].productos[productIndex] });
+            return res.json({ status: "success", message: "Product updated quantity", payload: this.carts[cartIndex] });
         }
         // Else, add product to cart
         this.carts[cartIndex].productos.push({ idProduct: productID, quantity: 1 });
         await this.saveData();
-        const selectedCart = this.carts[cartIndex];
-        return res.json({ status: "success", message: "Product added to cart", data: selectedCart.productos[selectedCart.productos.length - 1] });
+        return res.json({ status: "success", message: "Product added to cart", payload: this.carts[cartIndex] });
     }
 }

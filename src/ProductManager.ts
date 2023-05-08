@@ -71,7 +71,7 @@ export default class ProductManager {
     product = { id: ++this.currentId, ...product };
     this.products.push(product);
     await this.saveData();
-    return res.json({ status: "success", message: "Product added successfully", data: product });
+    return res.status(201).json({ status: "success", message: "Product added successfully", payload: product });
   }
 
   getProductById(id: number, res: any) {
@@ -120,7 +120,7 @@ export default class ProductManager {
     // Else, update product and secure id property is not modified
     this.products[productIndex] = { ...this.products[productIndex], ...product, id: this.products[productIndex].id };
     await this.saveData();
-    return res.json({ status: "success", message: "Product updated successfully", data: this.products[productIndex] });
+    return res.json({ status: "success", message: "Product updated successfully", payload: this.products[productIndex] });
   }
 
   async deleteProduct(res: any, id: number) {
@@ -132,7 +132,7 @@ export default class ProductManager {
     // Else, delete product
     const deletedProduct = this.products.splice(productIndex, 1);
     await this.saveData();
-    return res.json({ status: "success", message: "Product deleted successfully", data: deletedProduct });
+    return res.json({ status: "success", message: "Product deleted successfully", payload: deletedProduct });
   }
 
   productExists(id: number) {
