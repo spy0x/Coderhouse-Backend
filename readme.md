@@ -28,6 +28,7 @@
 ##### El programa se asegura de retornar un error (código 400) si se entregan IDs inválidos.
 
 > *PD2 Se instaló el package multer en el proyecto y se añadió el archivo utils.js para utilizarlo, pero actualmente no está implementado para esta entrega, lamentablemente.
+> *PD3 Los archivos json se generan con un nombre en español porque así aparecía en las instrucciones del entregable.
 
 
 
