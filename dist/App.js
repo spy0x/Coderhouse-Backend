@@ -11,7 +11,7 @@ startServer();
 async function startServer() {
     await productManager.loadData();
     await cartManager.loadData();
-    app.use('/static', express.static("public"));
+    app.use('/static', express.static("src/public"));
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
     app.use("/api/carts", cartsRouter);
