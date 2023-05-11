@@ -4,6 +4,7 @@ import CartManager from "./CartManager.js";
 import { uploader } from "./Utils.js";
 import cartsRouter from "./routes/carts.router.js";
 import productsRouter from "./routes/products.router.js";
+import viewsRouter from "./routes/views.router.js";
 import handlebars from "express-handlebars";
 
 const PORT = 8080;
@@ -27,13 +28,7 @@ async function startServer() {
   // SETTING ROUTES
   app.use("/api/carts", cartsRouter);
   app.use("/api/products", productsRouter);
-  app.get("*", (req, res, next) => {
-    const error = {
-      status: 'ERROR 404',
-      message: "Page Not found",
-    }
-    res.render("error", error)
-  });
+  app.use("/", viewsRouter)
   // STARTING SERVER
   app.listen(PORT, () => {
     console.log("Server http://localhost/ is running on port " + PORT);
