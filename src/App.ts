@@ -6,6 +6,7 @@ import cartsRouter from "./routes/carts.router.js";
 import productsRouter from "./routes/products.router.js";
 import viewsRouter from "./routes/views.router.js";
 import handlebars from "express-handlebars";
+import { Server } from "socket.io";
 
 const PORT = 8080;
 const app = express();
@@ -18,19 +19,27 @@ async function startServer() {
   await productManager.loadData();
   await cartManager.loadData();
   // SETTING HANDLEBARS
-  app.engine('handlebars', handlebars.engine());
-  app.set('views', 'src/views');
-  app.set('view engine', 'handlebars');
-  // SETTING MIDDLEWARES 
-  app.use('/static', express.static("src/public"));
+  app.engine("handlebars", handlebars.engine());
+  app.set("views", "src/views");
+  app.set("view engine", "handlebars");
+  // SETTING MIDDLEWARES
+  app.use("/static", express.static("src/public"));
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   // SETTING ROUTES
   app.use("/api/carts", cartsRouter);
   app.use("/api/products", productsRouter);
-  app.use("/", viewsRouter)
+  app.use("/", viewsRouter);
   // STARTING SERVER
-  app.listen(PORT, () => {
+  const httpServer = app.listen(PORT, () => {
     console.log("Server http://localhost/ is running on port " + PORT);
+  });
+  const socketServer = new Server(httpServer);
+  socketServer.on("connection", (socket) => {
+    console.log("New client connected");
+    socket.on("message", (data) => {
+      console.log(data);
+    });
+    socketServer.emit("event", "Hello from server")
   });
 }

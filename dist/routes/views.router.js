@@ -1,5 +1,8 @@
 import { Router } from "express";
 const viewsRouter = Router();
+viewsRouter.get("/", (req, res) => {
+    res.render("index");
+});
 viewsRouter.get("*", (req, res, next) => {
     const error = {
         status: 'ERROR 404',
