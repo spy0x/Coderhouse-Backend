@@ -33,10 +33,10 @@ export default class ProductManager {
             console.log("Error saving data!");
         }
     }
-    async addProduct(res, product) {
+    async addProduct(product) {
         // Check if product already exists
         if (this.products.some((item) => item.code === product.code)) {
-            return res.status(400).json({ status: "error", message: "Product already exists" });
+            return { code: 400, result: { status: "error", message: "Product already exists" } };
         }
         // Check if product has all required properties
         if (!product.title ||
@@ -45,7 +45,7 @@ export default class ProductManager {
             !product.code ||
             !product.category ||
             !product.stock) {
-            return res.status(400).json({ status: "error", message: "Product is missing required properties" });
+            return { code: 400, result: { status: "error", message: "Product is missing required properties" } };
         }
         // If no thumbnail, set default value to empty array
         if (!product.thumbnail) {
@@ -59,68 +59,81 @@ export default class ProductManager {
         product = { id: ++this.currentId, ...product };
         this.products.push(product);
         await this.saveData();
-        return res.status(201).json({ status: "success", message: "Product added successfully", payload: product });
+        return { code: 201, result: { status: "success", message: "Product added successfully", payload: product } };
     }
-    getProductById(id, res) {
+    getProductById(id) {
         if (isNaN(id)) {
-            return res.status(400).json({ status: "error", message: "Invalid id" });
+            return { code: 400, result: { status: "error", message: "Invalid id" } };
         }
         if (id < 0) {
-            return res.status(400).json({ status: "error", message: "Id must be equal or greater than 0" });
+            return { code: 400, result: { status: "error", message: "Id must be equal or greater than 0" } };
         }
         const product = this.products.find((item) => item.id === id);
         if (product) {
-            return res.json({ status: "success", payload: product });
+            return { code: 200, result: { status: "success", payload: product } };
         }
         else {
-            return res.status(404).json({ status: "error", message: "Product not found" });
+            return { code: 404, result: { status: "error", message: "Product not found" } };
         }
     }
-    getProducts(res, countLimit) {
+    getProducts(countLimit) {
         // if countLimit exists, convert it to number, and list products with the specified limit. Else, list all products.
         if (countLimit) {
             if (isNaN(countLimit)) {
-                return res.status(400).json({ status: "error", message: "Invalid limit" });
+                return { code: 400, result: { status: "error", message: "Invalid limit" } };
             }
             else {
                 if (countLimit < 1) {
-                    return res.status(400).json({ status: "error", message: "Limit must be greater than 0" });
+                    return { code: 400, result: { status: "error", message: "Limit must be greater than 0" } };
                 }
                 else if (countLimit > this.products.length) {
-                    return res.status(400).json({ status: "error", message: "Limit must be less than or equal to the number of products" });
+                    return {
+                        code: 400,
+                        result: { status: "error", message: "Limit must be less than or equal to the number of products" },
+                    };
                 }
                 const result = this.products.slice(0, countLimit);
-                return res.json({ status: "success", payload: result });
+                return { code: 200, result: { status: "success", payload: result } };
             }
         }
         else {
             return this.products.length
-                ? res.json({ status: "success", payload: this.products })
-                : res.status(404).json({ status: "error", message: "No products found." });
+                ? { code: 200, result: { status: "success", payload: this.products } }
+                : { code: 404, result: { status: "error", message: "No products found." } };
         }
     }
     // Update one or more properties of a product id
-    async updateProduct(res, id, product) {
+    async updateProduct(id, product) {
         // Check if product exists
         const productIndex = this.products.findIndex((product) => product.id === id);
         if (productIndex === -1) {
-            return res.status(404).json({ status: "error", message: "Product not found" });
+            return { code: 404, result: { status: "error", message: "Product not found" } };
         }
         // Else, update product and secure id property is not modified
         this.products[productIndex] = { ...this.products[productIndex], ...product, id: this.products[productIndex].id };
         await this.saveData();
-        return res.json({ status: "success", message: "Product updated successfully", payload: this.products[productIndex] });
+        return {
+            code: 200,
+            result: {
+                status: "success",
+                message: "Product updated successfully",
+                payload: this.products[productIndex],
+            },
+        };
     }
-    async deleteProduct(res, id) {
+    async deleteProduct(id) {
         // Check if product exists
         const productIndex = this.products.findIndex((product) => product.id === id);
         if (productIndex === -1) {
-            return res.status(404).json({ status: "error", message: "Product not found" });
+            return { code: 404, result: { status: "error", message: "Product not found" } };
         }
         // Else, delete product
         const deletedProduct = this.products.splice(productIndex, 1);
         await this.saveData();
-        return res.json({ status: "success", message: "Product deleted successfully", payload: deletedProduct });
+        return {
+            code: 200,
+            result: { status: "success", message: "Product deleted successfully", payload: deletedProduct },
+        };
     }
     productExists(id) {
         return this.products.some((item) => item.id === id);

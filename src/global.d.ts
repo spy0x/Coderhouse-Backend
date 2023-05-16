@@ -21,3 +21,14 @@ type Cart = {
   idCarrito: number;
   productos: ProductIdOnly[];
 }
+
+type Result = {
+  status: string;
+  message?: string;
+  payload?: any;
+}
+
+type ResResult = {
+  code: number;
+  result: Result;
+}

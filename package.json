@@ -5,7 +5,8 @@
   "main": "App.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon ./dist/App.js",
+    "start": "node ./dist/App.js",
+    "dev": "nodemon ./dist/App.js",
     "build": "npx tsc"
   },
   "repository": {

@@ -3,23 +3,28 @@ import { productManager } from "../App.js";
 const productsRouter = Router();
 productsRouter.get("/", (req, res) => {
     const countLimit = req.query.limit;
-    productManager.getProducts(res, countLimit);
+    const response = productManager.getProducts(countLimit);
+    return res.status(response.code).json(response.result);
 });
 productsRouter.get("/:pid", (req, res) => {
     const id = parseInt(req.params.pid);
-    productManager.getProductById(id, res);
+    const response = productManager.getProductById(id);
+    return res.status(response.code).json(response.result);
 });
-productsRouter.post("/", (req, res) => {
+productsRouter.post("/", async (req, res) => {
     const product = req.body;
-    productManager.addProduct(res, product);
+    const response = await productManager.addProduct(product);
+    return res.status(response.code).json(response.result);
 });
-productsRouter.delete("/:pid", (req, res) => {
+productsRouter.delete("/:pid", async (req, res) => {
     const id = parseInt(req.params.pid);
-    productManager.deleteProduct(res, id);
+    const response = await productManager.deleteProduct(id);
+    return res.status(response.code).json(response.result);
 });
-productsRouter.put("/:pid", (req, res) => {
+productsRouter.put("/:pid", async (req, res) => {
     const id = parseInt(req.params.pid);
     const product = req.body;
-    productManager.updateProduct(res, id, product);
+    const response = await productManager.updateProduct(id, product);
+    return res.status(response.code).json(response.result);
 });
 export default productsRouter;
