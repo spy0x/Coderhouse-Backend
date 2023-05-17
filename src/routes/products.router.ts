@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { productManager } from "../App.js";
 
+
 const productsRouter = Router();
 
 productsRouter.get("/", (req, res) => {
