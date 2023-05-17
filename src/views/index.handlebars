@@ -1,10 +1,8 @@
 <div>
-    <h1>Home</h1>
+    <h1>Product List</h1>
     <ul>
         {{#each payload}}
         <li>name: {{this.title}} - price: ${{this.price}} - stock: {{this.stock}}</li>
         {{/each}}
     </ul>
 </div>
-<script src="/socket.io/socket.io.js"></script>
-<script src="/static/js/index.js"></script>

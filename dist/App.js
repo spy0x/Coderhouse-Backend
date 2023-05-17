@@ -30,12 +30,14 @@ async function startServer() {
     const httpServer = app.listen(PORT, () => {
         console.log("Server http://localhost/ is running on port " + PORT);
     });
+    //WEBSOCKET CONNECTION
     const socketServer = new Server(httpServer);
     socketServer.on("connection", (socket) => {
-        console.log("New client connected");
-        socket.on("message", (data) => {
-            console.log(data);
-        });
-        socketServer.emit("event", "Hello from server");
+        console.log(`New client ${socket.id} connected`);
+        const { result } = productManager.getProducts(null);
+        socket.emit("getProducts", result);
+        // socket.on("getProducts", (data) => {
+        //   console.log(data);
+        // });
     });
 }
