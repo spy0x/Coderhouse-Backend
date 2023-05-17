@@ -41,8 +41,18 @@ async function startServer() {
     console.log(`New client ${socket.id} connected`);
     const { result } = productManager.getProducts(null);
     socket.emit("getProducts", result);
-    // socket.on("getProducts", (data) => {
-    //   console.log(data);
-    // });
+
+    // WEBSOCKET EVENTS
+    socket.on("deleteProduct", async (id) => {
+      await productManager.deleteProduct(id);
+      const { result } = productManager.getProducts(null);
+      socketServer.emit("getProducts", result);
+    });
+    socket.on("addProduct", async (product) => {
+      await productManager.addProduct(product);
+      const { result } = productManager.getProducts(null);
+      socketServer.emit("getProducts", result);
+    }
+    );
   });
 }

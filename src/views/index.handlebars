@@ -2,7 +2,8 @@
     <h1>Product List</h1>
     <ul>
         {{#each payload}}
-        <li>name: {{this.title}} - price: ${{this.price}} - stock: {{this.stock}}</li>
+        <li>id: {{this.id}} name: {{this.title}} - price: ${{this.price}} - stock: {{this.stock}} - category:
+            {{this.category}}</li>
         {{/each}}
     </ul>
 </div>

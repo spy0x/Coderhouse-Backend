@@ -1,6 +1,18 @@
 <div>
-    <h1>Realtime Products List</h1>
-    <ul id="productList"></ul>
+    <h2>Add new product</h2>
+    <input type="text" id="productTitle" placeholder="Product Title">
+    <input type="number" id="productPrice" placeholder="Product Price">
+    <input type="number" id="productStock" placeholder="Product Stock">
+    <input type="number" id="productCode" placeholder="Product Code">
+    <select id="productCategory">
+        <option disabled selected value="">Select a category</option>
+        <option value="Kitchen">Kitchen</option>
+        <option value="Technology">Technology</option>
+        <option value="Office">Office</option>
+    </select>
+    <button id="addProductBtn">Add Product</button>
 </div>
+<h1>Realtime Products List</h1>
+<ul id="productList"></ul>
 <script src="/socket.io/socket.io.js"></script>
 <script src="/static/js/realTimeProducts.js"></script>

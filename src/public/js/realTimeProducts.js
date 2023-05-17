@@ -1,11 +1,39 @@
 const socket = io();
-// socket.emit('getProducts', 'Hello Server!');
+
+//GET PRODUCTS FROM BACKEND
 socket.on('getProducts', ({payload}) => {
     const productList = document.querySelector('#productList');
+    productList.innerHTML = '';
     for(const product of payload){
-        const {title, price, stock} = product;
+        const {id, title, price, stock} = product;
         const productItem = document.createElement('li');
-        productItem.textContent = `name: ${title} - price: $${price} - stock: ${stock}`;
+        productItem.textContent = `id: ${id} name: ${title} - price: $${price} - stock: ${stock} - category: ${product.category}`;
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = 'Delete';
+        // EVENT BUTTON: DELETE PRODUCT FROM BACKEND
+        deleteBtn.onclick = () => {
+            socket.emit('deleteProduct', id);
+        }
+        productItem.appendChild(deleteBtn);
         productList.appendChild(productItem);
     }
 });
+
+// ADD PRODUCT TO BACKEND
+const addButton = document.querySelector('#addProductBtn');
+addButton.onclick = () => {
+    const title = document.querySelector('#productTitle').value;
+    const price = document.querySelector('#productPrice').value;
+    const stock = document.querySelector('#productStock').value;
+    const code = document.querySelector('#productCode').value;
+    const category = document.querySelector('#productCategory').value;
+    const product = {
+        title,
+        price,
+        stock,
+        code,
+        category,
+        description: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+    }
+    socket.emit('addProduct', product);
+}
