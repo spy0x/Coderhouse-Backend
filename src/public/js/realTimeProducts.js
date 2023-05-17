@@ -20,8 +20,9 @@ socket.on('getProducts', ({payload}) => {
 });
 
 // ADD PRODUCT TO BACKEND
-const addButton = document.querySelector('#addProductBtn');
-addButton.onclick = () => {
+const form = document.querySelector('#addProductForm');
+form.onsubmit = (e) => {
+    e.preventDefault();
     const title = document.querySelector('#productTitle').value;
     const price = document.querySelector('#productPrice').value;
     const stock = document.querySelector('#productStock').value;
@@ -36,4 +37,5 @@ addButton.onclick = () => {
         description: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
     }
     socket.emit('addProduct', product);
+    form.reset();
 }

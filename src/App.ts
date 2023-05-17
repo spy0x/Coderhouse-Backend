@@ -42,14 +42,17 @@ async function startServer() {
     const { result } = productManager.getProducts(null);
     socket.emit("getProducts", result);
 
-    // WEBSOCKET EVENTS
+    // WEBSOCKET DELETE PRODUCT EVENT
     socket.on("deleteProduct", async (id) => {
       await productManager.deleteProduct(id);
+      // BROADCAST UPDATE TO ALL CLIENTS
       const { result } = productManager.getProducts(null);
       socketServer.emit("getProducts", result);
     });
+    // WEBSOCKET ADD PRODUCT EVENT
     socket.on("addProduct", async (product) => {
       await productManager.addProduct(product);
+      // BROADCAST UPDATE TO ALL CLIENTS
       const { result } = productManager.getProducts(null);
       socketServer.emit("getProducts", result);
     }
