@@ -1,7 +1,7 @@
 import express from "express";
 import ProductManager from "./ProductManager.js";
 import CartManager from "./CartManager.js";
-import { uploader } from "./Utils.js";
+import { connectMongo, uploader } from "./Utils.js";
 import cartsRouter from "./routes/carts.router.js";
 import productsRouter from "./routes/products.router.js";
 import viewsRouter from "./routes/views.router.js";
@@ -13,6 +13,7 @@ const app = express();
 export const productManager = new ProductManager("productos.json");
 export const cartManager = new CartManager("carrito.json");
 
+connectMongo();
 startServer();
 
 async function startServer() {
