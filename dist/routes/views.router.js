@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { productManager } from "../App.js";
 const viewsRouter = Router();
-viewsRouter.get("/", (req, res) => {
-    const { result } = productManager.getProducts(null);
+viewsRouter.get("/", async (req, res) => {
+    const { result } = await productManager.getProducts(null);
     res.render("index", result);
 });
 viewsRouter.get("/realtimeproducts", (req, res) => {

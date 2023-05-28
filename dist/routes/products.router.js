@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { productManager } from "../App.js";
 const productsRouter = Router();
-productsRouter.get("/", (req, res) => {
-    const countLimit = req.query.limit;
-    const response = productManager.getProducts(countLimit);
+productsRouter.get("/", async (req, res) => {
+    const countLimit = parseInt(req.query.limit);
+    const response = await productManager.getProducts(countLimit);
     return res.status(response.code).json(response.result);
 });
 productsRouter.get("/:pid", (req, res) => {

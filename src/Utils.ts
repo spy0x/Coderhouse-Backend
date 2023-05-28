@@ -1,6 +1,6 @@
 // DB CONNECTION //
 import { connect } from "mongoose";
-const DB_URL = "mongodb+srv://spy0x:%254y%5EWqkJ%26%264%25fA@cluster0.7hatvzm.mongodb.net/?retryWrites=true&w=majority";
+export const DB_URL = "mongodb+srv://spy0x:%254y%5EWqkJ%26%264%25fA@cluster0.7hatvzm.mongodb.net/coderhouse-backend?retryWrites=true&w=majority";
 
 export async function connectMongo() {
   try {

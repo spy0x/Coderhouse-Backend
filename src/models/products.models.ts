@@ -11,4 +11,4 @@ const productSchema = new Schema({
   status: { type: Boolean },
 });
 
-export const ProductModel = model("products", productSchema);
+// export const ProductModel = model("Productos", productSchema);

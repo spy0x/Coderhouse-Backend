@@ -4,9 +4,9 @@ import { productManager } from "../App.js";
 
 const productsRouter = Router();
 
-productsRouter.get("/", (req, res) => {
-  const countLimit = req.query.limit;
-  const response = productManager.getProducts(countLimit);
+productsRouter.get("/", async (req, res) => {
+  const countLimit = parseInt(req.query.limit as string);
+  const response = await productManager.getProducts(countLimit);
   return res.status(response.code).json(response.result);
 });
 

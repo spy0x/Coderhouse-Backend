@@ -1,5 +1,11 @@
 import fs from "fs";
+import { MongoClient } from "mongodb";
+import { DB_URL } from "./Utils.js";
+// import { ProductModel } from "./models/products.models.js";
 
+const client = new MongoClient(DB_URL);
+const database = client.db('coderhouse-backend');
+const collection = database.collection('Products');
 export default class ProductManager {
   private path: string;
   private products: Product[];
@@ -88,27 +94,30 @@ export default class ProductManager {
     }
   }
 
-  getProducts(countLimit: any): ResResult {
-    // if countLimit exists, convert it to number, and list products with the specified limit. Else, list all products.
+  async getProducts(countLimit: any): Promise<ResResult> {
+    // if countLimit exists, list products with the specified limit. Else, list all products.
     if (countLimit) {
       if (isNaN(countLimit)) {
         return { code: 400, result: { status: "error", message: "Invalid limit" } };
+      } else if (countLimit < 1) {
+        return { code: 400, result: { status: "error", message: "Limit must be greater than 0" } };
       } else {
-        if (countLimit < 1) {
-          return { code: 400, result: { status: "error", message: "Limit must be greater than 0" } };
-        } else if (countLimit > this.products.length) {
-          return {
-            code: 400,
-            result: { status: "error", message: "Limit must be less than or equal to the number of products" },
-          };
+        try {
+          const products = await collection.find().limit(countLimit).toArray();
+          return { code: 200, result: { status: "success", payload: products } };
+        } catch (error) {
+          return { code: 400, result: { status: "error", message: "Error getting products" } };
         }
-        const result = this.products.slice(0, countLimit);
-        return { code: 200, result: { status: "success", payload: result } };
       }
     } else {
-      return this.products.length
-        ? { code: 200, result: { status: "success", payload: this.products } }
-        : { code: 404, result: { status: "error", message: "No products found." } };
+      try {
+        const products = await collection.find().toArray();;
+        return products
+          ? { code: 200, result: { status: "success", payload: products } }
+          : { code: 404, result: { status: "error", message: "No products found." } };
+      } catch (error) {
+        return { code: 400, result: { status: "error", message: "Error getting products" } };
+      }
     }
   }
 
