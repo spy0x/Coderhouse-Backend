@@ -1,10 +1,6 @@
 import fs from "fs";
-import { MongoClient } from "mongodb";
-import { DB_URL } from "./Utils.js";
+import { ProductModel } from "./models/products.models.js";
 // import { ProductModel } from "./models/products.models.js";
-const client = new MongoClient(DB_URL);
-const database = client.db('coderhouse-backend');
-const collection = database.collection('Products');
 export default class ProductManager {
     constructor(path) {
         this.path = path;
@@ -40,78 +36,81 @@ export default class ProductManager {
         }
     }
     async addProduct(product) {
-        // Check if product already exists
-        if (this.products.some((item) => item.code === product.code)) {
-            return { code: 400, result: { status: "error", message: "Product already exists" } };
+        try {
+            // Check if product already exists
+            if (await ProductModel.findOne({ code: product.code })) {
+                return { code: 400, result: { status: "error", message: "Product already exists" } };
+            }
+            // Check if product has all required properties
+            if (!product.title ||
+                !product.description ||
+                !product.price ||
+                !product.code ||
+                !product.category ||
+                !product.stock) {
+                return { code: 400, result: { status: "error", message: "Product is missing required properties" } };
+            }
+            // If no thumbnail, set default value to empty array
+            if (!product.thumbnail) {
+                product.thumbnail = [];
+            }
+            // if no status, set default value to true
+            if (!product.status) {
+                product.status = true;
+            }
+            // Add product
+            ProductModel.create(product);
+            return { code: 201, result: { status: "success", message: "Product added successfully", payload: product } };
         }
-        // Check if product has all required properties
-        if (!product.title ||
-            !product.description ||
-            !product.price ||
-            !product.code ||
-            !product.category ||
-            !product.stock) {
-            return { code: 400, result: { status: "error", message: "Product is missing required properties" } };
+        catch (error) {
+            return { code: 400, result: { status: "error", message: "Error adding product" } };
         }
-        // If no thumbnail, set default value to empty array
-        if (!product.thumbnail) {
-            product.thumbnail = [];
-        }
-        // if no status, set default value to true
-        if (!product.status) {
-            product.status = true;
-        }
-        // Add product
-        product = { id: ++this.currentId, ...product };
-        this.products.push(product);
-        await this.saveData();
-        return { code: 201, result: { status: "success", message: "Product added successfully", payload: product } };
     }
-    getProductById(id) {
-        if (isNaN(id)) {
-            return { code: 400, result: { status: "error", message: "Invalid id" } };
+    async getProductById(id) {
+        try {
+            const product = await ProductModel.find({ _id: id });
+            if (product) {
+                return { code: 200, result: { status: "success", payload: product } };
+            }
+            else {
+                return { code: 404, result: { status: "error", message: "Product not found" } };
+            }
         }
-        if (id < 0) {
-            return { code: 400, result: { status: "error", message: "Id must be equal or greater than 0" } };
-        }
-        const product = this.products.find((item) => item.id === id);
-        if (product) {
-            return { code: 200, result: { status: "success", payload: product } };
-        }
-        else {
+        catch (error) {
             return { code: 404, result: { status: "error", message: "Product not found" } };
         }
     }
     async getProducts(countLimit) {
-        // if countLimit exists, list products with the specified limit. Else, list all products.
-        if (countLimit) {
-            if (isNaN(countLimit)) {
-                return { code: 400, result: { status: "error", message: "Invalid limit" } };
+        try {
+            const products = await ProductModel.find();
+            // if products array is empty, return error
+            if (products.length === 0) {
+                return { code: 404, result: { status: "error", message: "No products found." } };
             }
-            else if (countLimit < 1) {
-                return { code: 400, result: { status: "error", message: "Limit must be greater than 0" } };
+            // if countLimit exists, list products with the specified limit. Else, list all products.
+            if (countLimit) {
+                if (isNaN(countLimit)) {
+                    return { code: 400, result: { status: "error", message: "Invalid limit" } };
+                }
+                else if (countLimit < 1) {
+                    return { code: 400, result: { status: "error", message: "Limit must be greater than 0" } };
+                }
+                else {
+                    try {
+                        const products = await ProductModel.find().limit(countLimit);
+                        return { code: 200, result: { status: "success", payload: products } };
+                    }
+                    catch (error) {
+                        return { code: 400, result: { status: "error", message: "Error getting products" } };
+                    }
+                }
             }
             else {
-                try {
-                    const products = await collection.find().limit(countLimit).toArray();
-                    return { code: 200, result: { status: "success", payload: products } };
-                }
-                catch (error) {
-                    return { code: 400, result: { status: "error", message: "Error getting products" } };
-                }
+                return { code: 200, result: { status: "success", payload: products } };
             }
         }
-        else {
-            try {
-                const products = await collection.find().toArray();
-                ;
-                return products
-                    ? { code: 200, result: { status: "success", payload: products } }
-                    : { code: 404, result: { status: "error", message: "No products found." } };
-            }
-            catch (error) {
-                return { code: 400, result: { status: "error", message: "Error getting products" } };
-            }
+        catch (error) {
+            return { code: 400, result: { status: "error", message: "Error getting products" } };
         }
     }
     // Update one or more properties of a product id

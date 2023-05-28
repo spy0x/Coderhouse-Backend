@@ -1,4 +1,4 @@
-import { Schema } from "mongoose";
+import { Schema, model } from "mongoose";
 const productSchema = new Schema({
     title: { type: String, required: true, max: 100, unique: true },
     description: { type: String, required: true, max: 500 },
@@ -9,4 +9,4 @@ const productSchema = new Schema({
     thumbnail: { type: (Array) },
     status: { type: Boolean },
 });
-// export const ProductModel = model("Productos", productSchema);
+export const ProductModel = model("products", productSchema);

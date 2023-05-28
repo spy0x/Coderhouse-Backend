@@ -10,9 +10,9 @@ productsRouter.get("/", async (req, res) => {
   return res.status(response.code).json(response.result);
 });
 
-productsRouter.get("/:pid", (req, res) => {
-  const id = parseInt(req.params.pid);
-  const response = productManager.getProductById(id);
+productsRouter.get("/:pid", async (req, res) => {
+  const id = req.params.pid;
+  const response = await productManager.getProductById(id);
   return res.status(response.code).json(response.result);
 });
 

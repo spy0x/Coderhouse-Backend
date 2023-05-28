@@ -5,14 +5,14 @@ socket.on('getProducts', ({payload}) => {
     const productList = document.querySelector('#productList');
     productList.innerHTML = '';
     for(const product of payload){
-        const {id, title, price, stock} = product;
+        const {_id, title, price, stock} = product;
         const productItem = document.createElement('li');
-        productItem.textContent = `id: ${id} name: ${title} - price: $${price} - stock: ${stock} - category: ${product.category}`;
+        productItem.textContent = `id: ${_id} name: ${title} - price: $${price} - stock: ${stock} - category: ${product.category}`;
         const deleteBtn = document.createElement('button');
         deleteBtn.textContent = 'Delete';
         // EVENT BUTTON: DELETE PRODUCT FROM BACKEND
         deleteBtn.onclick = () => {
-            socket.emit('deleteProduct', id);
+            socket.emit('deleteProduct', _id);
         }
         productItem.appendChild(deleteBtn);
         productList.appendChild(productItem);

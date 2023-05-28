@@ -1,5 +1,5 @@
 type Product = {
-  readonly id?: number;
+  readonly id?: string;
   title: string;
   description: string;
   price: number;

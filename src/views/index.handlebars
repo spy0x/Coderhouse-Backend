@@ -2,7 +2,7 @@
     <h1 class="text-3xl font-bold underline">Product List</h1>
     <ul>
         {{#each payload}}
-        <li>id: {{this.id}} name: {{this.title}} - price: ${{this.price}} - stock: {{this.stock}} - category:
+        <li>id: {{this._id}} name: {{this.title}} - price: ${{this.price}} - stock: {{this.stock}} - category:
             {{this.category}}</li>
         {{/each}}
     </ul>
