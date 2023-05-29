@@ -154,7 +154,7 @@ export default class ProductManager {
             return { code: 400, result: { status: "error", message: "Error deleting product" } };
         }
     }
-    productExists(id) {
-        return this.products.some((item) => item.id === id);
+    async productExists(id) {
+        return await ProductModel.findOne({ _id: id });
     }
 }

@@ -159,7 +159,8 @@ export default class ProductManager {
     }
   }
 
-  productExists(id: number) {
-    return this.products.some((item) => item.id === id);
+  async productExists(id: number) {
+
+    return await ProductModel.findOne({ _id: id });
   }
 }
