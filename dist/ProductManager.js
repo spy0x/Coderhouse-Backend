@@ -82,7 +82,7 @@ export default class ProductManager {
     }
     async getProducts(countLimit) {
         try {
-            const products = await ProductModel.find();
+            const products = await ProductModel.find().lean().exec();
             // if products array is empty, return error
             if (products.length === 0) {
                 return { code: 404, result: { status: "error", message: "No products found." } };
