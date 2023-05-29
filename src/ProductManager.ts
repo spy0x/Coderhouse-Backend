@@ -119,38 +119,44 @@ export default class ProductManager {
   }
 
   // Update one or more properties of a product id
-  async updateProduct(id: number, product: ProductKeys): Promise<ResResult> {
-    // Check if product exists
-    const productIndex = this.products.findIndex((product) => product.id === id);
-    if (productIndex === -1) {
-      return { code: 404, result: { status: "error", message: "Product not found" } };
+  async updateProduct(id: string, productAttributes: ProductKeys): Promise<ResResult> {
+    try {
+      // Check if product exists
+      const product = await ProductModel.find({ _id: id });
+      if (!product) {
+        return { code: 404, result: { status: "error", message: "Product not found" } };
+      }
+      // Else, update product and secure id property is not modified
+      await ProductModel.updateOne({ _id: id }, productAttributes);
+      return {
+        code: 200,
+        result: {
+          status: "success",
+          message: "Product updated successfully",
+          payload: await ProductModel.findOne({ _id: id }),
+        },
+      };
+    } catch (error) {
+      return { code: 400, result: { status: "error", message: "Error updating product" } };
     }
-    // Else, update product and secure id property is not modified
-    this.products[productIndex] = { ...this.products[productIndex], ...product, id: this.products[productIndex].id };
-    await this.saveData();
-    return {
-      code: 200,
-      result: {
-        status: "success",
-        message: "Product updated successfully",
-        payload: this.products[productIndex],
-      },
-    };
   }
 
-  async deleteProduct(id: number): Promise<ResResult> {
-    // Check if product exists
-    const productIndex = this.products.findIndex((product) => product.id === id);
-    if (productIndex === -1) {
-      return { code: 404, result: { status: "error", message: "Product not found" } };
+  async deleteProduct(id: string): Promise<ResResult> {
+    try {
+      // Check if product exists
+      const product = await ProductModel.find({ _id: id });
+      if (!product) {
+        return { code: 404, result: { status: "error", message: "Product not found" } };
+      }
+      // Else, delete product
+      await ProductModel.deleteOne({ _id: id });
+      return {
+        code: 200,
+        result: { status: "success", message: "Product deleted successfully", payload: product },
+      };
+    } catch {
+      return { code: 400, result: { status: "error", message: "Error deleting product" } };
     }
-    // Else, delete product
-    const deletedProduct = this.products.splice(productIndex, 1);
-    await this.saveData();
-    return {
-      code: 200,
-      result: { status: "success", message: "Product deleted successfully", payload: deletedProduct },
-    };
   }
 
   productExists(id: number) {

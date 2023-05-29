@@ -23,15 +23,15 @@ productsRouter.post("/", async (req, res) => {
 });
 
 productsRouter.delete("/:pid", async (req, res) => {
-  const id = parseInt(req.params.pid);
+  const id = req.params.pid;
   const response = await productManager.deleteProduct(id);
   return res.status(response.code).json(response.result);
 });
 
 productsRouter.put("/:pid", async (req, res) => {
-  const id = parseInt(req.params.pid);
-  const product = req.body as ProductKeys;
-  const response = await productManager.updateProduct(id, product);
+  const id = req.params.pid;
+  const productAttributes = req.body as ProductKeys;
+  const response = await productManager.updateProduct(id, productAttributes);
   return res.status(response.code).json(response.result);
 });
 
