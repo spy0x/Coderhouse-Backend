@@ -1,5 +1,5 @@
 import { Router } from "express";
-import ProductService from "../services/products.services.js";
+import ProductService from "../dao/products.services.js";
 
 const viewsRouter = Router();
 const Service = new ProductService();
