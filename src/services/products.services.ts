@@ -115,7 +115,13 @@ export default class ProductService {
     }
   }
 
-  async productExists(id: number) {
-    return await ProductModel.findOne({ _id: id });
+  async productExists(id: string) {
+    try {
+      await ProductModel.exists({ _id: id });
+      return true;
+    }
+    catch {
+      return false;
+    }
   }
 }
