@@ -44,7 +44,8 @@ export default class CartManager {
   }
 
   async addCart(): Promise<ResResult> {
-    this.carts.push({ idCarrito: ++this.currentId, productos: [] });
+    const newId = ++this.currentId;
+    this.carts.push({ _id: newId.toString(), productos: [] });
     await this.saveData();
     return {
       code: 201,
@@ -52,14 +53,8 @@ export default class CartManager {
     };
   }
 
-  getCartProducts(id: number): ResResult {
-    if (isNaN(id)) {
-      return { code: 400, result: { status: "error", message: "Invalid id" } };
-    }
-    if (id < 0) {
-      return { code: 400, result: { status: "error", message: "Id must be equal or greater than 0" } };
-    }
-    const cart = this.carts.find((item) => item.idCarrito === id);
+  getCartProducts(id: string): ResResult {
+    const cart = this.carts.find((item) => item._id === id);
     if (cart) {
       return { code: 200, result: { status: "success", payload: cart.productos } };
     } else {
@@ -67,13 +62,13 @@ export default class CartManager {
     }
   }
 
-  async addProductToCart(cartID: number, productID: number): Promise<ResResult> {
+  async addProductToCart(cartID: string, productID: string): Promise<ResResult> {
     // Check if product exists
     if (!productManager.productExists(productID)) {
       return { code: 404, result: { status: "error", message: "Product not found" } };
     }
     // Check if cart exists
-    const cartIndex = this.carts.findIndex((cart) => cart.idCarrito === cartID);
+    const cartIndex = this.carts.findIndex((cart) => cart._id === cartID);
     if (cartIndex === -1) {
       return { code: 404, result: { status: "error", message: "Cart not found" } };
     }
