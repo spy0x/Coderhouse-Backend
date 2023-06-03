@@ -1,40 +1,5 @@
-import { ProductModel } from "./dao/models/products.models.js";
-// import { ProductModel } from "./models/products.models.js";
-export default class ProductManager {
-    constructor(path) {
-        this.path = path;
-        this.products = [];
-        this.currentId = 0;
-    }
-    // async loadData() {
-    //   try {
-    //     const data = await fs.promises.readFile(this.path, "utf-8");
-    //     const parsedData = JSON.parse(data);
-    //     this.products = parsedData.products as Product[];
-    //     this.currentId = parsedData.lastId as number;
-    //   } catch (error) {
-    //     console.log("Error loading data!");
-    //     console.log("Creating new data file...");
-    //     try {
-    //       await fs.promises.writeFile(this.path, JSON.stringify({ lastId: 0, products: [] }, null, 2), "utf-8");
-    //       await this.loadData();
-    //       console.log("Data file created");
-    //     } catch (error) {
-    //       console.log("Error creating data file!");
-    //     }
-    //   }
-    // }
-    // private async saveData() {
-    //   try {
-    //     await fs.promises.writeFile(
-    //       this.path,
-    //       JSON.stringify({ lastId: this.currentId, products: this.products }, null, 2),
-    //       "utf-8"
-    //     );
-    //   } catch (error) {
-    //     console.log("Error saving data!");
-    //   }
-    // }
+import { ProductModel } from "../dao/models/products.models.js";
+export default class ProductService {
     async addProduct(product) {
         try {
             // Check if product already exists
@@ -113,7 +78,6 @@ export default class ProductManager {
             return { code: 400, result: { status: "error", message: "Error getting products" } };
         }
     }
-    // Update one or more properties of a product id
     async updateProduct(id, productAttributes) {
         try {
             // Check if product exists

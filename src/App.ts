@@ -1,5 +1,5 @@
 import express from "express";
-import ProductManager from "./ProductManager.js";
+import ProductManager from "./dao/ProductManager.js";
 import CartManager from "./CartManager.js";
 import { connectMongo, initSocket} from "./Utils.js";
 import cartsRouter from "./routes/carts.router.js";
@@ -16,8 +16,8 @@ connectMongo();
 startServer();
 
 async function startServer() {
-  await productManager.loadData();
-  await cartManager.loadData();
+  // await productManager.loadData();
+  // await cartManager.loadData();
   // SETTING HANDLEBARS
   app.engine("handlebars", handlebars.engine());
   app.set("views", "src/views");

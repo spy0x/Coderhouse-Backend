@@ -1,4 +1,4 @@
-import { ProductModel } from "./dao/models/products.models.js";
+import { ProductModel } from "./models/products.models.js";
 // import { ProductModel } from "./models/products.models.js";
 export default class ProductManager {
     constructor(path) {

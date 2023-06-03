@@ -1,10 +1,11 @@
 import { Router } from "express";
-import { productManager } from "../App.js";
+import ProductService from "../services/products.services.js";
 
 const viewsRouter = Router();
+const Service = new ProductService();
 
 viewsRouter.get("/", async (req, res) => {
-  const { result } = await productManager.getProducts(null);
+  const { result } = await Service.getProducts(null);
 
   res.render("index", result);
 });
@@ -13,7 +14,7 @@ viewsRouter.get("/realtimeproducts", (req, res) => {
   res.render("realTimeProducts");
 });
 
-viewsRouter.get("*", (req, res, next) => {
+viewsRouter.get("*", (req, res) => {
   const error = {
     status: "ERROR 404",
     message: "Page Not found",
