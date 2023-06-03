@@ -1,6 +1,5 @@
 import { Router } from "express";
-import { cartManager } from "../App.js";
-import CartService from "../services/carts.services.js";
+import CartService from "../dao/carts.services.js";
 
 const cartsRouter = Router();
 const Service = new CartService();
@@ -10,9 +9,9 @@ cartsRouter.post("/", async (req, res) => {
     return res.status(response.code).json(response.result);
   });
 
-cartsRouter.get("/:cid", (req, res) => {
+cartsRouter.get("/:cid", async (req, res) => {
     const cartID = req.params.cid;
-    const response = cartManager.getCartProducts(cartID);
+    const response = await Service.getCartProducts(cartID);
     return res.status(response.code).json(response.result);
 });
 

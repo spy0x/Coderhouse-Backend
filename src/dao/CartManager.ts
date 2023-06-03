@@ -1,5 +1,7 @@
 import fs from "fs";
-import { productManager } from "./App.js";
+import ProductManager from "./ProductManager.js";
+
+const productManager = new ProductManager("productos.json");
 
 export default class CartManager {
   private path: string;

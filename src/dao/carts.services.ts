@@ -1,9 +1,9 @@
-import { CartModel } from "../dao/models/carts.models.js";
+import { CartModel } from "./models/carts.models.js";
 import ProductService from "./products.services.js";
 
 const productService = new ProductService();
 export default class CartService {
-  async addCart() {
+  async addCart(): Promise<ResResult> {
     try {
       const cart = await CartModel.create({ productos: [] });
       return {
@@ -57,6 +57,21 @@ export default class CartService {
       return true;
     } catch (error) {
       return false;
+    }
+  }
+  
+  async getCartProducts(id: string): Promise<ResResult> {
+    try {
+        const cart = await CartModel.findById(id);
+        if (cart) {
+            return { code: 200, result: { status: "success", payload: cart.productos } };
+        }
+        else {
+            return { code: 404, result: { status: "error", message: "Cart not found" } };
+        }
+    }
+    catch (error) {
+        return { code: 500, result: { status: "error", message: "Couldn't get cart products." } };
     }
   }
 }

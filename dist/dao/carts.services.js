@@ -1,4 +1,4 @@
-import { CartModel } from "../dao/models/carts.models.js";
+import { CartModel } from "./models/carts.models.js";
 import ProductService from "./products.services.js";
 const productService = new ProductService();
 export default class CartService {
