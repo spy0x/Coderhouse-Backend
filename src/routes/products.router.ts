@@ -6,7 +6,7 @@ const productsRouter = Router();
 const Service = new ProductService();
 
 productsRouter.get("/", async (req, res) => {
-  const countLimit = parseInt(req.query.limit as string);
+  const countLimit = req.query.limit;
   const response = await Service.getProducts(countLimit);
   return res.status(response.code).json(response.result);
 });

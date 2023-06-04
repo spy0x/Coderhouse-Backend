@@ -37,7 +37,7 @@ export default class ProductService {
             if (!mongoose.Types.ObjectId.isValid(id)) {
                 return { code: 404, result: { status: "error", message: "Product not found" } };
             }
-            const product = await ProductModel.find({ _id: id });
+            const product = await ProductModel.findById(id);
             if (product) {
                 return { code: 200, result: { status: "success", payload: product } };
             }
