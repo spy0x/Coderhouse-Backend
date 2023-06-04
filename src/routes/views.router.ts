@@ -14,6 +14,10 @@ viewsRouter.get("/realtimeproducts", (req, res) => {
   res.render("realTimeProducts");
 });
 
+viewsRouter.get("/chat", (req, res) => {
+  res.render("chat");
+});
+
 viewsRouter.get("*", (req, res) => {
   const error = {
     status: "ERROR 404",

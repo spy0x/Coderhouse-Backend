@@ -32,3 +32,9 @@ type ResResult = {
   code: number;
   result: Result;
 }
+
+type Post = {
+  readonly _id?: string;
+  username: string;
+  message: string;
+}
