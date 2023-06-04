@@ -1,4 +1,5 @@
 import { ProductModel } from "../dao/models/products.models.js";
+import mongoose from "mongoose";
 export default class ProductService {
     async addProduct(product) {
         try {
@@ -33,6 +34,9 @@ export default class ProductService {
     }
     async getProductById(id) {
         try {
+            if (!mongoose.Types.ObjectId.isValid(id)) {
+                return { code: 404, result: { status: "error", message: "Product not found" } };
+            }
             const product = await ProductModel.find({ _id: id });
             if (product) {
                 return { code: 200, result: { status: "success", payload: product } };
@@ -42,7 +46,7 @@ export default class ProductService {
             }
         }
         catch (error) {
-            return { code: 404, result: { status: "error", message: "Product not found" } };
+            return { code: 404, result: { status: "error", message: "Couldn't get product" } };
         }
     }
     async getProducts(countLimit) {
@@ -61,13 +65,8 @@ export default class ProductService {
                     return { code: 400, result: { status: "error", message: "Limit must be greater than 0" } };
                 }
                 else {
-                    try {
-                        const products = await ProductModel.find().limit(countLimit);
-                        return { code: 200, result: { status: "success", payload: products } };
-                    }
-                    catch (error) {
-                        return { code: 400, result: { status: "error", message: "Error getting products" } };
-                    }
+                    const products = await ProductModel.find().limit(countLimit);
+                    return { code: 200, result: { status: "success", payload: products } };
                 }
             }
             else {
@@ -81,7 +80,10 @@ export default class ProductService {
     async updateProduct(id, productAttributes) {
         try {
             // Check if product exists
-            const product = await ProductModel.find({ _id: id });
+            if (!mongoose.Types.ObjectId.isValid(id)) {
+                return { code: 404, result: { status: "error", message: "Product not found" } };
+            }
+            const product = await ProductModel.findById(id);
             if (!product) {
                 return { code: 404, result: { status: "error", message: "Product not found" } };
             }
@@ -103,6 +105,9 @@ export default class ProductService {
     async deleteProduct(id) {
         try {
             // Check if product exists
+            if (!mongoose.Types.ObjectId.isValid(id)) {
+                return { code: 404, result: { status: "error", message: "Product not found" } };
+            }
             const product = await ProductModel.find({ _id: id });
             if (!product) {
                 return { code: 404, result: { status: "error", message: "Product not found" } };
