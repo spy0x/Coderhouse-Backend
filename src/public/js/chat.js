@@ -7,7 +7,14 @@ socket.on('getMessages', (posts) => {
     for(const post of posts){
         const { username, message } = post;
         const messageItem = document.createElement('li');
-        messageItem.textContent = `${username}: ${message}`;
+        const usernameSpan = document.createElement('span');
+        const messageSpan = document.createElement('span');
+        usernameSpan.textContent = `${username}: `;
+        messageSpan.textContent = message;
+        usernameSpan.classList.add('text-gray-700', 'text-xl', 'font-bold');
+        messageSpan.classList.add('text-gray-700', 'text-xl');
+        messageItem.appendChild(usernameSpan);
+        messageItem.appendChild(messageSpan);
         messagesList.appendChild(messageItem);
     }
 });
@@ -16,11 +23,11 @@ const form = document.querySelector('#sendChatForm');
 form.onsubmit = (e) => {
     e.preventDefault();
     const username = document.querySelector('#username').value;
-    const message = document.querySelector('#message').value;
+    const message = document.querySelector('#message');
     const post = {
         username,
-        message,
+        message: message.value,
     }
     socket.emit('addMessage', post);
-    form.reset();
+    message.value = '';
 }

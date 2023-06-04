@@ -4,7 +4,7 @@ export default class MessageService {
   async getAllMessages() {
     try {
       const result = await MessageModel.find({});
-      return result;
+      return result.reverse();
     } catch (e) {
       return [];
     }

@@ -1,12 +1,18 @@
 <div>
-    <h2>Write Message:</h2>
+    <h2 class="font-bold text-2lg text-center my-2">Write Message:</h2>
     <form id="sendChatForm">
-        <input id="username" type="text" required id="username" placeholder="Username" class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-        <input id="message" type="text" required id="message" placeholder="Message" class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-        <button id="sendBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Send</button>
+        <div class="flex flex-col items-center space-y-1">
+            <input id="username" type="text" required id="username" placeholder="Username"
+                class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            <input id="message" type="text" required id="message" placeholder="Message"
+                class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </div>
+        <button id="sendBtn" class="block mx-auto my-3 text-center bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Send</button>
     </form>
 </div>
-<h1>Realtime Chat</h1>
-<ul id="messagesList"></ul>
+<h1 class="text-4xl font-bold my-auto text-center">Realtime Chat</h1>
+<div class="flex justify-center my-5">
+    <ul id="messagesList"></ul>
+</div>
 <script src="/socket.io/socket.io.js"></script>
 <script src="/static/js/chat.js"></script>
