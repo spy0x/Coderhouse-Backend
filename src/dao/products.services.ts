@@ -51,13 +51,15 @@ export default class ProductService {
     }
   }
 
-  async getProducts(limit: any, query: any, sort: string, page: any): Promise<ResResult> {
+  async getProducts(limit: any, query: any, sort: string, pag: any): Promise<ResResult> {
     try {
       query = query ? { category: query } : {};
       limit = limit || 10;
-      page = page || 1;
-      const options: QueryOptions = { limit, page };
+      pag = pag || 1;
+      const options: QueryOptions = { limit, page: pag };
       if (sort) {
+        const validSort = sort === "asc" || sort === "desc";
+        if (!validSort) return { code: 400, result: { status: "error", message: "Invalid sort parameter" } };
         options.sort = { price: sort };
       }
       const products = await ProductModel.paginate(query, options);
@@ -66,7 +68,11 @@ export default class ProductService {
       if (products.length === 0) {
         return { code: 404, result: { status: "error", message: "No products found." } };
       }
-      return { code: 200, result: { status: "success", payload: products } };
+      const { docs, totalPages, prevPage, nextPage, page, hasNextPage, hasPrevPage } = products;
+      const prevPageUrl = `http://localhost:8080/api/products?page=${prevPage}`;
+      const nextPageUrl = `http://localhost:8080/api/products?page=${nextPage}`;
+      const result = { totalPages, prevPage, nextPage, page, hasNextPage, hasPrevPage, prevPageUrl, nextPageUrl };
+      return { code: 200, result: { status: "success", payload: docs, ...result } };
     } catch (error) {
       return { code: 400, result: { status: "error", message: "Error getting products" } };
     }

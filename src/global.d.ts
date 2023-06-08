@@ -22,7 +22,7 @@ type Cart = {
   productos: ProductIdOnly[];
 }
 
-type Result = {
+interface Result {
   status: string;
   message?: string;
   payload?: any;
@@ -30,7 +30,7 @@ type Result = {
 
 type ResResult = {
   code: number;
-  result: Result;
+  result: Result | PaginateResult;
 }
 
 type Post = {
@@ -48,4 +48,15 @@ type QueryOptions = {
 
 type SortQuery = {
   price: string;
+}
+interface PaginateResult extends Result {
+  docs: Array<Product>;
+  totalPages: number;
+  prevPage: number;
+  nextPage: number;
+  page: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+  prevPageUrl: string;
+  nextPageUrl: string;
 }
