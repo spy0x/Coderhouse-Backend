@@ -6,8 +6,11 @@ const productsRouter = Router();
 const Service = new ProductService();
 
 productsRouter.get("/", async (req, res) => {
-  const countLimit = req.query.limit;
-  const response = await Service.getProducts(countLimit);
+  const limit = req.query.limit;
+  const filter = req.query.query;
+  const sorted = req.query.sort as string;
+  const page = req.query.page;
+  const response = await Service.getProducts(limit, filter, sorted, page);
   return res.status(response.code).json(response.result);
 });
 

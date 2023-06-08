@@ -38,3 +38,14 @@ type Post = {
   username: string;
   message: string;
 }
+
+type QueryOptions = {
+  limit?: number;
+  page?: number;
+  sort?: SortQuery;
+  category?: string;
+};
+
+type SortQuery = {
+  price: string;
+}

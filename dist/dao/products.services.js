@@ -49,29 +49,22 @@ export default class ProductService {
             return { code: 404, result: { status: "error", message: "Couldn't get product" } };
         }
     }
-    async getProducts(countLimit) {
+    async getProducts(limit, query, sort, page) {
         try {
-            const products = await ProductModel.find().lean().exec();
+            query = query ? { category: query } : {};
+            limit = limit || 10;
+            page = page || 1;
+            const options = { limit, page };
+            if (sort) {
+                options.sort = { price: sort };
+            }
+            const products = await ProductModel.paginate(query, options);
+            // const products = await ProductModel.find().lean().exec();
             // if products array is empty, return error
             if (products.length === 0) {
                 return { code: 404, result: { status: "error", message: "No products found." } };
             }
-            // if countLimit exists, list products with the specified limit. Else, list all products.
-            if (countLimit) {
-                if (isNaN(countLimit)) {
-                    return { code: 400, result: { status: "error", message: "Invalid limit" } };
-                }
-                else if (countLimit < 1) {
-                    return { code: 400, result: { status: "error", message: "Limit must be greater than 0" } };
-                }
-                else {
-                    const products = await ProductModel.find().limit(countLimit);
-                    return { code: 200, result: { status: "success", payload: products } };
-                }
-            }
-            else {
-                return { code: 200, result: { status: "success", payload: products } };
-            }
+            return { code: 200, result: { status: "success", payload: products } };
         }
         catch (error) {
             return { code: 400, result: { status: "error", message: "Error getting products" } };
