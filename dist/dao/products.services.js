@@ -1,5 +1,6 @@
 import { ProductModel } from "../dao/models/products.models.js";
 import mongoose from "mongoose";
+const HOST_URL = 'http://localhost:8080';
 export default class ProductService {
     async addProduct(product) {
         try {
@@ -68,8 +69,8 @@ export default class ProductService {
                 return { code: 404, result: { status: "error", message: "No products found." } };
             }
             const { docs, totalPages, prevPage, nextPage, page, hasNextPage, hasPrevPage } = products;
-            const prevPageUrl = `http://localhost:8080/api/products?page=${prevPage}`;
-            const nextPageUrl = `http://localhost:8080/api/products?page=${nextPage}`;
+            const prevPageUrl = `${HOST_URL}/api/products?page=${prevPage}`;
+            const nextPageUrl = `${HOST_URL}/api/products?page=${nextPage}`;
             const result = { totalPages, prevPage, nextPage, page, hasNextPage, hasPrevPage, prevPageUrl, nextPageUrl };
             return { code: 200, result: { status: "success", payload: docs, ...result } };
         }
