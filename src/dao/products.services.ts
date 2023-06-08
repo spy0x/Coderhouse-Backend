@@ -1,7 +1,6 @@
 import { ProductModel } from "../dao/models/products.models.js";
 import mongoose from "mongoose";
 
-const HOST_URL= 'http://localhost:8080';
 export default class ProductService {
   async addProduct(product: Product): Promise<ResResult> {
     try {
@@ -52,12 +51,12 @@ export default class ProductService {
     }
   }
 
-  async getProducts(limit: any, query: any, sort: string, pag: any): Promise<ResResult> {
+  async getProducts(limit: any, query: any, sort: any, pag: any): Promise<ResResult> {
     try {
       query = query ? { category: query } : {};
       limit = limit || 10;
       pag = pag || 1;
-      const options: QueryOptions = { limit, page: pag };
+      const options: QueryOptions = { limit, page: pag, lean: true };
       if (sort) {
         const validSort = sort === "asc" || sort === "desc";
         if (!validSort) return { code: 400, result: { status: "error", message: "Invalid sort parameter" } };
@@ -66,12 +65,12 @@ export default class ProductService {
       const products = await ProductModel.paginate(query, options);
       // const products = await ProductModel.find().lean().exec();
       // if products array is empty, return error
-      if (products.length === 0) {
+      if (products.docs.length === 0) {
         return { code: 404, result: { status: "error", message: "No products found." } };
       }
       const { docs, totalPages, prevPage, nextPage, page, hasNextPage, hasPrevPage } = products;
-      const prevPageUrl = `${HOST_URL}/api/products?page=${prevPage}`;
-      const nextPageUrl = `${HOST_URL}/api/products?page=${nextPage}`;
+      const prevPageUrl = hasPrevPage && `/api/products?page=${prevPage}`;
+      const nextPageUrl = hasNextPage && `/api/products?page=${nextPage}`;
       const result = { totalPages, prevPage, nextPage, page, hasNextPage, hasPrevPage, prevPageUrl, nextPageUrl };
       return { code: 200, result: { status: "success", payload: docs, ...result } };
     } catch (error) {

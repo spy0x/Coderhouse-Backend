@@ -44,6 +44,7 @@ type QueryOptions = {
   page?: number;
   sort?: SortQuery;
   category?: string;
+  lean?: boolean;
 };
 
 type SortQuery = {
