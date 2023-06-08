@@ -3,7 +3,7 @@ import ProductService from "../dao/products.services.js";
 const viewsRouter = Router();
 const Service = new ProductService();
 viewsRouter.get("/", async (req, res) => {
-    const { result } = await Service.getProducts(10, null, null, 1);
+    const { result } = await Service.getProducts();
     res.render("index", result);
 });
 viewsRouter.get("/realtimeproducts", (req, res) => {

@@ -5,7 +5,7 @@ const viewsRouter = Router();
 const Service = new ProductService();
 
 viewsRouter.get("/", async (req, res) => {
-  const { result } = await Service.getProducts(10, null, null, 1);
+  const { result } = await Service.getProducts();
   res.render("index", result);
 });
 

@@ -45,7 +45,7 @@ export function initSocket(httpServer: any) {
   const socketServer = new Server(httpServer);
   socketServer.on("connection", async (socket) => {
     console.log(`New client ${socket.id} connected`);
-    const { result } = await productService.getProducts(null);
+    const { result } = await productService.getProducts();
     socket.emit("getProducts", result);
     socket.emit("getMessages", await messageService.getAllMessages());
 
@@ -53,14 +53,14 @@ export function initSocket(httpServer: any) {
     socket.on("deleteProduct", async (id) => {
       await productService.deleteProduct(id);
       // BROADCAST UPDATE TO ALL CLIENTS
-      const { result } = await productService.getProducts(null);
+      const { result } = await productService.getProducts();
       socketServer.emit("getProducts", result);
     });
     // WEBSOCKET ADD PRODUCT EVENT
     socket.on("addProduct", async (product) => {
       await productService.addProduct(product);
       // BROADCAST UPDATE TO ALL CLIENTS
-      const { result } = await productService.getProducts(null);
+      const { result } = await productService.getProducts();
       socketServer.emit("getProducts", result);
     });
     socket.on("addMessage", async (message) => {

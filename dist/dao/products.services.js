@@ -49,7 +49,7 @@ export default class ProductService {
             return { code: 404, result: { status: "error", message: "Couldn't get product" } };
         }
     }
-    async getProducts(limit, query, sort, pag) {
+    async getProducts(limit = 10, query = null, sort = null, pag = 1) {
         try {
             query = query ? { category: query } : {};
             limit = limit || 10;

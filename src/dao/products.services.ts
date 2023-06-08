@@ -51,7 +51,7 @@ export default class ProductService {
     }
   }
 
-  async getProducts(limit: any, query: any, sort: any, pag: any): Promise<ResResult> {
+  async getProducts(limit: any = 10, query: any = null, sort: any = null, pag: any = 1): Promise<ResResult> {
     try {
       query = query ? { category: query } : {};
       limit = limit || 10;
