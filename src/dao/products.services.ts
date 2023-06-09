@@ -54,23 +54,33 @@ export default class ProductService {
   async getProducts(limit: any = 10, query: any = null, sort: any = null, pag: any = 1): Promise<ResResult> {
     try {
       query = query ? { category: query } : {};
+      // If limit not a number, return error.
+      if (isNaN(limit)) return { code: 400, result: { status: "error", message: "Invalid limit parameter" } };
       limit = limit || 10;
+      // If page not a number, return error.
+      if (isNaN(pag)) return { code: 400, result: { status: "error", message: "Invalid page parameter" } };
       pag = pag || 1;
+
       const options: QueryOptions = { limit, page: pag, lean: true };
+      // if sort is not null, check if it's a valid value and then set sort option.
       if (sort) {
         const validSort = sort === "asc" || sort === "desc";
         if (!validSort) return { code: 400, result: { status: "error", message: "Invalid sort parameter" } };
         options.sort = { price: sort };
       }
       const products = await ProductModel.paginate(query, options);
-      // const products = await ProductModel.find().lean().exec();
       // if products array is empty, return error
       if (products.docs.length === 0) {
         return { code: 404, result: { status: "error", message: "No products found." } };
       }
+      // Get pagination info into variables.
       const { docs, totalPages, prevPage, nextPage, page, hasNextPage, hasPrevPage } = products;
-      const prevPageUrl = hasPrevPage && `/api/products?page=${prevPage}`;
-      const nextPageUrl = hasNextPage && `/api/products?page=${nextPage}`;
+      // Setting Next and Prev page urls
+      const queryStr = Object.keys(query).length === 0 ? "" : `&query=${query}`;
+      const sortStr = sort !== null ? `&sort=${sort}` : "";
+      const prevPageUrl = hasPrevPage && `/api/products?page=${prevPage}&limit=${limit}${queryStr}${sortStr}`;
+      const nextPageUrl = hasNextPage && `/api/products?page=${nextPage}&limit=${limit}${queryStr}${sortStr}`;
+      // Setting result object and returning it
       const result = { totalPages, prevPage, nextPage, page, hasNextPage, hasPrevPage, prevPageUrl, nextPageUrl };
       return { code: 200, result: { status: "success", payload: docs, ...result } };
     } catch (error) {
