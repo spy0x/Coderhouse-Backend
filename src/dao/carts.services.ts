@@ -19,7 +19,7 @@ export default class CartService {
   async addProductToCart(cartID: string, productID: string): Promise<ResResult> {
     try {
       // Checks if product exists
-      if(!mongoose.Types.ObjectId.isValid(productID)) {
+      if (!mongoose.Types.ObjectId.isValid(productID)) {
         return { code: 404, result: { status: "error", message: "Product not found" } };
       }
       const productExists = await productService.productExists(productID);
@@ -27,7 +27,7 @@ export default class CartService {
         return { code: 404, result: { status: "error", message: "Product not found" } };
       }
       // Checks if cart exists
-      if(!mongoose.Types.ObjectId.isValid(cartID)) {
+      if (!mongoose.Types.ObjectId.isValid(cartID)) {
         return { code: 404, result: { status: "error", message: "Cart not found" } };
       }
       const cartExists = await this.cartExists(cartID);
@@ -61,7 +61,7 @@ export default class CartService {
 
   async cartExists(cartID: string) {
     try {
-      if(!mongoose.Types.ObjectId.isValid(cartID)) {
+      if (!mongoose.Types.ObjectId.isValid(cartID)) {
         return false;
       }
       const cart = await CartModel.findById(cartID);
@@ -73,7 +73,7 @@ export default class CartService {
 
   async getCartProducts(id: string): Promise<ResResult> {
     try {
-      if(!mongoose.Types.ObjectId.isValid(id)) {
+      if (!mongoose.Types.ObjectId.isValid(id)) {
         return { code: 404, result: { status: "error", message: "Cart not found" } };
       }
       const cart = await CartModel.findById(id);
@@ -84,6 +84,38 @@ export default class CartService {
       }
     } catch (error) {
       return { code: 500, result: { status: "error", message: "Couldn't get cart products." } };
+    }
+  }
+
+  async deleteProductFromCart(cartID: string, productID: string): Promise<ResResult> {
+    try {
+      // Check if cartID is valid and exists
+      if (!mongoose.Types.ObjectId.isValid(cartID)) {
+        return { code: 404, result: { status: "error", message: "Cart not found" } };
+      }
+      const cart = await CartModel.findById(cartID);
+      if (!cart) {
+        return { code: 404, result: { status: "error", message: "Cart not found" } };
+      }
+      // Check if productID is valid and exists
+      if (!mongoose.Types.ObjectId.isValid(productID)) {
+        return { code: 404, result: { status: "error", message: "Product not found" } };
+      }
+      const productExists = await productService.productExists(productID);
+      if (!productExists) {
+        return { code: 404, result: { status: "error", message: "Product not found" } };
+      }
+      // Check if product is in cart
+      const productInCartIndex = cart.productos.findIndex((product) => product.idProduct === productID);
+      if (productInCartIndex === -1) {
+        return { code: 404, result: { status: "error", message: "Product not found in cart" } };
+      }
+      // If product is in cart, delete it
+      cart.productos.splice(productInCartIndex, 1);
+      await CartModel.updateOne({ _id: cartID }, cart);
+      return { code: 200, result: { status: "success", message: "Product deleted from cart", payload: cart } };
+    } catch (error) {
+      return { code: 500, result: { status: "error", message: "Couldn't delete product from cart." } };
     }
   }
 }

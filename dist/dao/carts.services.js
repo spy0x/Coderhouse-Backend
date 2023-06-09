@@ -87,4 +87,36 @@ export default class CartService {
             return { code: 500, result: { status: "error", message: "Couldn't get cart products." } };
         }
     }
+    async deleteProductFromCart(cartID, productID) {
+        try {
+            // Check if cartID is valid and exists
+            if (!mongoose.Types.ObjectId.isValid(cartID)) {
+                return { code: 404, result: { status: "error", message: "Cart not found" } };
+            }
+            const cart = await CartModel.findById(cartID);
+            if (!cart) {
+                return { code: 404, result: { status: "error", message: "Cart not found" } };
+            }
+            // Check if productID is valid and exists
+            if (!mongoose.Types.ObjectId.isValid(productID)) {
+                return { code: 404, result: { status: "error", message: "Product not found" } };
+            }
+            const productExists = await productService.productExists(productID);
+            if (!productExists) {
+                return { code: 404, result: { status: "error", message: "Product not found" } };
+            }
+            // Check if product is in cart
+            const productInCartIndex = cart.productos.findIndex((product) => product.idProduct === productID);
+            if (productInCartIndex === -1) {
+                return { code: 404, result: { status: "error", message: "Product not found in cart" } };
+            }
+            // If product is in cart, delete it
+            cart.productos.splice(productInCartIndex, 1);
+            await CartModel.updateOne({ _id: cartID }, cart);
+            return { code: 200, result: { status: "success", message: "Product deleted from cart", payload: cart } };
+        }
+        catch (error) {
+            return { code: 500, result: { status: "error", message: "Couldn't delete product from cart." } };
+        }
+    }
 }

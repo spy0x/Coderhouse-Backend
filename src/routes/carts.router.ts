@@ -22,4 +22,11 @@ cartsRouter.post("/:cid/product/:pid", async (req, res) => {
     return res.status(response.code).json(response.result);
 });
 
+cartsRouter.delete("/:cid/product/:pid", async (req, res) => {
+    const cartID = req.params.cid;
+    const productID = req.params.pid;
+    const response = await Service.deleteProductFromCart(cartID, productID);
+    return res.status(response.code).json(response.result);
+});
+
 export default cartsRouter;

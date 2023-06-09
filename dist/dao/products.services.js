@@ -136,8 +136,7 @@ export default class ProductService {
     }
     async productExists(id) {
         try {
-            await ProductModel.exists({ _id: id });
-            return true;
+            return await ProductModel.exists({ _id: id });
         }
         catch {
             return false;
