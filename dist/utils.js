@@ -37,21 +37,21 @@ export function initSocket(httpServer) {
     const socketServer = new Server(httpServer);
     socketServer.on("connection", async (socket) => {
         console.log(`New client ${socket.id} connected`);
-        const { result } = await productService.getProducts();
+        const { result } = await productService.getProducts(null);
         socket.emit("getProducts", result);
         socket.emit("getMessages", await messageService.getAllMessages());
         // WEBSOCKET DELETE PRODUCT EVENT
         socket.on("deleteProduct", async (id) => {
             await productService.deleteProduct(id);
             // BROADCAST UPDATE TO ALL CLIENTS
-            const { result } = await productService.getProducts();
+            const { result } = await productService.getProducts(null);
             socketServer.emit("getProducts", result);
         });
         // WEBSOCKET ADD PRODUCT EVENT
         socket.on("addProduct", async (product) => {
             await productService.addProduct(product);
             // BROADCAST UPDATE TO ALL CLIENTS
-            const { result } = await productService.getProducts();
+            const { result } = await productService.getProducts(null);
             socketServer.emit("getProducts", result);
         });
         socket.on("addMessage", async (message) => {
