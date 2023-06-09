@@ -118,4 +118,35 @@ export default class CartService {
       return { code: 500, result: { status: "error", message: "Couldn't delete product from cart." } };
     }
   }
+  async updateProductsList(cartID: string, products: Array<ProductIdOnly>): Promise<ResResult> {
+    // Check if products is an array
+    if (!Array.isArray(products)) {
+      return { code: 404, result: { status: "error", message: "Products must be an array" } };
+    }
+    // Check if cartID is valid and exists
+    if (!mongoose.Types.ObjectId.isValid(cartID)) {
+      return { code: 404, result: { status: "error", message: "Cart not found" } };
+    }
+    const cart = await CartModel.findById(cartID);
+    if (!cart) {
+      return { code: 404, result: { status: "error", message: "Cart not found" } };
+    }
+    // Check products array contains valid parameters
+    for (const product of products) {
+      if (!mongoose.Types.ObjectId.isValid(product.idProduct)) {
+        return { code: 404, result: { status: "error", message: "Some product has wrong ID" } };
+      }
+      const productExists = await productService.productExists(product.idProduct);
+      if (!productExists) {
+        return { code: 404, result: { status: "error", message: "Some product has wrong ID" } };
+      }
+      if (!product.quantity || product.quantity < 1 || isNaN(product.quantity)) {
+        product.quantity = 1;
+      }
+    }
+    // Else, update cart products with new product list
+    cart.productos = products;
+    await CartModel.updateOne({ _id: cartID }, cart);
+    return { code: 200, result: { status: "success", message: "Cart product list updated", payload: cart } };
+  }
 }

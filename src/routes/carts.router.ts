@@ -15,6 +15,13 @@ cartsRouter.get("/:cid", async (req, res) => {
     return res.status(response.code).json(response.result);
 });
 
+cartsRouter.put("/:cid", async (req, res) => {
+    const cartID = req.params.cid;
+    const products = req.body;
+    const response = await Service.updateProductsList(cartID, products);
+    return res.status(response.code).json(response.result);
+});
+
 cartsRouter.post("/:cid/product/:pid", async (req, res) => {
     const cartID = req.params.cid;
     const productID = req.params.pid;
