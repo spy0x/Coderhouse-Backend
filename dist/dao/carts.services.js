@@ -181,4 +181,18 @@ export default class CartService {
         await CartModel.updateOne({ _id: cartID }, cart);
         return { code: 200, result: { status: "success", message: "Product quantity updated", payload: cart } };
     }
+    async clearCart(cartID) {
+        // Check if cartID is valid and exists
+        if (!mongoose.Types.ObjectId.isValid(cartID)) {
+            return { code: 404, result: { status: "error", message: "Cart not found" } };
+        }
+        const cart = await CartModel.findById(cartID);
+        if (!cart) {
+            return { code: 404, result: { status: "error", message: "Cart not found" } };
+        }
+        // Else, clear cart products
+        cart.productos = [];
+        await CartModel.updateOne({ _id: cartID }, cart);
+        return { code: 200, result: { status: "success", message: "Cart cleared", payload: cart } };
+    }
 }
