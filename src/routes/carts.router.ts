@@ -22,6 +22,15 @@ cartsRouter.put("/:cid", async (req, res) => {
     return res.status(response.code).json(response.result);
 });
 
+cartsRouter.put("/:cid/product/:pid", async (req, res) => {
+    const cartID = req.params.cid;
+    const productID = req.params.pid;
+    const quantity = req.body.quantity;
+    const response = await Service.updateProductQuantity(cartID, productID, quantity);
+    return res.status(response.code).json(response.result);
+});
+
+
 cartsRouter.post("/:cid/product/:pid", async (req, res) => {
     const cartID = req.params.cid;
     const productID = req.params.pid;
