@@ -1,11 +1,13 @@
 import { Router } from "express";
 import ProductService from "../services/products.services.js";
+import CartService from "../services/carts.services.js";
 
 const viewsRouter = Router();
-const Service = new ProductService();
+const productService = new ProductService();
+const cartService = new CartService();
 
 viewsRouter.get("/", async (req, res) => {
-  const { result } = await Service.getProducts();
+  const { result } = await productService.getProducts();
   res.render("index", result);
 });
 
@@ -15,6 +17,18 @@ viewsRouter.get("/realtimeproducts", (req, res) => {
 
 viewsRouter.get("/chat", (req, res) => {
   res.render("chat");
+});
+
+viewsRouter.get("/products", async (req, res) => {
+  const {limit, page, query, sort} = req.query;
+  const { result } = await productService.getProducts(limit, query, sort, page);
+  res.render("products", result);
+});
+
+viewsRouter.get("/cart/:cid", async (req, res) => {
+  const cartID = req.params.cid;
+  const { result } = await cartService.getCartProducts(cartID);
+  res.render("cart", result);
 });
 
 viewsRouter.get("*", (req, res) => {

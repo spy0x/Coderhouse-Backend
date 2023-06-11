@@ -1,0 +1,19 @@
+<div>
+    <h1 class="text-3xl font-bold underline">{{#if message}}{{message}}{{else}}Product List{{/if}}</h1>
+    {{#if payload}}
+    <ul>
+        {{#each payload}}
+        <li>id: {{this._id}} name: {{this.title}} - price: ${{this.price}} - stock: {{this.stock}} - category:
+            {{this.category}}</li>
+        {{/each}}
+    </ul>
+    {{/if}}
+    <div class="flex justify-center gap-5 text-center">
+    {{#if prevPage}}
+        <a href="{{prevPageUrl}}"><i class="m-auto fa-solid fa-backward"></i></a>
+    {{/if}}
+    {{#if nextPage}}
+        <a href="{{nextPageUrl}}"><i class="m-auto fa-solid fa-forward"></i></a>
+    {{/if}}
+    </div>
+</div>
