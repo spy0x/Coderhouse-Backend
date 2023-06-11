@@ -19,10 +19,11 @@ viewsRouter.get("/products", async (req, res) => {
     const { result } = await productService.getProducts(limit, query, sort, page);
     res.render("products", result);
 });
-viewsRouter.get("/cart/:cid", async (req, res) => {
+viewsRouter.get("/carts/:cid", async (req, res) => {
     const cartID = req.params.cid;
     const { result } = await cartService.getCartProducts(cartID);
-    res.render("cart", result);
+    console.log(result);
+    res.render("carts", result);
 });
 viewsRouter.get("*", (req, res) => {
     const error = {

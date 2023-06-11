@@ -1,11 +1,12 @@
 <div class="p-5">
-    <h1 class="text-center text-3xl font-bold underline">{{#if message}}{{message}}{{else}}Product List{{/if}}</h1>
+    <h1 class="text-center text-3xl font-bold underline">{{#if message}}{{message}}{{else}}Cart Product List{{/if}}</h1>
     {{#if payload}}
     <div class="flex justify-center p-5">
         <ul>
             {{#each payload}}
-            <li>id: {{this._id}} name: {{this.title}} - price: ${{this.price}} - stock: {{this.stock}} - category:
-                {{this.category}}</li>
+            <li>id: {{this.idProduct._id}} name: {{this.idProduct.title}} - price: ${{this.idProduct.price}} - stock:
+                {{this.idProduct.stock}} - category:
+                {{this.idProduct.category}} - quantity: {{this.quantity}}</li>
             {{/each}}
         </ul>
     </div>

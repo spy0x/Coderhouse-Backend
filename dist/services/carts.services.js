@@ -34,7 +34,7 @@ export default class CartService {
                 return { code: 404, result: { status: "error", message: "Cart not found" } };
             }
             // Else, add product to cart
-            const cart = await CartModel.findById(cartID);
+            const cart = (await CartModel.findById(cartID));
             // Check if product is already in cart, add ++ to quantity
             const productInCartIndex = cart.productos.findIndex((product) => product.idProduct.toString() === productID);
             if (productInCartIndex !== -1) {
@@ -75,8 +75,13 @@ export default class CartService {
             if (!mongoose.Types.ObjectId.isValid(id)) {
                 return { code: 404, result: { status: "error", message: "Cart not found" } };
             }
-            const cart = await CartModel.findById(id).populate("productos.idProduct", { strictPopulate: false });
+            const cart = await CartModel.findById(id).populate("productos.idProduct").lean();
+            //if product list is empty, return error message
             if (cart) {
+                //if product list is empty, return error message
+                if (cart.productos.length === 0) {
+                    return { code: 404, result: { status: "error", message: "Cart is empty" } };
+                }
                 return { code: 200, result: { status: "success", payload: cart.productos } };
             }
             else {
@@ -94,7 +99,7 @@ export default class CartService {
             if (!mongoose.Types.ObjectId.isValid(cartID)) {
                 return { code: 404, result: { status: "error", message: "Cart not found" } };
             }
-            const cart = await CartModel.findById(cartID);
+            const cart = (await CartModel.findById(cartID));
             if (!cart) {
                 return { code: 404, result: { status: "error", message: "Cart not found" } };
             }
@@ -129,7 +134,7 @@ export default class CartService {
         if (!mongoose.Types.ObjectId.isValid(cartID)) {
             return { code: 404, result: { status: "error", message: "Cart not found" } };
         }
-        const cart = await CartModel.findById(cartID);
+        const cart = (await CartModel.findById(cartID));
         if (!cart) {
             return { code: 404, result: { status: "error", message: "Cart not found" } };
         }
@@ -156,7 +161,7 @@ export default class CartService {
         if (!mongoose.Types.ObjectId.isValid(cartID)) {
             return { code: 404, result: { status: "error", message: "Cart not found" } };
         }
-        const cart = await CartModel.findById(cartID);
+        const cart = (await CartModel.findById(cartID));
         if (!cart) {
             return { code: 404, result: { status: "error", message: "Cart not found" } };
         }
