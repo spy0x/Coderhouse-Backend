@@ -1,4 +1,4 @@
-import { CartModel } from "./models/carts.models.js";
+import { CartModel } from "../models/carts.models.js";
 import ProductService from "./products.services.js";
 import mongoose from "mongoose";
 const productService = new ProductService();

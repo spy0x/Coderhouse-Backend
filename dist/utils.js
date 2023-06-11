@@ -17,8 +17,8 @@ export async function connectMongo() {
 import multer from "multer";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
-import ProductService from "./dao/products.services.js";
-import MessageService from "./dao/messages.services.js";
+import ProductService from "./services/products.services.js";
+import MessageService from "./services/messages.services.js";
 const __filename = fileURLToPath(import.meta.url);
 export const __dirname = dirname(__filename);
 const storage = multer.diskStorage({

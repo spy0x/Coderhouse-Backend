@@ -1,5 +1,5 @@
 import { Router } from "express";
-import CartService from "../dao/carts.services.js";
+import CartService from "../services/carts.services.js";
 
 const cartsRouter = Router();
 const Service = new CartService();
