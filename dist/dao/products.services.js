@@ -25,10 +25,11 @@ export default class ProductService {
                 product.status = true;
             }
             // Add product
-            ProductModel.create(product);
+            await ProductModel.create(product);
             return { code: 201, result: { status: "success", message: "Product added successfully", payload: product } };
         }
         catch (error) {
+            console.log(error);
             return { code: 400, result: { status: "error", message: "Error adding product" } };
         }
     }
@@ -60,7 +61,7 @@ export default class ProductService {
             if (isNaN(pag))
                 return { code: 400, result: { status: "error", message: "Invalid page parameter" } };
             pag = pag || 1;
-            const options = { limit, page: pag, lean: true };
+            const options = { limit, page: pag, lean: true, leanWithId: false };
             // if sort is not null, check if it's a valid value and then set sort option.
             if (sort) {
                 const validSort = sort === "asc" || sort === "desc";

@@ -45,6 +45,7 @@ type QueryOptions = {
   sort?: SortQuery;
   category?: string;
   lean?: boolean;
+  leanWithId?: boolean;
 };
 
 type SortQuery = {

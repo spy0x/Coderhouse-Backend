@@ -34,9 +34,9 @@ export default class CartService {
                 return { code: 404, result: { status: "error", message: "Cart not found" } };
             }
             // Else, add product to cart
-            const cart = (await CartModel.findById(cartID));
+            const cart = await CartModel.findById(cartID);
             // Check if product is already in cart, add ++ to quantity
-            const productInCartIndex = cart.productos.findIndex((product) => product.idProduct === productID);
+            const productInCartIndex = cart.productos.findIndex((product) => product.idProduct.toString() === productID);
             if (productInCartIndex !== -1) {
                 cart.productos[productInCartIndex].quantity++;
                 await CartModel.updateOne({ _id: cartID }, cart);
@@ -75,7 +75,7 @@ export default class CartService {
             if (!mongoose.Types.ObjectId.isValid(id)) {
                 return { code: 404, result: { status: "error", message: "Cart not found" } };
             }
-            const cart = await CartModel.findById(id);
+            const cart = await CartModel.findById(id).populate("productos.idProduct", { strictPopulate: false });
             if (cart) {
                 return { code: 200, result: { status: "success", payload: cart.productos } };
             }
@@ -84,6 +84,7 @@ export default class CartService {
             }
         }
         catch (error) {
+            console.log(error);
             return { code: 500, result: { status: "error", message: "Couldn't get cart products." } };
         }
     }
@@ -106,7 +107,7 @@ export default class CartService {
                 return { code: 404, result: { status: "error", message: "Product not found" } };
             }
             // Check if product is in cart
-            const productInCartIndex = cart.productos.findIndex((product) => product.idProduct === productID);
+            const productInCartIndex = cart.productos.findIndex((product) => product.idProduct.toString() === productID);
             if (productInCartIndex === -1) {
                 return { code: 404, result: { status: "error", message: "Product not found in cart" } };
             }
@@ -168,7 +169,7 @@ export default class CartService {
             return { code: 404, result: { status: "error", message: "Product not found" } };
         }
         // Check if product is in cart
-        const productInCartIndex = cart.productos.findIndex((product) => product.idProduct === productID);
+        const productInCartIndex = cart.productos.findIndex((product) => product.idProduct.toString() === productID);
         if (productInCartIndex === -1) {
             return { code: 404, result: { status: "error", message: "Product not found in cart" } };
         }
