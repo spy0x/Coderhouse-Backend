@@ -42,18 +42,6 @@ export default class CartService {
     }
   }
 
-  async cartExists(cartID: string) {
-    try {
-      if (!mongoose.Types.ObjectId.isValid(cartID)) {
-        return false;
-      }
-      const cart = await CartModel.findById(cartID);
-      return cart ? true : false;
-    } catch (error) {
-      return false;
-    }
-  }
-
   async getCartProducts(id: string): Promise<ResResult> {
     try {
       const cart = (await CartModel.findById(id).populate("productos.idProduct").lean()) as Cart;
@@ -71,12 +59,7 @@ export default class CartService {
   async deleteProductFromCart(cartID: string, productID: string): Promise<ResResult> {
     try {
       const cart = (await CartModel.findById(cartID)) as Cart;
-      // Check if product is in cart
       const productInCartIndex = cart.productos.findIndex((product) => product.idProduct.toString() === productID);
-      if (productInCartIndex === -1) {
-        return { code: 404, result: { status: "error", message: "Product not found in cart" } };
-      }
-      // Else delete product from cart 
       cart.productos.splice(productInCartIndex, 1);
       await CartModel.updateOne({ _id: cartID }, cart);
       return { code: 200, result: { status: "success", message: "Product deleted from cart", payload: cart } };
@@ -86,25 +69,7 @@ export default class CartService {
   }
   async updateProductsList(cartID: string, products: Array<ProductIdOnly>): Promise<ResResult> {
     try {
-      // Check if products is an array
-      if (!Array.isArray(products)) {
-        return { code: 404, result: { status: "error", message: "Products must be an array" } };
-      }
       const cart = (await CartModel.findById(cartID)) as Cart;
-      // Check products array contains valid parameters
-      for (const product of products) {
-        if (!mongoose.Types.ObjectId.isValid(product.idProduct)) {
-          return { code: 404, result: { status: "error", message: "Some product has wrong ID" } };
-        }
-        const productExists = await productService.productExists(product.idProduct);
-        if (!productExists) {
-          return { code: 404, result: { status: "error", message: "Some product has wrong ID" } };
-        }
-        if (!product.quantity || product.quantity < 1 || isNaN(product.quantity)) {
-          product.quantity = 1;
-        }
-      }
-      // Else, update cart products with new product list
       cart.productos = products;
       await CartModel.updateOne({ _id: cartID }, cart);
       return { code: 200, result: { status: "success", message: "Cart product list updated", payload: cart } };
@@ -112,26 +77,27 @@ export default class CartService {
       return { code: 500, result: { status: "error", message: "Couldn't update cart product list." } };
     }
   }
+
   async updateProductQuantity(cartID: string, productID: string, quantity: number): Promise<ResResult> {
-    const cart = (await CartModel.findById(cartID)) as Cart;
-    // Check if product is in cart
-    const productInCartIndex = cart.productos.findIndex((product) => product.idProduct.toString() === productID);
-    if (productInCartIndex === -1) {
-      return { code: 404, result: { status: "error", message: "Product not found in cart" } };
+    try {
+      const cart = (await CartModel.findById(cartID)) as Cart;
+      const productInCartIndex = cart.productos.findIndex((product) => product.idProduct.toString() === productID);
+      // Check if quantity is valid
+      if (!quantity || quantity < 1 || isNaN(quantity)) {
+        return { code: 404, result: { status: "error", message: "Invalid quantity" } };
+      }
+      // Else update its quantity
+      cart.productos[productInCartIndex].quantity = quantity;
+      await CartModel.updateOne({ _id: cartID }, cart);
+      return { code: 200, result: { status: "success", message: "Product quantity updated", payload: cart } };
+    } catch (error) {
+      return { code: 500, result: { status: "error", message: "Couldn't update product quantity." } };
     }
-    // Check if quantity is valid
-    if (!quantity || quantity < 1 || isNaN(quantity)) {
-      return { code: 404, result: { status: "error", message: "Invalid quantity" } };
-    }
-    // Else product is in cart and update its quantity
-    cart.productos[productInCartIndex].quantity = quantity;
-    await CartModel.updateOne({ _id: cartID }, cart);
-    return { code: 200, result: { status: "success", message: "Product quantity updated", payload: cart } };
   }
 
   async clearCart(cartID: string): Promise<ResResult> {
     try {
-      const cart = await CartModel.findById(cartID) as Cart;
+      const cart = (await CartModel.findById(cartID)) as Cart;
       cart.productos = [];
       await CartModel.updateOne({ _id: cartID }, cart);
       return { code: 200, result: { status: "success", message: "Cart cleared", payload: cart } };
