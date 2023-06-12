@@ -18,23 +18,6 @@ export default class CartService {
 
   async addProductToCart(cartID: string, productID: string): Promise<ResResult> {
     try {
-      // Checks if product exists
-      if (!mongoose.Types.ObjectId.isValid(productID)) {
-        return { code: 404, result: { status: "error", message: "Product not found" } };
-      }
-      const productExists = await productService.productExists(productID);
-      if (!productExists) {
-        return { code: 404, result: { status: "error", message: "Product not found" } };
-      }
-      // Checks if cart exists
-      if (!mongoose.Types.ObjectId.isValid(cartID)) {
-        return { code: 404, result: { status: "error", message: "Cart not found" } };
-      }
-      const cartExists = await this.cartExists(cartID);
-      if (!cartExists) {
-        return { code: 404, result: { status: "error", message: "Cart not found" } };
-      }
-      // Else, add product to cart
       const cart = (await CartModel.findById(cartID)) as Cart;
       // Check if product is already in cart, add ++ to quantity
       const productInCartIndex = cart.productos.findIndex((product) => product.idProduct.toString() === productID);
@@ -73,19 +56,12 @@ export default class CartService {
 
   async getCartProducts(id: string): Promise<ResResult> {
     try {
-      if (!mongoose.Types.ObjectId.isValid(id)) {
-        return { code: 404, result: { status: "error", message: "Cart not found" } };
-      }
-      const cart = await CartModel.findById(id).populate("productos.idProduct").lean();
-      //if product list is empty, return error message
-      if (cart) {
-        //if product list is empty, return error message
-        if (cart.productos.length === 0) {
-          return { code: 404, result: { status: "error", message: "Cart is empty" } };
-        }
-        return { code: 200, result: { status: "success", payload: cart.productos } };
+      const cart = (await CartModel.findById(id).populate("productos.idProduct").lean()) as Cart;
+      //if product list is empty, return error message, else return products
+      if (cart.productos.length === 0) {
+        return { code: 404, result: { status: "error", message: "Cart is empty" } };
       } else {
-        return { code: 404, result: { status: "error", message: "Cart not found" } };
+        return { code: 200, result: { status: "success", payload: cart.productos } };
       }
     } catch (error) {
       return { code: 500, result: { status: "error", message: "Couldn't get cart products." } };
@@ -94,28 +70,13 @@ export default class CartService {
 
   async deleteProductFromCart(cartID: string, productID: string): Promise<ResResult> {
     try {
-      // Check if cartID is valid and exists
-      if (!mongoose.Types.ObjectId.isValid(cartID)) {
-        return { code: 404, result: { status: "error", message: "Cart not found" } };
-      }
       const cart = (await CartModel.findById(cartID)) as Cart;
-      if (!cart) {
-        return { code: 404, result: { status: "error", message: "Cart not found" } };
-      }
-      // Check if productID is valid and exists
-      if (!mongoose.Types.ObjectId.isValid(productID)) {
-        return { code: 404, result: { status: "error", message: "Product not found" } };
-      }
-      const productExists = await productService.productExists(productID);
-      if (!productExists) {
-        return { code: 404, result: { status: "error", message: "Product not found" } };
-      }
       // Check if product is in cart
       const productInCartIndex = cart.productos.findIndex((product) => product.idProduct.toString() === productID);
       if (productInCartIndex === -1) {
         return { code: 404, result: { status: "error", message: "Product not found in cart" } };
       }
-      // If product is in cart, delete it
+      // Else delete product from cart 
       cart.productos.splice(productInCartIndex, 1);
       await CartModel.updateOne({ _id: cartID }, cart);
       return { code: 200, result: { status: "success", message: "Product deleted from cart", payload: cart } };
@@ -124,53 +85,35 @@ export default class CartService {
     }
   }
   async updateProductsList(cartID: string, products: Array<ProductIdOnly>): Promise<ResResult> {
-    // Check if products is an array
-    if (!Array.isArray(products)) {
-      return { code: 404, result: { status: "error", message: "Products must be an array" } };
-    }
-    // Check if cartID is valid and exists
-    if (!mongoose.Types.ObjectId.isValid(cartID)) {
-      return { code: 404, result: { status: "error", message: "Cart not found" } };
-    }
-    const cart = (await CartModel.findById(cartID)) as Cart;
-    if (!cart) {
-      return { code: 404, result: { status: "error", message: "Cart not found" } };
-    }
-    // Check products array contains valid parameters
-    for (const product of products) {
-      if (!mongoose.Types.ObjectId.isValid(product.idProduct)) {
-        return { code: 404, result: { status: "error", message: "Some product has wrong ID" } };
+    try {
+      // Check if products is an array
+      if (!Array.isArray(products)) {
+        return { code: 404, result: { status: "error", message: "Products must be an array" } };
       }
-      const productExists = await productService.productExists(product.idProduct);
-      if (!productExists) {
-        return { code: 404, result: { status: "error", message: "Some product has wrong ID" } };
+      const cart = (await CartModel.findById(cartID)) as Cart;
+      // Check products array contains valid parameters
+      for (const product of products) {
+        if (!mongoose.Types.ObjectId.isValid(product.idProduct)) {
+          return { code: 404, result: { status: "error", message: "Some product has wrong ID" } };
+        }
+        const productExists = await productService.productExists(product.idProduct);
+        if (!productExists) {
+          return { code: 404, result: { status: "error", message: "Some product has wrong ID" } };
+        }
+        if (!product.quantity || product.quantity < 1 || isNaN(product.quantity)) {
+          product.quantity = 1;
+        }
       }
-      if (!product.quantity || product.quantity < 1 || isNaN(product.quantity)) {
-        product.quantity = 1;
-      }
+      // Else, update cart products with new product list
+      cart.productos = products;
+      await CartModel.updateOne({ _id: cartID }, cart);
+      return { code: 200, result: { status: "success", message: "Cart product list updated", payload: cart } };
+    } catch (error) {
+      return { code: 500, result: { status: "error", message: "Couldn't update cart product list." } };
     }
-    // Else, update cart products with new product list
-    cart.productos = products;
-    await CartModel.updateOne({ _id: cartID }, cart);
-    return { code: 200, result: { status: "success", message: "Cart product list updated", payload: cart } };
   }
   async updateProductQuantity(cartID: string, productID: string, quantity: number): Promise<ResResult> {
-    // Check if cartID is valid and exists
-    if (!mongoose.Types.ObjectId.isValid(cartID)) {
-      return { code: 404, result: { status: "error", message: "Cart not found" } };
-    }
     const cart = (await CartModel.findById(cartID)) as Cart;
-    if (!cart) {
-      return { code: 404, result: { status: "error", message: "Cart not found" } };
-    }
-    // Check if productID is valid and exists
-    if (!mongoose.Types.ObjectId.isValid(productID)) {
-      return { code: 404, result: { status: "error", message: "Product not found" } };
-    }
-    const productExists = await productService.productExists(productID);
-    if (!productExists) {
-      return { code: 404, result: { status: "error", message: "Product not found" } };
-    }
     // Check if product is in cart
     const productInCartIndex = cart.productos.findIndex((product) => product.idProduct.toString() === productID);
     if (productInCartIndex === -1) {
@@ -185,18 +128,15 @@ export default class CartService {
     await CartModel.updateOne({ _id: cartID }, cart);
     return { code: 200, result: { status: "success", message: "Product quantity updated", payload: cart } };
   }
+
   async clearCart(cartID: string): Promise<ResResult> {
-    // Check if cartID is valid and exists
-    if (!mongoose.Types.ObjectId.isValid(cartID)) {
-      return { code: 404, result: { status: "error", message: "Cart not found" } };
+    try {
+      const cart = await CartModel.findById(cartID) as Cart;
+      cart.productos = [];
+      await CartModel.updateOne({ _id: cartID }, cart);
+      return { code: 200, result: { status: "success", message: "Cart cleared", payload: cart } };
+    } catch (error) {
+      return { code: 500, result: { status: "error", message: "Couldn't clear cart." } };
     }
-    const cart = await CartModel.findById(cartID);
-    if (!cart) {
-      return { code: 404, result: { status: "error", message: "Cart not found" } };
-    }
-    // Else, clear cart products
-    cart.productos = [];
-    await CartModel.updateOne({ _id: cartID }, cart);
-    return { code: 200, result: { status: "success", message: "Cart cleared", payload: cart } };
   }
 }
