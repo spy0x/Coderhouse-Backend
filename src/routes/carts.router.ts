@@ -11,7 +11,7 @@ cartsRouter.post("/", async (req, res) => {
     return res.status(response.code).json(response.result);
   });
 
-cartsRouter.get("/:cid", cartExists,async (req, res) => {
+cartsRouter.get("/:cid", cartExists, async (req, res) => {
     const cartID = req.params.cid;
     const response = await Service.getCartProducts(cartID);
     return res.status(response.code).json(response.result);

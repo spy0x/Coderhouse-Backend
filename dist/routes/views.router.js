@@ -1,6 +1,7 @@
 import { Router } from "express";
 import ProductService from "../services/products.services.js";
 import CartService from "../services/carts.services.js";
+import { cartExists } from "../middlewares/cartsMiddlewares.js";
 const viewsRouter = Router();
 const productService = new ProductService();
 const cartService = new CartService();
@@ -19,7 +20,7 @@ viewsRouter.get("/products", async (req, res) => {
     const { result } = await productService.getProducts(limit, query, sort, page);
     res.render("products", result);
 });
-viewsRouter.get("/carts/:cid", async (req, res) => {
+viewsRouter.get("/carts/:cid", cartExists, async (req, res) => {
     const cartID = req.params.cid;
     const { result } = await cartService.getCartProducts(cartID);
     res.render("carts", result);
