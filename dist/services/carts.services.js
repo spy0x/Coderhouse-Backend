@@ -89,7 +89,6 @@ export default class CartService {
             }
         }
         catch (error) {
-            console.log(error);
             return { code: 500, result: { status: "error", message: "Couldn't get cart products." } };
         }
     }

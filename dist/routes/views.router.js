@@ -22,7 +22,6 @@ viewsRouter.get("/products", async (req, res) => {
 viewsRouter.get("/carts/:cid", async (req, res) => {
     const cartID = req.params.cid;
     const { result } = await cartService.getCartProducts(cartID);
-    console.log(result);
     res.render("carts", result);
 });
 viewsRouter.get("*", (req, res) => {

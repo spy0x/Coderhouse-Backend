@@ -1,3 +1,6 @@
+<div>
+    <p>Your cart ID: <a class="font-bold underline hover:text-blue-600" id="cart-id"></a></p>
+</div>
 <div class="p-5">
     <h1 class="text-center text-3xl font-bold underline">{{#if message}}{{message}}{{else}}Product List{{/if}}</h1>
     {{#if payload}}
@@ -5,7 +8,10 @@
         <ul>
             {{#each payload}}
             <li>id: {{this._id}} name: {{this.title}} - price: ${{this.price}} - stock: {{this.stock}} - category:
-                {{this.category}}</li>
+                {{this.category}} <a id="{{this._id}}"><button
+                        class="mx-5 my-1 text-center bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Add
+                        to cart</button></a>
+            </li>
             {{/each}}
         </ul>
     </div>
@@ -19,3 +25,5 @@
         {{/if}}
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/static/js/products.js"></script>

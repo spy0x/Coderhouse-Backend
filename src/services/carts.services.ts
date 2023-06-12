@@ -88,7 +88,6 @@ export default class CartService {
         return { code: 404, result: { status: "error", message: "Cart not found" } };
       }
     } catch (error) {
-      console.log(error);
       return { code: 500, result: { status: "error", message: "Couldn't get cart products." } };
     }
   }

@@ -31,7 +31,6 @@ export default class ProductService {
       await ProductModel.create(product);
       return { code: 201, result: { status: "success", message: "Product added successfully", payload: product } };
     } catch (error) {
-      console.log(error)
       return { code: 400, result: { status: "error", message: "Error adding product" } };
     }
   }
