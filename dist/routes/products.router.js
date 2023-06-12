@@ -1,6 +1,6 @@
 import { Router } from "express";
 import ProductService from "../services/products.services.js";
-import { productExists } from "../middlewares/productsMiddlewares.js";
+import { productValid, productExists } from "../middlewares/productsMiddlewares.js";
 const productsRouter = Router();
 const Service = new ProductService();
 productsRouter.get("/", async (req, res) => {
@@ -16,7 +16,7 @@ productsRouter.get("/:pid", productExists, async (req, res) => {
     const response = await Service.getProductById(id);
     return res.status(response.code).json(response.result);
 });
-productsRouter.post("/", async (req, res) => {
+productsRouter.post("/", productValid, async (req, res) => {
     const product = req.body;
     const response = await Service.addProduct(product);
     return res.status(response.code).json(response.result);

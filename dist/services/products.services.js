@@ -2,19 +2,6 @@ import { ProductModel } from "../models/products.models.js";
 export default class ProductService {
     async addProduct(product) {
         try {
-            // Check if product already exists
-            if (await ProductModel.findOne({ code: product.code })) {
-                return { code: 400, result: { status: "error", message: "Product already exists" } };
-            }
-            // Check if product has all required properties
-            if (!product.title ||
-                !product.description ||
-                !product.price ||
-                !product.code ||
-                !product.category ||
-                !product.stock) {
-                return { code: 400, result: { status: "error", message: "Product is missing required properties" } };
-            }
             // If no thumbnail, set default value to empty array
             if (!product.thumbnail) {
                 product.thumbnail = [];
