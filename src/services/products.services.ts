@@ -4,13 +4,9 @@ export default class ProductService {
   async addProduct(product: Product): Promise<ResResult> {
     try {
       // If no thumbnail, set default value to empty array
-      if (!product.thumbnail) {
-        product.thumbnail = [];
-      }
+      if (!product.thumbnail) product.thumbnail = [];
       // if no status, set default value to true
-      if (!product.status) {
-        product.status = true;
-      }
+      if (!product.status) product.status = true;
       // Add product
       await ProductModel.create(product);
       return { code: 201, result: { status: "success", message: "Product added successfully", payload: product } };
