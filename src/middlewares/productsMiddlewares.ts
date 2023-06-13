@@ -59,3 +59,20 @@ export const productValid = async (req: any, res: any, next: any) => {
   }
   next();
 };
+
+export const productsValidQueries = async (req: any, res: any, next: any) => {
+  const sort = req.query.sort;
+  req.query.limit = req.query.limit || 10;
+  req.query.page = req.query.page || 1;
+  req.query.query = req.query.query ? { category: req.query.query } : {};
+  // If limit not a number, return error.
+  if (isNaN(req.query.limit)) return res.status(400).json({ status: "error", message: "Invalid limit parameter" });
+  // If page not a number, return error.
+  if (isNaN(req.query.page)) return res.status(400).json({ status: "error", message: "Invalid page parameter" });
+  // if sort existsl, check if it's a valid value.
+  if (sort) {
+    const validSort = sort === "asc" || sort === "desc";
+    if (!validSort) return res.status(400).json({ status: "error", message: "Invalid sort parameter" });
+  }
+  next();
+};

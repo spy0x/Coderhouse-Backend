@@ -30,21 +30,9 @@ export default class ProductService {
 
   async getProducts(limit: any = 10, query: any = null, sort: any = null, pag: any = 1): Promise<ResResult> {
     try {
-      query = query ? { category: query } : {};
-      // If limit not a number, return error.
-      if (isNaN(limit)) return { code: 400, result: { status: "error", message: "Invalid limit parameter" } };
-      limit = limit || 10;
-      // If page not a number, return error.
-      if (isNaN(pag)) return { code: 400, result: { status: "error", message: "Invalid page parameter" } };
-      pag = pag || 1;
-
       const options: QueryOptions = { limit, page: pag, lean: true, leanWithId: false };
-      // if sort is not null, check if it's a valid value and then set sort option.
-      if (sort) {
-        const validSort = sort === "asc" || sort === "desc";
-        if (!validSort) return { code: 400, result: { status: "error", message: "Invalid sort parameter" } };
-        options.sort = { price: sort };
-      }
+      // if sort exists, add it to options
+      if (sort) options.sort = { price: sort };
       const products = await ProductModel.paginate(query, options);
       // if products array is empty, return error
       if (products.docs.length === 0) {
@@ -54,7 +42,7 @@ export default class ProductService {
       const { docs, totalPages, prevPage, nextPage, page, hasNextPage, hasPrevPage } = products;
       // Setting Next and Prev page urls
       const queryStr = Object.keys(query).length === 0 ? "" : `&query=${query}`;
-      const sortStr = sort !== null ? `&sort=${sort}` : "";
+      const sortStr = sort ? `&sort=${sort}` : "";
       const prevPageUrl = hasPrevPage && `/products?page=${prevPage}&limit=${limit}${queryStr}${sortStr}`;
       const nextPageUrl = hasNextPage && `/products?page=${nextPage}&limit=${limit}${queryStr}${sortStr}`;
       // Setting result object and returning it

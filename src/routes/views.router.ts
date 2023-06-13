@@ -2,25 +2,26 @@ import { Router } from "express";
 import ProductService from "../services/products.services.js";
 import CartService from "../services/carts.services.js";
 import { cartExists } from "../middlewares/cartsMiddlewares.js";
+import { productsValidQueries } from "../middlewares/productsMiddlewares.js";
 
 const viewsRouter = Router();
 const productService = new ProductService();
 const cartService = new CartService();
 
-viewsRouter.get("/", async (req, res) => {
-  const { result } = await productService.getProducts();
-  res.render("index", result);
-});
+// viewsRouter.get("/", async (req, res) => {
+//   const { result } = await productService.getProducts();
+//   res.render("index", result);
+// });
 
-viewsRouter.get("/realtimeproducts", (req, res) => {
-  res.render("realTimeProducts");
-});
+// viewsRouter.get("/realtimeproducts", (req, res) => {
+//   res.render("realTimeProducts");
+// });
 
-viewsRouter.get("/chat", (req, res) => {
-  res.render("chat");
-});
+// viewsRouter.get("/chat", (req, res) => {
+//   res.render("chat");
+// });
 
-viewsRouter.get("/products", async (req, res) => {
+viewsRouter.get("/products", productsValidQueries, async (req, res) => {
   const {limit, page, query, sort} = req.query;
   const { result } = await productService.getProducts(limit, query, sort, page);
   res.render("products", result);

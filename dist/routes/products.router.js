@@ -1,9 +1,9 @@
 import { Router } from "express";
 import ProductService from "../services/products.services.js";
-import { productValid, productExists } from "../middlewares/productsMiddlewares.js";
+import { productValid, productExists, productsValidQueries } from "../middlewares/productsMiddlewares.js";
 const productsRouter = Router();
 const Service = new ProductService();
-productsRouter.get("/", async (req, res) => {
+productsRouter.get("/", productsValidQueries, async (req, res) => {
     const limit = req.query.limit;
     const filter = req.query.query;
     const sorted = req.query.sort;
