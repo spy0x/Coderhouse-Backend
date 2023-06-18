@@ -7,6 +7,7 @@ import handlebars from "express-handlebars";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import filesStore from "session-file-store";
+import MongoStore from "connect-mongo";
 const PORT = 8080;
 const app = express();
 const FileStoreSession = filesStore(session);
@@ -25,7 +26,7 @@ async function startServer() {
     app.use(express.urlencoded({ extended: true }));
     app.use(cookieParser());
     app.use(session({
-        store: new FileStoreSession({ path: "./sessions", ttl: 100, retries: 0 }),
+        store: MongoStore.create({ mongoUrl: 'mongodb+srv://spy0x:%254y%5EWqkJ%26%264%25fA@cluster0.7hatvzm.mongodb.net/ecommerce?retryWrites=true&w=majority', ttl: 1000 }),
         secret: "$NhPb39oFn&CdY",
         resave: true,
         saveUninitialized: true,
