@@ -4,9 +4,13 @@ import cartsRouter from "./routes/carts.router.js";
 import productsRouter from "./routes/products.router.js";
 import viewsRouter from "./routes/views.router.js";
 import handlebars from "express-handlebars";
+import cookieParser from "cookie-parser";
+import session from "express-session";
+import filesStore from "session-file-store";
 
 const PORT = 8080;
 const app = express();
+const FileStoreSession = filesStore(session);
 
 connectMongo();
 startServer();
@@ -22,6 +26,13 @@ async function startServer() {
   app.use("/static", express.static("src/public"));
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
+  app.use(cookieParser())
+  app.use(session({
+    store: new FileStoreSession({ path: "./sessions", ttl: 100, retries: 0 }),
+    secret: "$NhPb39oFn&CdY",
+    resave: true,
+    saveUninitialized: true,
+  }));
   // SETTING ROUTES
   app.use("/api/carts", cartsRouter);
   app.use("/api/products", productsRouter);
