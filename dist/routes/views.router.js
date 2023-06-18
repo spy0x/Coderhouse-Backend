@@ -6,10 +6,11 @@ import { productsValidQueries } from "../middlewares/productsMiddlewares.js";
 const viewsRouter = Router();
 const productService = new ProductService();
 const cartService = new CartService();
-// viewsRouter.get("/", async (req, res) => {
-//   const { result } = await productService.getProducts();
-//   res.render("index", result);
-// });
+viewsRouter.get("/", async (req, res) => {
+    const { register } = req.query;
+    const context = { session: req.session, register };
+    res.render("index", context);
+});
 // viewsRouter.get("/realtimeproducts", (req, res) => {
 //   res.render("realTimeProducts");
 // });

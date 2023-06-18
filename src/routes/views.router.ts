@@ -8,10 +8,11 @@ const viewsRouter = Router();
 const productService = new ProductService();
 const cartService = new CartService();
 
-// viewsRouter.get("/", async (req, res) => {
-//   const { result } = await productService.getProducts();
-//   res.render("index", result);
-// });
+viewsRouter.get("/", async (req, res) => {
+  const { register } = req.query;
+  const context = { session: req.session, register };
+  res.render("index", context);
+});
 
 // viewsRouter.get("/realtimeproducts", (req, res) => {
 //   res.render("realTimeProducts");
@@ -22,7 +23,7 @@ const cartService = new CartService();
 // });
 
 viewsRouter.get("/products", productsValidQueries, async (req, res) => {
-  const {limit, page, query, sort} = req.query;
+  const { limit, page, query, sort } = req.query;
   const { result } = await productService.getProducts(limit, query, sort, page);
   res.render("products", result);
 });
