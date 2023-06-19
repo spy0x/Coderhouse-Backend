@@ -1,0 +1,23 @@
+<h1 class="text-3xl text-center font-bold underline">Login</h1>
+<form method="GET">
+    <div class="flex flex-col items-center space-y-1">
+        <div class="flex flex-col">
+            <label for="username">Username</label>
+            <input
+                class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                type="text" name="username" id="username" placeholder="Your email" required>
+        </div>
+        <div class="flex flex-col">
+            <label for="password">Password</label>
+            <input
+                class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                type="password" name="password" id="password" placeholder="Your password" required>
+        </div>
+    </div>
+    <div class="flex flex-col">
+        <button type="submit"
+            class="block mx-auto my-3 text-center bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Register</button>
+    </div>
+</form>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/static/js/login.js"></script>

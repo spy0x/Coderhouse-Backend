@@ -1,3 +1,15 @@
+type User = {
+  readonly _id?: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  age: number;
+  password: string;
+  role: string;
+}
+
+type UserSession = session.Session & Partial<session.SessionData> & User;
+
 type Product = {
   readonly _id?: string;
   title: string;
@@ -15,12 +27,12 @@ type ProductKeys = Partial<Omit<Product, "id">>;
 type ProductIdOnly = {
   idProduct: string;
   quantity: number;
-}
+};
 
 type Cart = {
   readonly _id?: string;
   productos: ProductIdOnly[];
-}
+};
 
 interface Result {
   status: string;
@@ -31,13 +43,13 @@ interface Result {
 type ResResult = {
   code: number;
   result: Result | PaginateResult;
-}
+};
 
 type Post = {
   readonly _id?: string;
   username: string;
   message: string;
-}
+};
 
 type QueryOptions = {
   limit?: number;
@@ -50,7 +62,7 @@ type QueryOptions = {
 
 type SortQuery = {
   price: string;
-}
+};
 interface PaginateResult extends Result {
   docs: Array<Product>;
   totalPages: number;

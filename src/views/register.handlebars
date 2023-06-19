@@ -1,0 +1,47 @@
+<h1 class="text-3xl text-center font-bold underline">Register</h1>
+<form method="POST">
+    <div class="flex flex-col items-center space-y-1">
+        <div class="flex flex-col">
+            <label for="first_name">Name</label>
+            <input
+                class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                type="text" name="first_name" id="first_name" placeholder="Your firstname" required>
+        </div>
+        <div class="flex flex-col">
+            <label for="last_name">Lastname</label>
+            <input
+                class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                type="text" name="last_name" id="last_name" placeholder="Your lastname" required>
+        </div>
+        <div class="flex flex-col">
+            <label for="age">Age</label>
+            <input
+                class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                type="number" min="1" max="100" name="age" id="age" placeholder="Your age" required>
+        </div>
+        <div class="flex flex-col">
+            <label for="email">Email</label>
+            <input
+                class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                type="email" name="email" id="email" placeholder="your@email.com" required>
+        </div>
+        <div class="flex flex-col">
+            <label for="password">Password</label>
+            <input
+                class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                type="password" name="password" id="password" placeholder="Your password" required>
+        </div>
+        <div class="flex flex-col">
+            <label for="password2">Confirm Password</label>
+            <input
+                class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                type="password" name="password2" id="password2" placeholder="Confirm your password" required>
+        </div>
+    </div>
+    <div class="flex flex-col">
+        <button type="submit"
+            class="block mx-auto my-3 text-center bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Register</button>
+    </div>
+</form>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/static/js/register.js"></script>
