@@ -41,7 +41,7 @@ form.onsubmit = (e) => {
           Swal.showLoading();
         },
         willClose: () => {
-          // Redirect to another URL after the specified time
+          // Redirect to Login Page.
           window.location.href = "/?login=true";
         },
       });

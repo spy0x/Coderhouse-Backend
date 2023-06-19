@@ -11,7 +11,7 @@
             <p>Role: {{session.role}}</p>
         </div>
     </div>
-    <button type="submit"
+    <button id="logout-btn" type="submit"
         class="block mx-auto my-3 text-center bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Logout</button>
     {{else}}
     <p class="text-xl text-center">Welcome, Guest. <span class="font-bold text-red-500"><a href="/?login=true">Sign
@@ -19,4 +19,4 @@
     {{/if}}
 </div>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="/static/js/register.js"></script>
+<script src="/static/js/profile.js"></script>

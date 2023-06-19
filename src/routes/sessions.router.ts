@@ -20,4 +20,14 @@ sessionsRouter.post("/login", async (req, res) => {
   return res.status(response.code).json(response.result);
 });
 
+sessionsRouter.get("/logout", async (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.status(500).json({ message: "Error! Couldn't logout!" });
+    }
+    res.clearCookie("connect.sid");
+    return res.status(200).json({ message: "Logout succesfully!" });
+  });
+});
+
 export default sessionsRouter;

@@ -1,5 +1,7 @@
 const cartText = document.querySelector("#cart-id");
+const logoutBtn = document.querySelector("#logout-btn");
 const cartID = localStorage.getItem("cartID");
+
 if (!cartID) {
   createCart();
 } else {
@@ -8,7 +10,7 @@ if (!cartID) {
 
 function setCart(id) {
   cartText.innerHTML = id;
-  cartText.setAttribute("href", `/carts/${id}`)
+  cartText.setAttribute("href", `/carts/${id}`);
 }
 function createCart() {
   fetch("/api/carts", {
@@ -30,12 +32,12 @@ products.forEach((product) => {
   product.addEventListener("click", (event) => {
     event.preventDefault();
     const loadingAlert = Swal.fire({
-      title: 'Loading...',
+      title: "Loading...",
       allowOutsideClick: false,
       showConfirmButton: false,
       didOpen: () => {
         Swal.showLoading();
-      }
+      },
     });
     const cartID = localStorage.getItem("cartID");
     const productID = product.getAttribute("id");
@@ -50,13 +52,13 @@ products.forEach((product) => {
       .then((result) => {
         loadingAlert.close();
         Swal.fire({
-          icon: 'success',
-          title: 'Success!',
-          text: 'Product added to cart!',
+          icon: "success",
+          title: "Success!",
+          text: "Product added to cart!",
           showCancelButton: true,
-          confirmButtonText: 'View Cart',
-          cancelButtonText: 'Close',
-        }).then(result => {
+          confirmButtonText: "View Cart",
+          cancelButtonText: "Close",
+        }).then((result) => {
           if (result.isConfirmed) {
             // Redirect to the cart URL
             window.location.href = `/carts/${cartID}`;
@@ -73,3 +75,41 @@ products.forEach((product) => {
       });
   });
 });
+
+logoutBtn.onclick = async () => {
+  try {
+    const loadingAlert = Swal.fire({
+      title: "Loading...",
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+    localStorage.removeItem("cartID");
+    await fetch("/api/sessions/logout");
+    loadingAlert.close();
+    Swal.fire({
+      icon: "success",
+      title: "Redirecting to login page...",
+      timer: 2500,
+      allowOutsideClick: false,
+      timerProgressBar: true,
+      text: "You have been logged out!",
+      didOpen: () => {
+        Swal.showLoading();
+      },
+      willClose: () => {
+        // Redirect to Login Page
+        window.location.href = "/?login=true";
+      },
+    });
+  } catch (error) {
+    loadingAlert.close();
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "Something went wrong!",
+    });
+  }
+};
