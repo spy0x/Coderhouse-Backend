@@ -1,9 +1,22 @@
 <div>
     <h1 class="text-3xl text-center font-bold underline">Dashboard</h1>
-    {{#if session.user}}
-    <p class="text-xl text-center">Welcome, {{session.name}}</p>
+    {{#if session}}
+    <p class="text-xl text-center">Welcome, {{session.first_name}}</p>
+    <h2 class="mt-10 mb-3 text-xl font-bold text-center">Perfil</h2>
+    <div class="flex justify-center">
+        <div>
+            <p>Email: {{session.email}}</p>
+            <p>Full name: {{session.first_name}} {{session.last_name}}</p>
+            <p>Age: {{session.age}}</p>
+            <p>Role: {{session.role}}</p>
+        </div>
+    </div>
+    <button type="submit"
+        class="block mx-auto my-3 text-center bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Logout</button>
     {{else}}
     <p class="text-xl text-center">Welcome, Guest. <span class="font-bold text-red-500"><a href="/?login=true">Sign
                 in</a> </span>or Register <a href="/?register=true" class="font-bold text-red-500">here</a></p>
     {{/if}}
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/static/js/register.js"></script>

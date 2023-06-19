@@ -7,13 +7,25 @@ export default class UserService {
     email: string,
     age: number,
     password: string,
-    role: string = "user",
+    role: string = "user"
   ): Promise<ResResult> {
     try {
       const user = await UserModel.create({ first_name, last_name, email, age, password, role });
       return { code: 201, result: { status: "success", message: "User created successfully", payload: user } };
     } catch (error) {
       return { code: 400, result: { status: "error", message: "Error adding user" } };
+    }
+  }
+  async login(email: string, password: string): Promise<ResResult> {
+    try {
+      const account = await UserModel.findOne({ email, password });
+      if (account) {
+        return { code: 200, result: { status: "success", message: "User logged in successfully", payload: account } };
+      } else {
+        return { code: 404, result: { status: "error", message: "Wrong user or password!" } };
+      }
+    } catch (error) {
+      return { code: 400, result: { status: "error", message: "Error logging in" } };
     }
   }
 }

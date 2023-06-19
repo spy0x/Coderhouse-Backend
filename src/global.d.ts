@@ -1,14 +1,3 @@
-type User = {
-  readonly _id?: string;
-  first_name: string;
-  last_name: string;
-  email: string;
-  age: number;
-  password: string;
-  role: string;
-}
-
-type UserSession = session.Session & Partial<session.SessionData> & User;
 
 type Product = {
   readonly _id?: string;

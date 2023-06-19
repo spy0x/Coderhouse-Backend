@@ -33,7 +33,7 @@ products.forEach((product) => {
       title: 'Loading...',
       allowOutsideClick: false,
       showConfirmButton: false,
-      onBeforeOpen: () => {
+      didOpen: () => {
         Swal.showLoading();
       }
     });
@@ -62,7 +62,6 @@ products.forEach((product) => {
             window.location.href = `/carts/${cartID}`;
           }
         });
-        console.log(result); // TODO delete this line in production
       })
       .catch((error) => {
         loadingAlert.close();
@@ -71,7 +70,6 @@ products.forEach((product) => {
           title: "Oops...",
           text: "Something went wrong!",
         });
-        console.log(error); // TODO delete this line in production
       });
   });
 });

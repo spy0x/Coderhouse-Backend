@@ -11,10 +11,10 @@ const cartService = new CartService();
 
 viewsRouter.get("/", async (req, res) => {
   const { register, login } = req.query;
-  const session = req.session as UserSession;
+  const session = req.session;
   if (register === 'true' && !session.user) return res.render("register");
   if (login === 'true' && !session.user) return res.render("login");
-  const context = { session: req.session };
+  const context = { session: session.user };
   res.render("index", context);
 });
 

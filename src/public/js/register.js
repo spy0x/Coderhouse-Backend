@@ -13,45 +13,45 @@ form.onsubmit = (e) => {
     return;
   }
   const loadingAlert = Swal.fire({
-    title: 'Loading...',
+    title: "Loading...",
     allowOutsideClick: false,
     showConfirmButton: false,
-    onBeforeOpen: () => {
+    didOpen: () => {
       Swal.showLoading();
-    }
+    },
   });
-  fetch("api/sessions", {
+  fetch("/api/sessions/register", {
     method: "POST",
     headers: {
-        "Content-Type": "application/json",
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(formValues),
-    })
+  })
     .then(() => {
-        loadingAlert.close();
-        form.reset();
-        Swal.fire({
-            icon: 'success',
-            timer: 2500,
-            title: 'Redirecting to Login Page...',
-            text: 'User created!',
-            allowOutsideClick: false,
-            timerProgressBar: true,
-            didOpen: () => {
-              Swal.showLoading();
-            },
-            willClose: () => {
-              // Redirect to another URL after the specified time
-              window.location.href = "/?login=true";
-            }
-        });
+      loadingAlert.close();
+      form.reset();
+      Swal.fire({
+        icon: "success",
+        timer: 2500,
+        title: "Redirecting to Login Page...",
+        text: "User created!",
+        allowOutsideClick: false,
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+        willClose: () => {
+          // Redirect to another URL after the specified time
+          window.location.href = "/?login=true";
+        },
+      });
     })
     .catch((error) => {
-        loadingAlert.close();
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Something went wrong!',
-        });
+      loadingAlert.close();
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+      });
     });
 };

@@ -14,7 +14,7 @@ viewsRouter.get("/", async (req, res) => {
         return res.render("register");
     if (login === 'true' && !session.user)
         return res.render("login");
-    const context = { session: req.session };
+    const context = { session: session.user };
     res.render("index", context);
 });
 // viewsRouter.get("/realtimeproducts", (req, res) => {
