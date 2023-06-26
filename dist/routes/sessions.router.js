@@ -1,11 +1,13 @@
 import { Router } from "express";
 import UserService from "../services/users.services.js";
+import passport from "passport";
 const sessionsRouter = Router();
 const usersService = new UserService();
-sessionsRouter.post("/register", async (req, res) => {
-    const { first_name, last_name, email, age, password, role } = req.body;
-    const response = await usersService.addUser(first_name, last_name, email, age, password, role);
-    return res.status(response.code).json(response.result);
+sessionsRouter.post("/register", passport.authenticate('register', { failureRedirect: "failRegister" }), async (req, res) => {
+    return res.status(201).json({ message: "User created successfully", payload: req.user });
+});
+sessionsRouter.get("/failRegister", (req, res) => {
+    return res.status(400).json({ message: "Error adding user" });
 });
 sessionsRouter.post("/login", async (req, res) => {
     const { email, password } = req.body;
