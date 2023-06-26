@@ -9,6 +9,8 @@ import productsRouter from "./routes/products.router.js";
 import sessionsRouter from "./routes/sessions.router.js";
 import viewsRouter from "./routes/views.router.js";
 import { connectMongo, initSocket } from "./utils.js";
+import passport from "passport";
+import initPassport from "./config/passport.config.js";
 
 const PORT = 8080;
 const app = express();
@@ -41,6 +43,10 @@ async function startServer() {
       saveUninitialized: true,
     })
   );
+  initPassport();
+  app.use(passport.initialize());
+  app.use(passport.session());
+
   // SETTING ROUTES
   app.use("/api/carts", cartsRouter);
   app.use("/api/products", productsRouter);
