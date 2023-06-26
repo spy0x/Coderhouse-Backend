@@ -3,7 +3,7 @@ import local from "passport-local";
 import { UserModel } from "../models/users.models.js";
 import { compareHash, createHash } from "../utils/passwordCrypt.js";
 const LocalStrategy = local.Strategy;
-export default function iniPassport() {
+export default function initPassport() {
     passport.use("login", new LocalStrategy({ usernameField: "email" }, async (username, password, done) => {
         try {
             const user = await UserModel.findOne({ email: username });
@@ -26,7 +26,7 @@ export default function iniPassport() {
         usernameField: "email",
     }, async (req, username, password, done) => {
         try {
-            const { email, firstName, lastName } = req.body;
+            const { email, first_name, last_name, age, role } = req.body;
             let user = await UserModel.findOne({ email: username });
             if (user) {
                 console.log("User already exists");
@@ -34,9 +34,10 @@ export default function iniPassport() {
             }
             const newUser = {
                 email,
-                firstName,
-                lastName,
-                isAdmin: false,
+                age,
+                first_name,
+                last_name,
+                role,
                 password: createHash(password),
             };
             let userCreated = await UserModel.create(newUser);
