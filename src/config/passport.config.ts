@@ -10,7 +10,7 @@ export default function initPassport() {
     "login",
     new LocalStrategy({ usernameField: "email" }, async (username, password, done) => {
       try {
-        const user = await UserModel.findOne({ email: username }) as Express.User;
+        const user = (await UserModel.findOne({ email: username })) as Express.User;
         if (!user) {
           console.log("User Not Found with username (email) " + username);
           return done(null, false);
@@ -19,7 +19,6 @@ export default function initPassport() {
           console.log("Invalid Password");
           return done(null, false);
         }
-
         return done(null, user);
       } catch (err) {
         return done(err);
@@ -51,7 +50,7 @@ export default function initPassport() {
             role,
             password: createHash(password),
           };
-          let userCreated = await UserModel.create(newUser) as Express.User;
+          let userCreated = (await UserModel.create(newUser)) as Express.User;
           console.log(userCreated);
           console.log("User Registration succesful");
           return done(null, userCreated);
@@ -69,7 +68,7 @@ export default function initPassport() {
   });
 
   passport.deserializeUser(async (id, done) => {
-    let user = await UserModel.findById(id) as Express.User;
+    let user = (await UserModel.findById(id)) as Express.User;
     done(null, user);
   });
 }

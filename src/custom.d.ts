@@ -3,12 +3,12 @@ import { SessionData } from 'express-session';
 declare module 'express-session' {
   interface SessionData {
     user?: {
-      readonly _id?: string;
+      readonly _id?: ObjectId;
       first_name: string;
       last_name: string;
       email: string;
       age: number;
-      password: string;
+      password?: string;
       role: string;
     };
   }
@@ -18,12 +18,12 @@ declare global {
   namespace Express {
     interface User {
       readonly _id?: ObjectId;
-      // first_name: string;
-      // last_name: string;
-      // email: string;
-      // age: number;
+      first_name: string;
+      last_name: string;
+      email: string;
+      age: number;
       password: string;
-      // role: string;
+      role: string;
     }
   }
 }
