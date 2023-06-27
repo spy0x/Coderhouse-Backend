@@ -2,6 +2,8 @@ import passport from "passport";
 import local from "passport-local";
 import { UserModel } from "../models/users.models.js";
 import { compareHash, createHash } from "../utils/passwordCrypt.js";
+import GitHubStrategy from "passport-github2";
+import fetch from "node-fetch";
 
 const LocalStrategy = local.Strategy;
 
@@ -63,6 +65,57 @@ export default function initPassport() {
     )
   );
 
+  passport.use(
+    "github",
+    // @ts-ignore: TS2351 - This expression is not constructable.
+    new GitHubStrategy(
+      {
+        clientID: "Iv1.b92d6a57a3ad1664",
+        clientSecret: "adfd8b0058d44adf99c34cb1ea10b91e537903f7",
+        callbackURL: "http://localhost:8080/api/sessions/githubcallback",
+      },
+      async (accesToken: any, refreshToken: any, profile: any, done: any) => {
+        try {
+          const res = await fetch('https://api.github.com/user/emails', {
+            headers: {
+              Accept: 'application/vnd.github+json',
+              Authorization: 'Bearer ' + accesToken,
+              'X-Github-Api-Version': '2022-11-28',
+            },
+          });
+          const emails: any = await res.json();
+          const emailDetail = emails.find((email: any) => email.verified == true);
+
+          if (!emailDetail) {
+            return done(new Error('cannot get a valid email for this user'));
+          }
+          profile.email = emailDetail.email;
+          console.log(profile);
+          let user = await UserModel.findOne({ email: profile.email });
+          if (!user) {
+            const newUser: User = {
+              email: profile.email,
+              first_name: profile._json.name || profile._json.login || "noname",
+              last_name: "nolast",
+              role: "user",
+              age: 18,
+              password: "nopass",
+            };
+            let userCreated = await UserModel.create(newUser);
+            console.log("User Registration succesful");
+            return done(null, userCreated);
+          } else {
+            console.log("User already exists");
+            return done(null, user);
+          }
+        } catch (e) {
+          console.log("Error in Auth GitHub!");
+          console.log(e);
+          return done(e);
+        }
+      }
+    )
+  );
   passport.serializeUser((user, done) => {
     done(null, user._id);
   });

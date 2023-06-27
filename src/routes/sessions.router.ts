@@ -30,6 +30,14 @@ sessionsRouter.get("/faillogin", (req, res) => {
   return res.status(400).json({ status: "error", message: "Wrong user or password" });
 });
 
+sessionsRouter.get("/github", passport.authenticate("github", { scope: ["user:email"] }));
+
+sessionsRouter.get("/githubcallback", passport.authenticate("github", { failureRedirect: "/login" }), (req, res) => {
+  // Successful authentication, redirect home.
+  req.session.user = req.user;
+  res.redirect("/");
+});
+
 // sessionsRouter.post("/login", async (req, res) => {
 //   const { email, password } = req.body;
 //   const response = await usersService.login(email, password);
