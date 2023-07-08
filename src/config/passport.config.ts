@@ -96,9 +96,8 @@ export default function initPassport() {
             const newUser: User = {
               email: profile.email,
               first_name: profile._json.name || profile._json.login || "noname",
-              last_name: "nolast",
+              last_name: "",
               role: "user",
-              age: 18,
               password: "nopass",
             };
             let userCreated = await UserModel.create(newUser);
