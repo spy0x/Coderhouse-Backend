@@ -4,6 +4,8 @@ import { UserModel } from "../models/users.models.js";
 import { compareHash, createHash } from "../utils/passwordCrypt.js";
 import GitHubStrategy from "passport-github2";
 import fetch from "node-fetch";
+import CartService from "../services/carts.services.js";
+import { CartModel } from "../models/carts.models.js";
 const LocalStrategy = local.Strategy;
 export default function initPassport() {
     passport.use("login", new LocalStrategy({ usernameField: "email" }, async (username, password, done) => {
@@ -28,7 +30,7 @@ export default function initPassport() {
         usernameField: "email",
     }, async (req, username, password, done) => {
         try {
-            const { email, first_name, last_name, age, role } = req.body;
+            const { email, first_name, last_name, age } = req.body;
             let user = await UserModel.findOne({ email: username });
             if (user) {
                 console.log("User already exists");
@@ -39,17 +41,17 @@ export default function initPassport() {
                 age,
                 first_name,
                 last_name,
-                role,
+                role: "user",
                 password: createHash(password),
+                cartId: req.session.cartId,
             };
             let userCreated = (await UserModel.create(newUser));
-            console.log(userCreated);
-            console.log("User Registration succesful");
+            // console.log(userCreated);
+            // console.log("User Registration succesful");
             return done(null, userCreated);
         }
         catch (e) {
             console.log("Error in register");
-            console.log(e);
             return done(e);
         }
     }));
@@ -59,43 +61,57 @@ export default function initPassport() {
         clientID: "Iv1.b92d6a57a3ad1664",
         clientSecret: "adfd8b0058d44adf99c34cb1ea10b91e537903f7",
         callbackURL: "http://localhost:8080/api/sessions/githubcallback",
-    }, async (accesToken, refreshToken, profile, done) => {
+        passReqToCallback: true,
+    }, async (req, accesToken, refreshToken, profile, done) => {
         try {
-            const res = await fetch('https://api.github.com/user/emails', {
+            const resEmail = await fetch("https://api.github.com/user/emails", {
                 headers: {
-                    Accept: 'application/vnd.github+json',
-                    Authorization: 'Bearer ' + accesToken,
-                    'X-Github-Api-Version': '2022-11-28',
+                    Accept: "application/vnd.github+json",
+                    Authorization: "Bearer " + accesToken,
+                    "X-Github-Api-Version": "2022-11-28",
                 },
             });
-            const emails = await res.json();
+            const emails = await resEmail.json();
             const emailDetail = emails.find((email) => email.verified == true);
             if (!emailDetail) {
-                return done(new Error('cannot get a valid email for this user'));
+                return done(new Error("cannot get a valid email for this user"));
             }
             profile.email = emailDetail.email;
             console.log(profile);
-            let user = await UserModel.findOne({ email: profile.email });
+            const user = await UserModel.findOne({ email: profile.email });
             if (!user) {
+                // If the current cartID is already in use, create a new cart for the new user.
+                let cartId = req.session.cartId;
+                if (await UserModel.findOne({ cartId: req.session.cartId })) {
+                    const cartService = new CartService();
+                    const { result: { payload: newCart } } = await cartService.addCart();
+                    cartId = newCart._id.toString();
+                }
                 const newUser = {
                     email: profile.email,
                     first_name: profile._json.name || profile._json.login || "noname",
-                    last_name: "",
                     role: "user",
                     password: "nopass",
+                    cartId,
                 };
-                let userCreated = await UserModel.create(newUser);
+                const userCreated = await UserModel.create(newUser);
                 console.log("User Registration succesful");
                 return done(null, userCreated);
             }
             else {
-                console.log("User already exists");
+                const userCart = await CartModel.findById(user.cartId);
+                const currentCart = await CartModel.findById(req.session.cartId);
+                // If current cart has products, place products in user cart.
+                if (userCart && currentCart && currentCart.productos) {
+                    userCart.productos = [...currentCart.productos];
+                    await userCart.save();
+                }
+                console.log("User already exists. Not creating another one!");
                 return done(null, user);
             }
         }
         catch (e) {
             console.log("Error in Auth GitHub!");
-            console.log(e);
             return done(e);
         }
     }));

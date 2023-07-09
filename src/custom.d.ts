@@ -10,6 +10,7 @@ declare module 'express-session' {
       age: number;
       password?: string;
       role: string;
+      cartId: string;
     },
     cartId?: string;
   }
@@ -25,6 +26,7 @@ declare global {
       age: number;
       password: string;
       role: string;
+      cartId: ObjectId;
     }
   }
 }

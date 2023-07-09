@@ -9,5 +9,6 @@ export const createCart = async (req, res, next) => {
     else {
         req.session.cartId = req.cookies.cartId;
     }
+    req.session.save();
     next();
 };

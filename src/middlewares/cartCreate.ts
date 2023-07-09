@@ -12,5 +12,6 @@ export const createCart = async (req: any, res: any, next: any) => {
   } else {
     req.session.cartId = req.cookies.cartId;
   }
+  req.session.save();
   next();
 };

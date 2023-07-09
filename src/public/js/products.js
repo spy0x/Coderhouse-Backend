@@ -8,15 +8,14 @@ async function SetCartID() {
     const result = await fetch("/api/sessions/cart");
     const data = await result.json();
     const cartID = data.payload;
-    console.log(cartID);
-    setCart(cartID);
+    setCartText(cartID);
     setProductButtons(cartID);
   } catch (error) {
     console.log("Couldn't get cart ID");
   }
 }
 
-function setCart(id) {
+function setCartText(id) {
   cartText.innerHTML = id;
   cartText.setAttribute("href", `/carts/${id}`);
 }

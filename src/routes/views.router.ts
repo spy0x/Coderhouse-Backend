@@ -29,7 +29,7 @@ viewsRouter.get("/", async (req, res) => {
 //   res.render("chat");
 // });
 
-viewsRouter.get("/products", isUser, productsValidQueries, async (req, res) => {
+viewsRouter.get("/products", productsValidQueries, async (req, res) => {
   const { limit, page, query, sort } = req.query;
   const { result } = await productService.getProducts(limit, query, sort, page);
   res.render("products", result);
