@@ -58,4 +58,13 @@ sessionsRouter.get("/logout", async (req, res) => {
   });
 });
 
+sessionsRouter.get("/cart", async (req, res) => {
+  if (req.session.cartId) {
+    return res.status(200).json({ status: "success", message: "Cart found", payload: req.cookies.cartId });
+  }
+  else {
+    return res.status(400).json({ status: "error", message: "Cart not found" });
+  }
+});
+
 export default sessionsRouter;

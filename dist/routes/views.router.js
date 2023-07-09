@@ -4,9 +4,11 @@ import CartService from "../services/carts.services.js";
 import { cartExists } from "../middlewares/cartsMiddlewares.js";
 import { productsValidQueries } from "../middlewares/productsMiddlewares.js";
 import { isUser } from "../middlewares/auth.js";
+import { createCart } from "../middlewares/cartCreate.js";
 const viewsRouter = Router();
 const productService = new ProductService();
 const cartService = new CartService();
+viewsRouter.use(createCart);
 viewsRouter.get("/", async (req, res) => {
     const { register, login } = req.query;
     const session = req.session;

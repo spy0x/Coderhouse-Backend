@@ -10,7 +10,8 @@ declare module 'express-session' {
       age: number;
       password?: string;
       role: string;
-    };
+    },
+    cartId?: string;
   }
 }
 

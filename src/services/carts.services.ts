@@ -1,8 +1,5 @@
 import { CartModel } from "../models/carts.models.js";
-import ProductService from "./products.services.js";
-import mongoose from "mongoose";
 
-const productService = new ProductService();
 export default class CartService {
   async addCart(): Promise<ResResult> {
     try {
