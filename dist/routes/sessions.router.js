@@ -4,7 +4,11 @@ import passport from "passport";
 const sessionsRouter = Router();
 const usersService = new UserService();
 sessionsRouter.post("/register", passport.authenticate("register", { failureRedirect: "failRegister", session: true }), async (req, res) => {
-    res.cookie("cartId", req.session.cartId, { maxAge: 1000 * 60 * 60 * 24 * 7 }); // 7 days
+    if (req.user) {
+        req.session.cartId = req.user.cartId;
+        req.session.save();
+        res.cookie("cartId", req.user.cartId, { maxAge: 1000 * 60 * 60 * 24 * 7 }); // 7 days
+    }
     return res.status(201).json({ status: "success", message: "User created successfully", payload: req.user });
 });
 sessionsRouter.get("/failRegister", (req, res) => {
@@ -16,6 +20,8 @@ sessionsRouter.post("/login", passport.authenticate("login", { failureRedirect: 
     }
     const { _id, email, first_name, last_name, age, role, cartId } = req.user;
     req.session.user = { _id, email, first_name, last_name, role, age, cartId };
+    req.session.cartId = req.user.cartId;
+    req.session.save();
     res.cookie("cartId", req.user.cartId, { maxAge: 1000 * 60 * 60 * 24 * 7 }); // 7 days
     return res.status(200).json({ status: "success", message: "User logged in successfully", payload: req.user });
 });
