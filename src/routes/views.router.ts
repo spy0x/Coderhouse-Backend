@@ -32,7 +32,7 @@ viewsRouter.get("/", async (req, res) => {
 viewsRouter.get("/products", productsValidQueries, async (req, res) => {
   const { limit, page, query, sort } = req.query;
   const { result } = await productService.getProducts(limit, query, sort, page);
-  const context = { user: req.user, products: result.payload }
+  const context = { user: req.user, ...result }
   res.render("products", context);
 });
 

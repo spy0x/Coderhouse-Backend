@@ -42,6 +42,7 @@ sessionsRouter.get("/logout", async (req, res) => {
             return res.status(500).json({ status: "error", message: "Error! Couldn't logout!" });
         }
         res.clearCookie("connect.sid");
+        res.clearCookie('cartId');
         return res.status(200).json({ status: "success", message: "Logout succesfully!" });
     });
 });

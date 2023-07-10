@@ -140,7 +140,7 @@ const updateCartProducts = async (userCartId, currentCartId) => {
         const userCart = await CartModel.findById(userCartId);
         const currentCart = await CartModel.findById(currentCartId);
         // If current cart has products, place current products in user cart.
-        if (userCart && currentCart && currentCart.productos) {
+        if (userCart && currentCart && currentCart.productos.length > 0) {
             userCart.productos = [...currentCart.productos];
             await userCart.save();
             console.log("Updated products in user cart!");

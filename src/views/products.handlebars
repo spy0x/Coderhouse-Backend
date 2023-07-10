@@ -1,4 +1,4 @@
-<div>
+<div class="text-center">
     <p>Your cart ID: <a class="font-bold underline hover:text-blue-600" id="cart-id"></a></p>
     {{#if user}}
     <a href="/"><button
@@ -10,10 +10,10 @@
 </div>
 <div class="p-5">
     <h1 class="text-center text-3xl font-bold underline">{{#if message}}{{message}}{{else}}Product List{{/if}}</h1>
-    {{#if products}}
+    {{#if payload}}
     <div class="flex justify-center p-5">
         <ul>
-            {{#each products}}
+            {{#each payload}}
             <li>id: {{this._id}} name: {{this.title}} - price: ${{this.price}} - stock: {{this.stock}} - category:
                 {{this.category}} <a id="{{this._id}}"><button
                         class="mx-5 my-1 text-center bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Add
@@ -24,12 +24,8 @@
     </div>
     {{/if}}
     <div class="flex justify-center gap-5 text-center">
-        {{#if prevPage}}
-        <a href="{{prevPageUrl}}"><--< /a>
-                {{/if}}
-                {{#if nextPage}}
-                <a href="{{nextPageUrl}}">--></a>
-                {{/if}}
+        {{#if prevPage}} <a href="{{prevPageUrl}}"><--</a>{{/if}}
+        {{#if nextPage}} <a href="{{nextPageUrl}}">--></a>{{/if}}
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
