@@ -1,9 +1,7 @@
 import { Router } from "express";
-import UserService from "../services/users.services.js";
 import passport from "passport";
 import { UserModel } from "../models/users.models.js";
 const sessionsRouter = Router();
-const usersService = new UserService();
 sessionsRouter.post("/register", passport.authenticate("register", { failureRedirect: "failRegister", session: true }), async (req, res) => {
     if (req.user) {
         req.session.cartId = req.user.cartId;
@@ -38,15 +36,6 @@ sessionsRouter.get("/githubcallback", passport.authenticate("github", { failureR
     res.cookie("cartId", req.user?.cartId, { maxAge: 1000 * 60 * 60 * 24 * 365 }); // 365 days
     res.redirect("/");
 });
-// sessionsRouter.post("/login", async (req, res) => {
-//   const { email, password } = req.body;
-//   const response = await usersService.login(email, password);
-//   // if login success, save user in session and redirect to products page
-//   if (response.code === 200) {
-//     req.session.user = response.result.payload;
-//   }
-//   return res.status(response.code).json(response.result);
-// });
 sessionsRouter.get("/logout", async (req, res) => {
     req.session.destroy((err) => {
         if (err) {
@@ -68,9 +57,9 @@ sessionsRouter.get("/cart", async (req, res) => {
 sessionsRouter.get("/current", async (req, res) => {
     if (req.session.user) {
         const user = await UserModel.findById(req.session.user._id).populate({
-            path: 'cartId',
+            path: "cartId",
             populate: {
-                path: 'productos.idProduct',
+                path: "productos.idProduct",
             },
         });
         return res.status(200).json({ status: "success", message: "User found", payload: user });
