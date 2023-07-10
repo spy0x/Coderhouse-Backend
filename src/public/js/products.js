@@ -1,4 +1,3 @@
-const cartText = document.querySelector("#cart-id");
 const logoutBtn = document.querySelector("#logout-btn");
 
 SetCartID();
@@ -8,16 +7,10 @@ async function SetCartID() {
     const result = await fetch("/api/sessions/cart");
     const data = await result.json();
     const cartID = data.payload;
-    setCartText(cartID);
     setProductButtons(cartID);
   } catch (error) {
     console.log("Couldn't get cart ID");
   }
-}
-
-function setCartText(id) {
-  cartText.innerHTML = id;
-  cartText.setAttribute("href", `/carts/${id}`);
 }
 
 function setProductButtons(cartID) {
@@ -25,6 +18,15 @@ function setProductButtons(cartID) {
   products.forEach((product) => {
     product.addEventListener("click", (event) => {
       event.preventDefault();
+      if (!cartID) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "You must be logged in to add products to cart!",
+          cancelButtonText: "Close",
+        });
+        return;
+      }
       const loadingAlert = Swal.fire({
         title: "Loading...",
         allowOutsideClick: false,
@@ -41,15 +43,14 @@ function setProductButtons(cartID) {
         },
         body: JSON.stringify({}),
       })
-        .then((response) => response.json())
         .then((result) => {
           loadingAlert.close();
           Swal.fire({
-            icon: "success",
-            title: "Success!",
-            text: "Product added to cart!",
+            icon: result.status == 202 ? "success" : "error",
+            title: result.status == 202 ? "Success!" : "Oops...",
+            text: result.status == 202 ? "Product added to cart!" : "Something went wrong!",
             showCancelButton: true,
-            confirmButtonText: "View Cart",
+            confirmButtonText: result.status == 202 ? "View Cart" : null,
             cancelButtonText: "Close",
           }).then((result) => {
             if (result.isConfirmed) {
@@ -70,40 +71,41 @@ function setProductButtons(cartID) {
   });
 }
 
-logoutBtn.onclick = async () => {
-  try {
-    const loadingAlert = Swal.fire({
-      title: "Loading...",
-      allowOutsideClick: false,
-      showConfirmButton: false,
-      didOpen: () => {
-        Swal.showLoading();
-      },
-    });
-    localStorage.removeItem("cartID");
-    await fetch("/api/sessions/logout");
-    loadingAlert.close();
-    Swal.fire({
-      icon: "success",
-      title: "Redirecting to login page...",
-      timer: 2500,
-      allowOutsideClick: false,
-      timerProgressBar: true,
-      text: "You have been logged out!",
-      didOpen: () => {
-        Swal.showLoading();
-      },
-      willClose: () => {
-        // Redirect to Login Page
-        window.location.href = "/?login=true";
-      },
-    });
-  } catch (error) {
-    loadingAlert.close();
-    Swal.fire({
-      icon: "error",
-      title: "Oops...",
-      text: "Something went wrong!",
-    });
-  }
-};
+if (logoutBtn) {
+  logoutBtn.onclick = async () => {
+    try {
+      const loadingAlert = Swal.fire({
+        title: "Loading...",
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+      await fetch("/api/sessions/logout");
+      loadingAlert.close();
+      Swal.fire({
+        icon: "success",
+        title: "Redirecting to login page...",
+        timer: 2500,
+        allowOutsideClick: false,
+        timerProgressBar: true,
+        text: "You have been logged out!",
+        didOpen: () => {
+          Swal.showLoading();
+        },
+        willClose: () => {
+          // Redirect to Login Page
+          window.location.href = "/?login=true";
+        },
+      });
+    } catch (error) {
+      loadingAlert.close();
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+      });
+    }
+  };
+}

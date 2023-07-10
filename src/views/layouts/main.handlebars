@@ -10,7 +10,7 @@
 </head>
 
 <body>
-    <p class="text-center text-xl mt-1 mb-4"><a href="/" class="underline">Home</a> / <a href="/products" class="underline">Products</a> / <a class="underline" id="cart-button">Cart</a></p>
+    <p class="text-center text-xl mt-1 mb-4"><a href="/" class="underline">Home</a> / <a href="/products" class="underline">Products</a>{{#if user}} / <a class="underline" id="cart-button">Cart</a>{{else}} / <a href="/?login=true" class="underline">Login</a> / <a href="/?register=true" class="underline">Register</a>{{/if}}</p>
     {{{body}}}
     <script src="/static/js/main.js"></script>
 </body>

@@ -1,6 +1,6 @@
 const logoutBtn = document.getElementById("logout-btn");
-
-logoutBtn.onclick = async () => {
+if (logoutBtn) {
+  logoutBtn.onclick = async () => {
     try {
       const loadingAlert = Swal.fire({
         title: "Loading...",
@@ -37,3 +37,4 @@ logoutBtn.onclick = async () => {
       });
     }
   };
+}

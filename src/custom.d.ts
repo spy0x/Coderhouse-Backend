@@ -12,7 +12,6 @@ declare module 'express-session' {
       role: string;
       cartId: string;
     },
-    cartId?: string;
   }
 }
 

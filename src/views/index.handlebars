@@ -1,14 +1,14 @@
 <div>
     <h1 class="text-3xl text-center font-bold underline">Dashboard</h1>
-    {{#if session}}
-    <p class="text-xl text-center">Welcome, {{session.first_name}}</p>
+    {{#if user}}
+    <p class="text-xl text-center">Welcome, {{user.first_name}}</p>
     <h2 class="mt-10 mb-3 text-xl font-bold text-center">Perfil</h2>
     <div class="flex justify-center">
         <div>
-            <p>Email: {{session.email}}</p>
-            <p>Full name: {{session.first_name}} {{session.last_name}}</p>
-            <p>Age: {{session.age}}</p>
-            <p>Role: {{session.role}}</p>
+            <p>Email: {{user.email}}</p>
+            <p>Full name: {{user.first_name}} {{user.last_name}}</p>
+            <p>Age: {{user.age}}</p>
+            <p>Role: {{user.role}}</p>
         </div>
     </div>
     <button id="logout-btn" type="submit"
