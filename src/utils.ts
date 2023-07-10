@@ -3,10 +3,10 @@ import { connect } from "mongoose";
 import { Server } from "socket.io";
 
 // MONGODB CONNECTION
-export const DB_URL =
-  "mongodb+srv://spy0x:%254y%5EWqkJ%26%264%25fA@cluster0.7hatvzm.mongodb.net/ecommerce?retryWrites=true&w=majority";
 
-export async function connectMongo() {
+export async function connectMongo(MONGO_PASSWORD: string) {
+  const DB_URL =
+    `mongodb+srv://spy0x:${MONGO_PASSWORD}@cluster0.7hatvzm.mongodb.net/ecommerce?retryWrites=true&w=majority`;
   try {
     await connect(DB_URL);
     console.log("plug to mongo!");

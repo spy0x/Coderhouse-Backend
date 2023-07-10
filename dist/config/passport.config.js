@@ -5,6 +5,10 @@ import { compareHash, createHash } from "../utils/passwordCrypt.js";
 import GitHubStrategy from "passport-github2";
 import fetch from "node-fetch";
 import CartService from "../services/carts.services.js";
+import dotenv from "dotenv";
+dotenv.config();
+const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
+const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
 const LocalStrategy = local.Strategy;
 export default function initPassport() {
     passport.use("login", new LocalStrategy({ usernameField: "email", passReqToCallback: true }, async (req, username, password, done) => {
@@ -59,8 +63,8 @@ export default function initPassport() {
     passport.use("github", 
     // @ts-ignore: TS2351 - This expression is not constructable.
     new GitHubStrategy({
-        clientID: "Iv1.b92d6a57a3ad1664",
-        clientSecret: "adfd8b0058d44adf99c34cb1ea10b91e537903f7",
+        clientID: GITHUB_CLIENT_ID,
+        clientSecret: GITHUB_CLIENT_SECRET,
         callbackURL: "http://localhost:8080/api/sessions/githubcallback",
         passReqToCallback: true,
     }, async (req, accesToken, refreshToken, profile, done) => {
