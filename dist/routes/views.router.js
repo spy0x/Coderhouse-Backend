@@ -27,7 +27,8 @@ viewsRouter.get("/", async (req, res) => {
 viewsRouter.get("/products", productsValidQueries, async (req, res) => {
     const { limit, page, query, sort } = req.query;
     const { result } = await productService.getProducts(limit, query, sort, page);
-    res.render("products", result);
+    const context = { user: req.user, products: result.payload };
+    res.render("products", context);
 });
 viewsRouter.get("/carts/:cid", cartExists, async (req, res) => {
     const cartID = req.params.cid;

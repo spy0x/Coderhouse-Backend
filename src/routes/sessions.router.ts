@@ -1,6 +1,7 @@
 import { Router } from "express";
 import UserService from "../services/users.services.js";
 import passport from "passport";
+import { UserModel } from "../models/users.models.js";
 
 const sessionsRouter = Router();
 const usersService = new UserService();
@@ -12,7 +13,7 @@ sessionsRouter.post(
     if (req.user) {
       req.session.cartId = req.user.cartId;
       req.session.save();
-      res.cookie("cartId", req.user.cartId, { maxAge: 1000 * 60 * 60 * 24 * 7 }); // 7 days
+      res.cookie("cartId", req.user.cartId, { maxAge: 1000 * 60 * 60 * 24 * 365 }); // 365 days
     }
     return res.status(201).json({ status: "success", message: "User created successfully", payload: req.user });
   }
@@ -33,8 +34,8 @@ sessionsRouter.post(
     req.session.user = { _id, email, first_name, last_name, role, age, cartId };
     req.session.cartId = req.user.cartId;
     req.session.save();
-    res.cookie("cartId", req.user.cartId, { maxAge: 1000 * 60 * 60 * 24 * 7 }); // 7 days
-    return res.status(200).json({ status: "success", message: "User logged in successfully", payload: req.user });
+    res.cookie("cartId", req.user.cartId, { maxAge: 1000 * 60 * 60 * 24 * 365 }); // 365 days
+    return res.status(200).json({ status: "success", message: "User logged in successfully", payload: req.session.user });
   }
 );
 
@@ -52,7 +53,7 @@ sessionsRouter.get(
     req.session.user = req.user;
     req.session.cartId = req.user?.cartId;
     req.session.save();
-    res.cookie("cartId", req.user?.cartId, { maxAge: 1000 * 60 * 60 * 24 * 7 }); // 7 days
+    res.cookie("cartId", req.user?.cartId, { maxAge: 1000 * 60 * 60 * 24 * 365 }); // 365 days
     res.redirect("/");
   }
 );
@@ -77,11 +78,26 @@ sessionsRouter.get("/logout", async (req, res) => {
   });
 });
 
+//Get the cartID from the current session
 sessionsRouter.get("/cart", async (req, res) => {
   if (req.session.cartId) {
     return res.status(200).json({ status: "success", message: "Cart found", payload: req.cookies.cartId });
   } else {
     return res.status(400).json({ status: "error", message: "Cart not found" });
+  }
+});
+
+sessionsRouter.get("/current", async (req, res) => {
+  if (req.session.user) {
+    const user = await UserModel.findById(req.session.user._id).populate({
+      path: 'cartId',
+      populate: {
+        path: 'productos.idProduct',
+      },
+    });
+    return res.status(200).json({ status: "success", message: "User found", payload: user });
+  } else {
+    return res.status(400).json({ status: "error", message: "User not found" });
   }
 });
 

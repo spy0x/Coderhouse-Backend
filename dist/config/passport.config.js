@@ -120,7 +120,7 @@ export default function initPassport() {
 // If the current cartID is already in use, create a new cart for the new user.
 const generateCartId = async (cartId) => {
     try {
-        if (await UserModel.findOne({ cartId })) {
+        if (!cartId || await UserModel.findOne({ cartId })) {
             const cartService = new CartService();
             const { result: { payload: newCart }, } = await cartService.addCart();
             cartId = newCart._id.toString();

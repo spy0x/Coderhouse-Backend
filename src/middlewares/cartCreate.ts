@@ -7,7 +7,7 @@ export const createCart = async (req: any, res: any, next: any) => {
     const {
       result: { payload: cart },
     } = await cartService.addCart();
-    res.cookie("cartId", cart._id, { maxAge: 1000 * 60 * 60 * 24 * 7 }); // 7 days
+    res.cookie("cartId", cart._id, { maxAge: 1000 * 60 * 60 * 24 * 365 }); // 365 days
     req.session.cartId = cart._id.toString();
   } else {
     req.session.cartId = req.cookies.cartId;

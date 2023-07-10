@@ -9,7 +9,6 @@ const cartSchema = new Schema(
         _id: false,
       },
     ],
-    deletionDate: { type: Date, expires: "7d" },
   },
   { versionKey: false }
 );
