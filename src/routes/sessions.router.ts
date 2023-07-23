@@ -1,6 +1,5 @@
 import { Router } from "express";
-import passport, { session } from "passport";
-import { UserModel } from "../models/users.models.js";
+import passport from "passport";
 import sessionsController from "../controllers/sessions.controller.js";
 
 const sessionsRouter = Router();

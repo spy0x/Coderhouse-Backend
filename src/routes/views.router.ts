@@ -1,10 +1,8 @@
 import { Router } from "express";
-import productService from "../services/products.services.js";
-import cartService from "../services/carts.services.js";
+import viewsController from "../controllers/views.controller.js";
+import { isUser } from "../middlewares/auth.js";
 import { cartExists } from "../middlewares/cartsMiddlewares.js";
 import { productsValidQueries } from "../middlewares/productsMiddlewares.js";
-import { isUser, isAdmin } from "../middlewares/auth.js";
-import viewsController from "../controllers/views.controller.js";
 
 const viewsRouter = Router();
 export default viewsRouter;
