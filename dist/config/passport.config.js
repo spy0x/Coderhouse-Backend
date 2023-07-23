@@ -1,11 +1,11 @@
+import dotenv from "dotenv";
+import fetch from "node-fetch";
 import passport from "passport";
+import GitHubStrategy from "passport-github2";
 import local from "passport-local";
 import { UserModel } from "../models/users.models.js";
+import cartService from "../services/carts.services.js";
 import { compareHash, createHash } from "../utils/passwordCrypt.js";
-import GitHubStrategy from "passport-github2";
-import fetch from "node-fetch";
-import CartService from "../services/carts.services.js";
-import dotenv from "dotenv";
 // SETTING ENV VARIABLES
 dotenv.config();
 const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
@@ -119,7 +119,6 @@ export default function initPassport() {
 }
 // If the current cartID is already in use, create a new cart for the new user.
 const generateCartId = async () => {
-    const cartService = new CartService();
     const { result: { payload: newCart }, } = await cartService.addCart();
     return newCart._id;
 };
