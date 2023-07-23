@@ -1,41 +1,17 @@
 import { Router } from "express";
-import productService from "../services/products.services.js";
-import { productValid, productExists, productsValidQueries } from "../middlewares/productsMiddlewares.js";
+import productsController from "../controllers/products.controller.js";
+import { productExists, productValid, productsValidQueries } from "../middlewares/productsMiddlewares.js";
 
 const productsRouter = Router();
 
-productsRouter.get("/", productsValidQueries, async (req, res) => {
-  const limit = req.query.limit;
-  const filter = req.query.query;
-  const sorted = req.query.sort as string;
-  const page = req.query.page;
-  const response = await productService.getProducts(limit, filter, sorted, page);
-  return res.status(response.code).json(response.result);
-});
+productsRouter.get("/", productsValidQueries, productsController.getProducts);
 
-productsRouter.get("/:pid", productExists, async (req, res) => {
-  const id = req.params.pid;
-  const response = await productService.getProductById(id);
-  return res.status(response.code).json(response.result);
-});
+productsRouter.get("/:pid", productExists, productsController.getProduct);
 
-productsRouter.post("/", productValid, async (req, res) => {
-  const product = req.body as Product;
-  const response = await productService.addProduct(product);
-  return res.status(response.code).json(response.result);
-});
+productsRouter.post("/", productValid, productsController.addProduct);
 
-productsRouter.delete("/:pid", productExists, async (req, res) => {
-  const id = req.params.pid;
-  const response = await productService.deleteProduct(id);
-  return res.status(response.code).json(response.result);
-});
+productsRouter.delete("/:pid", productExists, productsController.deleteProduct);
 
-productsRouter.put("/:pid", productExists, async (req, res) => {
-  const id = req.params.pid;
-  const productAttributes = req.body as ProductKeys;
-  const response = await productService.updateProduct(id, productAttributes);
-  return res.status(response.code).json(response.result);
-});
+productsRouter.put("/:pid", productExists, productsController.updateProduct);
 
 export default productsRouter;
