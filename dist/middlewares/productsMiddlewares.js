@@ -1,7 +1,6 @@
 import { ProductModel } from "../models/products.models.js";
 import mongoose from "mongoose";
-import ProductService from "../services/products.services.js";
-const productService = new ProductService();
+import productService from "../services/products.services.js";
 export const productExists = async (req, res, next) => {
     const id = req.params.pid;
     // Check if product exists

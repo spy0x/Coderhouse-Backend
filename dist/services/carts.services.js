@@ -1,5 +1,5 @@
 import { CartModel } from "../models/carts.models.js";
-export default class CartService {
+class CartService {
     async addCart() {
         try {
             const cart = await CartModel.create({ productos: [] });
@@ -105,3 +105,5 @@ export default class CartService {
         }
     }
 }
+const cartService = new CartService();
+export default cartService;

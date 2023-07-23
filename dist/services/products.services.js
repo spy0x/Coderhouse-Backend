@@ -1,5 +1,5 @@
 import { ProductModel } from "../models/products.models.js";
-export default class ProductService {
+class ProductService {
     async addProduct(product) {
         try {
             // If no thumbnail, set default value to empty array
@@ -89,3 +89,5 @@ export default class ProductService {
         }
     }
 }
+const productService = new ProductService();
+export default productService;

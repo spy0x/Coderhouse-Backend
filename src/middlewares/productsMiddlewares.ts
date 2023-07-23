@@ -1,8 +1,7 @@
 import { ProductModel } from "../models/products.models.js";
 import mongoose from "mongoose";
-import ProductService from "../services/products.services.js";
+import productService from "../services/products.services.js";
 
-const productService = new ProductService();
 
 export const productExists = async (req: any, res: any, next: any) => {
   const id = req.params.pid;

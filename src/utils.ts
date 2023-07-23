@@ -20,8 +20,8 @@ export async function connectMongo(MONGO_PASSWORD: string) {
 import multer from "multer";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
-import ProductService from "./services/products.services.js";
-import MessageService from "./services/messages.services.js";
+import productService from "./services/products.services.js";
+import messageService from "./services/messages.services.js";
 
 const __filename = fileURLToPath(import.meta.url);
 export const __dirname = dirname(__filename);
@@ -38,9 +38,6 @@ const storage = multer.diskStorage({
 export const uploader = multer({ storage });
 
 //WEBSOCKET CONNECTION
-const productService = new ProductService();
-const messageService = new MessageService();
-
 export function initSocket(httpServer: any) {
   const socketServer = new Server(httpServer);
   socketServer.on("connection", async (socket) => {

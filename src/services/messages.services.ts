@@ -1,6 +1,6 @@
 import { MessageModel } from "../models/messages.models.js";
 
-export default class MessageService {
+class MessageService {
   async getAllMessages() {
     try {
       const result = await MessageModel.find({});
@@ -19,3 +19,6 @@ export default class MessageService {
     }
   }
 }
+
+const messageService = new MessageService();
+export default messageService;

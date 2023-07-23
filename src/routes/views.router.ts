@@ -1,13 +1,11 @@
 import { Router } from "express";
-import ProductService from "../services/products.services.js";
-import CartService from "../services/carts.services.js";
+import productService from "../services/products.services.js";
+import cartService from "../services/carts.services.js";
 import { cartExists } from "../middlewares/cartsMiddlewares.js";
 import { productsValidQueries } from "../middlewares/productsMiddlewares.js";
 import { isUser, isAdmin } from "../middlewares/auth.js";
 
 const viewsRouter = Router();
-const productService = new ProductService();
-const cartService = new CartService();
 
 
 viewsRouter.get("/", async (req, res) => {
