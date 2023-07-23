@@ -37,6 +37,7 @@
   "dependencies": {
     "@types/passport-github2": "^1.2.5",
     "bcrypt": "^5.1.0",
+    "commander": "^11.0.0",
     "connect-mongo": "^5.0.0",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.3.1",
