@@ -6,6 +6,7 @@ import GitHubStrategy from "passport-github2";
 import fetch from "node-fetch";
 import CartService from "../services/carts.services.js";
 import dotenv from "dotenv";
+// SETTING ENV VARIABLES
 dotenv.config();
 const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
 const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
