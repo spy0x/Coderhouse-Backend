@@ -1,4 +1,4 @@
-import { CartModel } from "../models/carts.models.js";
+import { CartModel } from "../dao/mongo/models/carts.models.js";
 import mongoose from "mongoose";
 export const cartExists = async (req, res, next) => {
     const id = req.params.cid;

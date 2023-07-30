@@ -1,4 +1,4 @@
-import { ProductModel } from "../models/products.models.js";
+import { ProductModel } from "../dao/mongo/models/products.models.js";
 
 class ProductService {
   async addProduct(product: Product): Promise<ResResult> {

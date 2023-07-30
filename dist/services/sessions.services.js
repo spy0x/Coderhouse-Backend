@@ -1,4 +1,4 @@
-import { UserModel } from "../models/users.models.js";
+import { UserModel } from "../dao/mongo/models/users.models.js";
 class SessionService {
     async getCurrentUser(id) {
         const user = await UserModel.findById(id).populate({

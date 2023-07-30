@@ -1,4 +1,4 @@
-import { ProductModel } from "../models/products.models.js";
+import { ProductModel } from "../dao/mongo/models/products.models.js";
 import mongoose from "mongoose";
 import productService from "../services/products.services.js";
 

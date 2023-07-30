@@ -1,4 +1,4 @@
-import { MessageModel } from "../models/messages.models.js";
+import { MessageModel } from "../dao/mongo/models/messages.models.js";
 
 class MessageService {
   async getAllMessages() {
