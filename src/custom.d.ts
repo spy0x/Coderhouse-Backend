@@ -27,5 +27,8 @@ declare global {
       role: string;
       cartId: ObjectId;
     }
+    interface Request {
+      cart: Cart; // Replace "any" with the actual type of the "cart" object
+    }
   }
 }

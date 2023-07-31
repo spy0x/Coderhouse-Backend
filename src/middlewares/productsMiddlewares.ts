@@ -1,22 +1,19 @@
 import { ProductModel } from "../DAO/mongo/models/products.models.js";
 import mongoose from "mongoose";
 import productService from "../services/products.services.js";
+import { Request, Response, NextFunction } from "express";
 
-
-export const productExists = async (req: any, res: any, next: any) => {
+export const productExists = async (req: Request, res: Response, next: NextFunction) => {
   const id = req.params.pid;
-  // Check if product exists
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json({ status: "error", message: "Product not found" });
-  }
+  // Check if product exists and has valid id
   const product = await ProductModel.findById(id);
-  if (!product) {
-    return res.status(404).json({ status: "error", message: "Product not found" });
+  if (mongoose.Types.ObjectId.isValid(id) && product) {
+    return next();
   }
-  next();
+  return res.status(404).json({ status: "error", message: "Product not found" });
 };
 
-export const productValidParams = async (req: any, res: any, next: any) => {
+export const productValidParams = async (req: Request, res: Response, next: NextFunction) => {
   const products = req.body;
   // Check if products is an array
   if (!Array.isArray(products)) {
@@ -36,30 +33,23 @@ export const productValidParams = async (req: any, res: any, next: any) => {
     }
   }
   req.body = products;
-  next();
+  return next();
 };
 
-export const productValid = async (req: any, res: any, next: any) => {
+export const productValid = async (req: Request, res: Response, next: NextFunction) => {
   const product = req.body as Product;
   // Check if product already exists
   if (await ProductModel.findOne({ code: product.code })) {
     return res.status(400).json({ status: "error", message: "Product already exists" });
   }
   // Check if product has all required properties
-  if (
-    !product.title ||
-    !product.description ||
-    !product.price ||
-    !product.code ||
-    !product.category ||
-    !product.stock
-  ) {
+  if (!product.title || !product.description || !product.price || !product.code || !product.category || !product.stock) {
     return res.status(400).json({ status: "error", message: "Product is missing required properties" });
   }
-  next();
+  return next();
 };
 
-export const productsValidQueries = async (req: any, res: any, next: any) => {
+export const productsValidQueries = async (req: any, res: Response, next: NextFunction) => {
   const sort = req.query.sort;
   req.query.limit = req.query.limit || 10;
   req.query.page = req.query.page || 1;
@@ -73,5 +63,5 @@ export const productsValidQueries = async (req: any, res: any, next: any) => {
     const validSort = sort === "asc" || sort === "desc";
     if (!validSort) return res.status(400).json({ status: "error", message: "Invalid sort parameter" });
   }
-  next();
+  return next();
 };

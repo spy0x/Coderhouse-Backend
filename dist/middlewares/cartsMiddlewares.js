@@ -11,7 +11,7 @@ export const cartExists = async (req, res, next) => {
         return res.status(404).json({ status: "error", message: "Cart not found" });
     }
     req.cart = cart;
-    next();
+    return next();
 };
 export const productInCart = async (req, res, next) => {
     const productID = req.params.pid;
@@ -21,5 +21,5 @@ export const productInCart = async (req, res, next) => {
     if (productInCartIndex === -1) {
         return res.status(404).json({ status: "error", message: "Product not found in cart" });
     }
-    next();
+    return next();
 };

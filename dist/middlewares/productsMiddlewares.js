@@ -3,15 +3,12 @@ import mongoose from "mongoose";
 import productService from "../services/products.services.js";
 export const productExists = async (req, res, next) => {
     const id = req.params.pid;
-    // Check if product exists
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(404).json({ status: "error", message: "Product not found" });
-    }
+    // Check if product exists and has valid id
     const product = await ProductModel.findById(id);
-    if (!product) {
-        return res.status(404).json({ status: "error", message: "Product not found" });
+    if (mongoose.Types.ObjectId.isValid(id) && product) {
+        return next();
     }
-    next();
+    return res.status(404).json({ status: "error", message: "Product not found" });
 };
 export const productValidParams = async (req, res, next) => {
     const products = req.body;
@@ -33,7 +30,7 @@ export const productValidParams = async (req, res, next) => {
         }
     }
     req.body = products;
-    next();
+    return next();
 };
 export const productValid = async (req, res, next) => {
     const product = req.body;
@@ -42,15 +39,10 @@ export const productValid = async (req, res, next) => {
         return res.status(400).json({ status: "error", message: "Product already exists" });
     }
     // Check if product has all required properties
-    if (!product.title ||
-        !product.description ||
-        !product.price ||
-        !product.code ||
-        !product.category ||
-        !product.stock) {
+    if (!product.title || !product.description || !product.price || !product.code || !product.category || !product.stock) {
         return res.status(400).json({ status: "error", message: "Product is missing required properties" });
     }
-    next();
+    return next();
 };
 export const productsValidQueries = async (req, res, next) => {
     const sort = req.query.sort;
@@ -69,5 +61,5 @@ export const productsValidQueries = async (req, res, next) => {
         if (!validSort)
             return res.status(400).json({ status: "error", message: "Invalid sort parameter" });
     }
-    next();
+    return next();
 };
