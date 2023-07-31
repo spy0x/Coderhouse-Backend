@@ -5,7 +5,7 @@ class ProductsDao {
     await ProductModel.create(product);
   }
   async findProduct(pid: string) {
-    return await ProductModel.findById(pid);
+    return await ProductModel.findById(pid) as Product;
   }
   async getProducts(limit: number = 10, query: object = {}, sort: string = "", pag: number = 1) {
     const options: QueryOptions = { limit, page: pag, lean: true, leanWithId: false };

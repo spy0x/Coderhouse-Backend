@@ -5,6 +5,7 @@ export let cartsDao;
 export let messagesDao;
 export let productsDao;
 export let usersDao;
+export let ticketsDao;
 export async function initFactory() {
     switch (process.env.DAO) {
         case "MONGO":
@@ -20,10 +21,12 @@ export async function initFactory() {
             const { default: MongoMessages } = await import("../DAO/mongo/classes/messages.dao.js");
             const { default: MongoProducts } = await import("../DAO/mongo/classes/products.dao.js");
             const { default: MongoUsers } = await import("../DAO/mongo/classes/users.dao.js");
+            const { default: MongoTickets } = await import("../DAO/mongo/classes/tickets.dao.js");
             cartsDao = MongoCarts;
             messagesDao = MongoMessages;
             productsDao = MongoProducts;
             usersDao = MongoUsers;
+            ticketsDao = MongoTickets;
     }
 }
 //FOR FILESYSTEM

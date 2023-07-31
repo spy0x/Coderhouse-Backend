@@ -41,6 +41,11 @@ class CartsController {
     const response = await cartService.deleteProductFromCart(cartID, productID);
     return res.status(response.code).json(response.result);
   }
+  async purchase(req: Request, res: Response) {
+    const cartID = req.params.cid;
+    const response = await cartService.purchase(req.session.user?.email as string, cartID);
+    return res.status(response.code).json(response.result);
+  }
 }
 
 const cartsController = new CartsController();

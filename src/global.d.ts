@@ -1,3 +1,4 @@
+
 type Product = {
   readonly _id?: string;
   title: string;

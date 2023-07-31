@@ -1,4 +1,4 @@
-import { cartsDao } from "../DAO/factory.js";
+import { cartsDao, productsDao, ticketsDao } from "../DAO/factory.js";
 class CartService {
     async addCart() {
         try {
@@ -14,7 +14,7 @@ class CartService {
     }
     async addProductToCart(cartID, productID) {
         try {
-            const cart = await cartsDao.findCart(cartID);
+            const cart = (await cartsDao.findCart(cartID));
             // Check if product is already in cart, add ++ to quantity
             const productInCartIndex = cart.productos.findIndex((product) => product.idProduct.toString() === productID);
             if (productInCartIndex !== -1) {
@@ -55,7 +55,7 @@ class CartService {
     }
     async deleteProductFromCart(cartID, productID) {
         try {
-            const cart = await cartsDao.findCart(cartID);
+            const cart = (await cartsDao.findCart(cartID));
             const productInCartIndex = cart.productos.findIndex((product) => product.idProduct.toString() === productID);
             cart.productos.splice(productInCartIndex, 1);
             await cartsDao.updateCart(cartID, cart);
@@ -78,7 +78,7 @@ class CartService {
     }
     async updateProductQuantity(cartID, productID, quantity) {
         try {
-            const cart = await cartsDao.findCart(cartID);
+            const cart = (await cartsDao.findCart(cartID));
             const productInCartIndex = cart.productos.findIndex((product) => product.idProduct.toString() === productID);
             // Check if quantity is valid
             if (!quantity || quantity < 1 || isNaN(quantity)) {
@@ -102,6 +102,36 @@ class CartService {
         }
         catch (error) {
             return { code: 500, result: { status: "error", message: "Couldn't clear cart." } };
+        }
+    }
+    async purchase(purchaser, cartID) {
+        try {
+            const cart = await cartsDao.findCart(cartID);
+            if (cart.productos.length < 1)
+                return { code: 404, result: { status: "error", message: "Cart is empty" } };
+            let totalAmount = 0;
+            for (const cartProduct of cart.productos) {
+                const productInDB = await productsDao.findProduct(cartProduct.idProduct.toString());
+                if (productInDB.stock < cartProduct.quantity) {
+                    return {
+                        code: 404,
+                        result: {
+                            status: "error",
+                            message: `Not enough stock for product ${productInDB.title}`,
+                            payload: productInDB,
+                        },
+                    };
+                }
+                totalAmount += productInDB.price * cartProduct.quantity;
+                productInDB.stock -= cartProduct.quantity;
+                await productsDao.updateProduct(productInDB._id, productInDB);
+                await this.deleteProductFromCart(cartID, cartProduct.idProduct.toString());
+            }
+            const ticket = await ticketsDao.createTicket(purchaser, totalAmount);
+            return { code: 200, result: { status: "success", message: "Purchase successful", payload: ticket } };
+        }
+        catch (error) {
+            return { code: 500, result: { status: "error", message: "Couldn't purchase products." } };
         }
     }
 }

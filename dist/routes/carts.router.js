@@ -12,3 +12,4 @@ cartsRouter.delete("/:cid", cartExists, cartsController.clearCart);
 cartsRouter.put("/:cid/product/:pid", cartExists, productExists, productInCart, cartsController.updateCartProductQuantity);
 cartsRouter.post("/:cid/product/:pid", cartExists, productExists, isCartOwner, cartsController.addCartProduct);
 cartsRouter.delete("/:cid/product/:pid", cartExists, productExists, productInCart, cartsController.deleteCartProduct);
+cartsRouter.post("/:cid/purchase", cartExists, isCartOwner, cartsController.purchase);

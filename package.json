@@ -29,6 +29,7 @@
     "@types/passport": "^1.0.12",
     "@types/passport-local": "^1.0.35",
     "@types/session-file-store": "^1.2.2",
+    "@types/uuid": "^9.0.2",
     "tailwindcss": "^3.3.2",
     "typescript": "^5.0.4"
   },
@@ -51,6 +52,7 @@
     "passport-github2": "^0.1.12",
     "passport-local": "^1.0.0",
     "session-file-store": "^1.5.0",
-    "socket.io": "^4.6.1"
+    "socket.io": "^4.6.1",
+    "uuid": "^9.0.0"
   }
 }
