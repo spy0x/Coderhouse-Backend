@@ -1,20 +1,18 @@
-import dotenv from "dotenv";
 import fetch from "node-fetch";
 import passport from "passport";
 import GitHubStrategy from "passport-github2";
 import local from "passport-local";
-import { UserModel } from "../models/users.models.js";
+import { UserModel } from "../DAO/mongo/models/users.models.js";
 import cartService from "../services/carts.services.js";
 import { compareHash, createHash } from "../utils/passwordCrypt.js";
+import { Request } from "express";
 
-// SETTING ENV VARIABLES
-dotenv.config();
-const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
-const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
 
 const LocalStrategy = local.Strategy;
 
 export default function initPassport() {
+  const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
+  const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
   passport.use(
     "login",
     new LocalStrategy({ usernameField: "email", passReqToCallback: true }, async (req, username, password, done) => {
@@ -83,7 +81,7 @@ export default function initPassport() {
         callbackURL: "http://localhost:8080/api/sessions/githubcallback",
         passReqToCallback: true,
       },
-      async (req: any, accesToken: any, refreshToken: any, profile: any, done: any) => {
+      async (req: Request, accesToken: any, refreshToken: any, profile: any, done: any) => {
         try {
           const resEmail = await fetch("https://api.github.com/user/emails", {
             headers: {
