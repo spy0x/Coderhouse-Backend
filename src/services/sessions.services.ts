@@ -1,8 +1,9 @@
-import usersDao from "../dao/mongo/classes/users.dao.js";
+import usersDao from "../DAO/mongo/classes/users.dao.js";
 
 class SessionService {
   async getCurrentUser(id: string) {
-    return await usersDao.getUser(id);
+    const user = await usersDao.getUser(id);
+    return user
   }
 }
 

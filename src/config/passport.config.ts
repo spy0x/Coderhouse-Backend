@@ -3,7 +3,7 @@ import fetch from "node-fetch";
 import passport from "passport";
 import GitHubStrategy from "passport-github2";
 import local from "passport-local";
-import { UserModel } from "../dao/mongo/models/users.models.js";
+import { UserModel } from "../DAO/mongo/models/users.models.js";
 import cartService from "../services/carts.services.js";
 import { compareHash, createHash } from "../utils/passwordCrypt.js";
 

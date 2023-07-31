@@ -1,4 +1,4 @@
-import cartsDao from "../dao/mongo/classes/carts.dao.js";
+import cartsDao from "../DAO/mongo/classes/carts.dao.js";
 class CartService {
     async addCart() {
         try {

@@ -1,4 +1,4 @@
-import messagesDao from "../dao/mongo/classes/messages.dao.js";
+import messagesDao from "../DAO/mongo/classes/messages.dao.js";
 
 class MessageService {
   async getAllMessages() {

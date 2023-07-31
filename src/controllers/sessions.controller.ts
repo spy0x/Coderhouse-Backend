@@ -1,4 +1,5 @@
 import sessionService from "../services/sessions.services.js";
+import SessionsDTO from "../DAO/DTOs/sessions.dto.js";
 
 class SessionsController {
   register(req: any, res: any) {
@@ -43,8 +44,9 @@ class SessionsController {
   async getSessionData(req: any, res: any) {
     try {
       if (req.session.user) {
-        const user = await sessionService.getCurrentUser(req.session.user._id);
-        return res.status(200).json({ status: "success", message: "User found", payload: user });
+        const user = await sessionService.getCurrentUser(req.session.user._id) as Express.User;
+        const cleanUser = new SessionsDTO(user);
+        return res.status(200).json({ status: "success", message: "User found", payload: cleanUser.user });
       } else {
         return res.status(400).json({ status: "error", message: "User not found" });
       }

@@ -1,4 +1,5 @@
 import sessionService from "../services/sessions.services.js";
+import SessionsDTO from "../DAO/DTOs/sessions.dto.js";
 class SessionsController {
     register(req, res) {
         return res.status(201).json({ status: "success", message: "User created successfully", payload: req.user });
@@ -44,7 +45,8 @@ class SessionsController {
         try {
             if (req.session.user) {
                 const user = await sessionService.getCurrentUser(req.session.user._id);
-                return res.status(200).json({ status: "success", message: "User found", payload: user });
+                const cleanUser = new SessionsDTO(user);
+                return res.status(200).json({ status: "success", message: "User found", payload: cleanUser.user });
             }
             else {
                 return res.status(400).json({ status: "error", message: "User not found" });
