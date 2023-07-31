@@ -7,12 +7,11 @@ class ProductsDao {
   async findProduct(pid: string) {
     return await ProductModel.findById(pid);
   }
-  async getProducts(limit: number = 10, query: string, sort: string, pag: number = 1) {
+  async getProducts(limit: number = 10, query: object = {}, sort: string = "", pag: number = 1) {
     const options: QueryOptions = { limit, page: pag, lean: true, leanWithId: false };
     // if sort exists, add it to options
     if (sort) options.sort = { price: sort };
-    const queryObject = query ? { category: query } : {};
-    return await ProductModel.paginate(queryObject, options);
+    return await ProductModel.paginate(query, options);
   }
   async updateProduct(pid: string, productAttributes: ProductKeys) {
     await ProductModel.updateOne({ _id: pid }, productAttributes);

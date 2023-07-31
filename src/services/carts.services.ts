@@ -14,7 +14,7 @@ class CartService {
 
   async addProductToCart(cartID: string, productID: string): Promise<ResResult> {
     try {
-      const cart = await cartsDao.addToCart(cartID);
+      const cart = await cartsDao.findCart(cartID);
       // Check if product is already in cart, add ++ to quantity
       const productInCartIndex = cart.productos.findIndex((product) => product.idProduct.toString() === productID);
       if (productInCartIndex !== -1) {

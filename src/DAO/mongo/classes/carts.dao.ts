@@ -4,11 +4,8 @@ class CartsDao {
   async createCart() {
     return await CartModel.create({ productos: [] });
   }
-  async addToCart(cartID: string) {
-    return (await CartModel.findById(cartID)) as Cart;
-  }
   async updateCart(cartID: string, cart: Cart) {
-    CartModel.updateOne({ _id: cartID }, cart);
+    await CartModel.updateOne({ _id: cartID }, cart);
   }
   async findCart(id: string) {
     return (await CartModel.findById(id)) as Cart;

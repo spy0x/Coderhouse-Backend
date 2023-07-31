@@ -6,13 +6,12 @@ class ProductsDao {
     async findProduct(pid) {
         return await ProductModel.findById(pid);
     }
-    async getProducts(limit = 10, query, sort, pag = 1) {
+    async getProducts(limit = 10, query = {}, sort = "", pag = 1) {
         const options = { limit, page: pag, lean: true, leanWithId: false };
         // if sort exists, add it to options
         if (sort)
             options.sort = { price: sort };
-        const queryObject = query ? { category: query } : {};
-        return await ProductModel.paginate(queryObject, options);
+        return await ProductModel.paginate(query, options);
     }
     async updateProduct(pid, productAttributes) {
         await ProductModel.updateOne({ _id: pid }, productAttributes);

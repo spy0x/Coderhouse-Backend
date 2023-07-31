@@ -24,7 +24,7 @@ class ProductService {
     }
   }
 
-  async getProducts(limit: number = 10, query: string = "", sort: any = null, pag: number = 1): Promise<ResResult> {
+  async getProducts(limit: number = 10, query: object = {}, sort: string = "", pag: number = 1): Promise<ResResult> {
     try {
       const products = await productsDao.getProducts(limit, query, sort, pag);
       // if products array is empty, return error
@@ -34,7 +34,7 @@ class ProductService {
       // Get pagination info into variables.
       const { docs, totalPages, prevPage, nextPage, page, hasNextPage, hasPrevPage } = products;
       // Setting Next and Prev page urls
-      const queryStr = query ? `&query=${query}` : "";
+      const queryStr = Object.keys(query).length === 0 ? "" : `&query=${query}`;
       const sortStr = sort ? `&sort=${sort}` : "";
       const prevPageUrl = hasPrevPage && `/products?page=${prevPage}&limit=${limit}${queryStr}${sortStr}`;
       const nextPageUrl = hasNextPage && `/products?page=${nextPage}&limit=${limit}${queryStr}${sortStr}`;
