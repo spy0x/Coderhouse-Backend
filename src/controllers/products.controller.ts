@@ -3,10 +3,10 @@ import productService from "../services/products.services.js";
 class ProductsController {
   async getProducts(req: any, res: any) {
     const limit = req.query.limit;
-    const filter = req.query.query;
-    const sorted = req.query.sort as string;
+    const query = req.query.query;
+    const sort = req.query.sort as string;
     const page = req.query.page;
-    const response = await productService.getProducts(limit, filter, sorted, page);
+    const response = await productService.getProducts(limit, query, sort, page);
     return res.status(response.code).json(response.result);
   }
   async getProduct(req: any, res: any) {

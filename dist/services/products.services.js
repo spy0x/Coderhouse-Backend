@@ -1,4 +1,4 @@
-import { ProductModel } from "../dao/mongo/models/products.models.js";
+import productsDao from "../dao/mongo/classes/products.dao.js";
 class ProductService {
     async addProduct(product) {
         try {
@@ -9,7 +9,7 @@ class ProductService {
             if (!product.status)
                 product.status = true;
             // Add product
-            await ProductModel.create(product);
+            await productsDao.createProduct(product);
             return { code: 201, result: { status: "success", message: "Product added successfully", payload: product } };
         }
         catch (error) {
@@ -18,20 +18,16 @@ class ProductService {
     }
     async getProductById(pid) {
         try {
-            const product = await ProductModel.findById(pid);
+            const product = await productsDao.findProduct(pid);
             return { code: 200, result: { status: "success", payload: product } };
         }
         catch (error) {
             return { code: 404, result: { status: "error", message: "Couldn't get product" } };
         }
     }
-    async getProducts(limit = 10, query = null, sort = null, pag = 1) {
+    async getProducts(limit = 10, query = "", sort = null, pag = 1) {
         try {
-            const options = { limit, page: pag, lean: true, leanWithId: false };
-            // if sort exists, add it to options
-            if (sort)
-                options.sort = { price: sort };
-            const products = await ProductModel.paginate(query, options);
+            const products = await productsDao.getProducts(limit, query, sort, pag);
             // if products array is empty, return error
             if (products.docs.length === 0) {
                 return { code: 404, result: { status: "error", message: "No products found." } };
@@ -39,7 +35,7 @@ class ProductService {
             // Get pagination info into variables.
             const { docs, totalPages, prevPage, nextPage, page, hasNextPage, hasPrevPage } = products;
             // Setting Next and Prev page urls
-            const queryStr = Object.keys(query).length === 0 ? "" : `&query=${query}`;
+            const queryStr = query ? `&query=${query}` : "";
             const sortStr = sort ? `&sort=${sort}` : "";
             const prevPageUrl = hasPrevPage && `/products?page=${prevPage}&limit=${limit}${queryStr}${sortStr}`;
             const nextPageUrl = hasNextPage && `/products?page=${nextPage}&limit=${limit}${queryStr}${sortStr}`;
@@ -53,13 +49,13 @@ class ProductService {
     }
     async updateProduct(pid, productAttributes) {
         try {
-            await ProductModel.updateOne({ _id: pid }, productAttributes);
+            await productsDao.updateProduct(pid, productAttributes);
             return {
                 code: 200,
                 result: {
                     status: "success",
                     message: "Product updated successfully",
-                    payload: await ProductModel.findOne({ _id: pid }),
+                    payload: await productsDao.findProduct(pid),
                 },
             };
         }
@@ -69,8 +65,8 @@ class ProductService {
     }
     async deleteProduct(pid) {
         try {
-            const product = await ProductModel.find({ _id: pid });
-            await ProductModel.deleteOne({ _id: pid });
+            const product = await productsDao.findProduct(pid);
+            await productsDao.deleteProduct(pid);
             return {
                 code: 200,
                 result: { status: "success", message: "Product deleted successfully", payload: product },
@@ -82,7 +78,7 @@ class ProductService {
     }
     async productExists(pid) {
         try {
-            return await ProductModel.exists({ _id: pid });
+            return await productsDao.productExists(pid);
         }
         catch {
             return false;

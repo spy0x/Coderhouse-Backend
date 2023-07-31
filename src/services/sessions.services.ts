@@ -1,14 +1,8 @@
-import { UserModel } from "../dao/mongo/models/users.models.js";
+import usersDao from "../dao/mongo/classes/users.dao.js";
 
 class SessionService {
   async getCurrentUser(id: string) {
-    const user = await UserModel.findById(id).populate({
-      path: "cartId",
-      populate: {
-        path: "productos.idProduct",
-      },
-    });
-    return user;
+    return await usersDao.getUser(id);
   }
 }
 
