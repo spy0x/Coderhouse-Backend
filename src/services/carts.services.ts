@@ -1,4 +1,4 @@
-import cartsDao from "../DAO/mongo/classes/carts.dao.js";
+import { cartsDao } from "../DAO/factory.js";
 class CartService {
   async addCart(): Promise<ResResult> {
     try {
@@ -14,7 +14,7 @@ class CartService {
 
   async addProductToCart(cartID: string, productID: string): Promise<ResResult> {
     try {
-      const cart = await cartsDao.findCart(cartID);
+      const cart = await cartsDao.findCart(cartID) as Cart;
       // Check if product is already in cart, add ++ to quantity
       const productInCartIndex = cart.productos.findIndex((product) => product.idProduct.toString() === productID);
       if (productInCartIndex !== -1) {
@@ -54,7 +54,7 @@ class CartService {
 
   async deleteProductFromCart(cartID: string, productID: string): Promise<ResResult> {
     try {
-      const cart = await cartsDao.findCart(cartID);
+      const cart = await cartsDao.findCart(cartID) as Cart;
       const productInCartIndex = cart.productos.findIndex((product) => product.idProduct.toString() === productID);
       cart.productos.splice(productInCartIndex, 1);
       await cartsDao.updateCart(cartID, cart);
@@ -76,7 +76,7 @@ class CartService {
 
   async updateProductQuantity(cartID: string, productID: string, quantity: number): Promise<ResResult> {
     try {
-      const cart = await cartsDao.findCart(cartID);
+      const cart = await cartsDao.findCart(cartID) as Cart;
       const productInCartIndex = cart.productos.findIndex((product) => product.idProduct.toString() === productID);
       // Check if quantity is valid
       if (!quantity || quantity < 1 || isNaN(quantity)) {

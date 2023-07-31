@@ -1,4 +1,3 @@
-import dotenv from "dotenv";
 import fetch from "node-fetch";
 import passport from "passport";
 import GitHubStrategy from "passport-github2";
@@ -7,14 +6,12 @@ import { UserModel } from "../DAO/mongo/models/users.models.js";
 import cartService from "../services/carts.services.js";
 import { compareHash, createHash } from "../utils/passwordCrypt.js";
 
-// SETTING ENV VARIABLES
-dotenv.config();
-const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
-const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
 
 const LocalStrategy = local.Strategy;
 
 export default function initPassport() {
+  const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
+  const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
   passport.use(
     "login",
     new LocalStrategy({ usernameField: "email", passReqToCallback: true }, async (req, username, password, done) => {
