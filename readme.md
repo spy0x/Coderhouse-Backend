@@ -1,10 +1,8 @@
-# Segunda Entrega Curso Programación Backend
+# Tercera Entrega Curso Programación Backend
 ## Coderhouse
 
-##### Colección de REQUESTS de Postman para testear el programa:
-[DESCARGAR](https://drive.google.com/file/d/1T11p3jczn7Ebh5-XfRajTp7Fk-QuXAbo/view?usp=sharing "DESCARGAR")
 ##### Documentación ONLINE de Postman para testear el programa:
-[https://documenter.getpostman.com/view/19344400/2s93sdYrx8](https://documenter.getpostman.com/view/19344400/2s93eYUXPz)
+[https://documenter.getpostman.com/view/19344400/2s9XxvTEr6](https://documenter.getpostman.com/view/19344400/2s9XxvTEr6)
 
 #### PARA EJECUTAR EL PROGRAMA:
 `npm start` (node ./dist/App.js)
@@ -15,10 +13,10 @@
 
 ## Funciones
 
-##### El programa permite crear, modificar, eliminar y ver productos. 
-##### El programa permite crear carts (por defecto con array de productos vacío), ver los productos de un cart específico y agregar/eliminar un producto específico a un cart específico. Se puede vaciar el carrito o modificar la lista de productos de un carrito específico. También se puede modificar el quantity de un producto especifico en un carrito.
-
-##### El programa se asegura de retornar un error (código 400) si se entregan IDs, params o queries inválidos.
+##### El programa permite al administrador crear, modificar, eliminar y ver productos. 
+##### Sistema de registro y login de usuarios con librería Passport.
+##### Sistema de login vía terceros (Github.com).
+##### La aplicación permite ver productos, agregar al carrito y comprar si es que se está logueado.
 
 > *PD2 Se instaló el package multer en el proyecto y se añadió el archivo utils.js para utilizarlo, pero actualmente no está implementado para esta entrega, lamentablemente.
 
