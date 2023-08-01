@@ -12,9 +12,9 @@ class SessionsController {
     if (!req.user) {
       return res.status(400).json({ error: "Invalid Credentials" });
     }
-    const { _id, email, first_name, last_name, age, role, cartId } = req.user;
-    req.session.user = { _id, email, first_name, last_name, role, age, cartId };
-    return res.status(200).json({ status: "success", message: "User logged in successfully", payload: req.session.user });
+    req.session.user = req.user;
+    const cleanUser = new SessionsDTO(req.session.user);
+    return res.status(200).json({ status: "success", message: "User logged in successfully", payload: cleanUser.user});
   }
   failLogin(req: Request, res: Response) {
     return res.status(400).json({ status: "error", message: "Wrong user or password" });

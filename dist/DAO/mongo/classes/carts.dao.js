@@ -1,8 +1,7 @@
 import { CartModel } from "../models/carts.models.js";
 class CartsDao {
     async createCart() {
-        const cart = await CartModel.create({ productos: [] });
-        return cart;
+        return await CartModel.create({ productos: [] });
     }
     async updateCart(cartID, cart) {
         await CartModel.updateOne({ _id: cartID }, cart);

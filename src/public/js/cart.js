@@ -3,6 +3,7 @@ SetCartID();
 
 async function SetCartID() {
   try {
+    if (!buyButton) return;
     const result = await fetch("/api/sessions/cart");
     const data = await result.json();
     if (!data.payload) return;

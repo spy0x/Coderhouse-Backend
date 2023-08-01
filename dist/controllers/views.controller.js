@@ -3,24 +3,26 @@ import cartService from "../services/carts.services.js";
 class ViewsController {
     async index(req, res) {
         const { register, login } = req.query;
-        const session = req.session;
-        if (register === "true" && !session.user)
+        const user = req.session.user;
+        if (register === "true" && !user)
             return res.render("register");
-        if (login === "true" && !session.user)
+        if (login === "true" && !user)
             return res.render("login");
-        const context = { user: session.user };
+        const context = { user };
         res.render("index", context);
     }
     async products(req, res) {
         const { limit, page, query, sort } = req.query;
         const { result } = await productService.getProducts(limit, query, sort, page);
-        const context = { user: req.session.user, ...result };
+        const user = req.session.user;
+        const context = { user, ...result };
         res.render("products", context);
     }
     async cart(req, res) {
         const cartID = req.params.cid;
         const { result } = await cartService.getCartProducts(cartID);
-        const context = { user: req.session.user, ...result };
+        const user = req.session.user;
+        const context = { user, ...result };
         res.render("carts", context);
     }
     async error(req, res) {
