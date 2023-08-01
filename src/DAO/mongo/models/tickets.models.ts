@@ -1,9 +1,9 @@
 import { Schema, model } from "mongoose";
-import { v4 as uuidGenerator} from 'uuid';
+
 
 const ticketSchema = new Schema(
   {
-    code: { type: String, default: uuidGenerator(), unique: true },
+    code: { type: String, unique: true },
     purchase_datetime: { type: Date, default: Date.now },
     amount: { type: Number, required: true },
     purchaser: { type: String, required: true },

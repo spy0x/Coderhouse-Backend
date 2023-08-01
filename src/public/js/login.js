@@ -1,4 +1,17 @@
 const loginForm = document.querySelector("form");
+const githubButton = document.querySelector("#github-button");
+
+githubButton.onclick = (e) => {
+  Swal.fire({
+    title: "Loading...",
+    allowOutsideClick: false,
+    showConfirmButton: false,
+    didOpen: () => {
+      Swal.showLoading();
+    },
+  });
+};
+
 loginForm.onsubmit = (e) => {
   e.preventDefault();
   const formData = new FormData(loginForm);

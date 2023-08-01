@@ -105,7 +105,7 @@ class CartService {
   async purchase(purchaser: string, cartID: string): Promise<ResResult> {
     try {
       const cart = await cartsDao.findCart(cartID);
-      if (cart.productos.length < 1) return { code: 404, result: { status: "error", message: "Cart is empty" } };
+      if (cart.productos.length < 1) return { code: 404, result: { status: "empty", message: "Cart is empty" } };
       let totalAmount = 0;
       for (const cartProduct of cart.productos) {
         const productInDB = await productsDao.findProduct(cartProduct.idProduct.toString());
@@ -113,7 +113,7 @@ class CartService {
           return {
             code: 404,
             result: {
-              status: "error",
+              status: "nostock",
               message: `Not enough stock for product ${productInDB.title}`,
               payload: productInDB,
             },
@@ -127,6 +127,7 @@ class CartService {
       const ticket = await ticketsDao.createTicket(purchaser, totalAmount);
       return { code: 200, result: { status: "success", message: "Purchase successful", payload: ticket } };
     } catch (error) {
+      console.log(error)
       return { code: 500, result: { status: "error", message: "Couldn't purchase products." } };
     }
   }
