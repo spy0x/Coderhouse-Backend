@@ -16,6 +16,10 @@ declare module 'express-session' {
 }
 
 declare global {
+  interface Error {
+    code?: number;
+    cause?: string;
+  }
   namespace Express {
     interface User {
       readonly _id?: ObjectId;
@@ -33,4 +37,3 @@ declare global {
   }
 }
 
-declare module 'express-compression';

@@ -1,5 +1,8 @@
-import { ProductModel } from "../DAO/mongo/models/products.models.js";
 import mongoose from "mongoose";
+import { ProductModel } from "../DAO/mongo/models/products.models.js";
+import CustomError from "../services/errors/CustomError.js";
+import EErrors from "../services/errors/enums.js";
+import { generateProductAlreadyExistsErrorInfo, generateProductErrorInfo } from "../services/errors/info.js";
 import productService from "../services/products.services.js";
 export const productExists = async (req, res, next) => {
     const id = req.params.pid;
@@ -33,16 +36,38 @@ export const productValidParams = async (req, res, next) => {
     return next();
 };
 export const productValid = async (req, res, next) => {
-    const product = req.body;
-    // Check if product already exists
-    if (await ProductModel.findOne({ code: product.code })) {
-        return res.status(400).json({ status: "error", message: "Product already exists" });
+    try {
+        const product = req.body;
+        // Check if product already exists
+        if (await ProductModel.findOne({ code: product.code })) {
+            CustomError.createError({
+                name: "PRODUCT ERROR",
+                message: "Product already exists",
+                code: EErrors.PRODUCT_ALREADY_EXISTS,
+                cause: generateProductAlreadyExistsErrorInfo(product),
+            });
+        }
+        // Check if product has all required properties
+        if (!product.title || !product.description || !product.price || !product.code || !product.category || !product.stock) {
+            CustomError.createError({
+                name: "PRODUCT ERROR",
+                message: "Product is missing required properties",
+                code: EErrors.PRODUCT_MISSING_PROPERTIES,
+                cause: generateProductErrorInfo(product),
+            });
+        }
+        return next();
     }
-    // Check if product has all required properties
-    if (!product.title || !product.description || !product.price || !product.code || !product.category || !product.stock) {
-        return res.status(400).json({ status: "error", message: "Product is missing required properties" });
+    catch (error) {
+        switch (error.code) {
+            case 2:
+                return res.status(400).json({ status: error.name, message: error.message });
+            case 3:
+                return res.status(400).json({ status: error.name, message: error.message });
+            default:
+                return res.status(500).json({ status: "error", message: "Unknown error" });
+        }
     }
-    return next();
 };
 export const productsValidQueries = async (req, res, next) => {
     const sort = req.query.sort;

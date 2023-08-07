@@ -74,3 +74,10 @@ type User = {
   role?: string;
   cartId: string;
 };
+
+type ErrorCustom = {
+  name: string;
+  cause: string;
+  message: string;
+  code: number;
+};
