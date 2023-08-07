@@ -1,4 +1,5 @@
 import cartService from "../services/carts.services.js";
+import ticketService from "../services/tickets.services.js";
 class CartsController {
     async addCart(req, res) {
         const response = await cartService.addCart();
@@ -41,7 +42,7 @@ class CartsController {
     }
     async purchase(req, res) {
         const cartID = req.params.cid;
-        const response = await cartService.purchase(req.session.user?.email, cartID);
+        const response = await ticketService.purchase(req.session.user?.email, cartID);
         return res.status(response.code).json(response.result);
     }
 }

@@ -1,5 +1,6 @@
-import cartService from "../services/carts.services.js";
 import { Request, Response } from "express";
+import cartService from "../services/carts.services.js";
+import ticketService from "../services/tickets.services.js";
 
 class CartsController {
   async addCart(req: Request, res: Response) {
@@ -43,7 +44,7 @@ class CartsController {
   }
   async purchase(req: Request, res: Response) {
     const cartID = req.params.cid;
-    const response = await cartService.purchase(req.session.user?.email as string, cartID);
+    const response = await ticketService.purchase(req.session.user?.email as string, cartID);
     return res.status(response.code).json(response.result);
   }
 }
