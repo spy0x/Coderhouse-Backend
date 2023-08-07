@@ -53,7 +53,8 @@ async function startServer() {
     app.use("/", viewsRouter);
     // SETTING SERVER
     const httpServer = app.listen(PORT, () => {
-        console.log("Server running AT: http://localhost:" + PORT);
+        if (process.env.NODE_ENV === "DEVELOPMENT")
+            console.log("Server running AT: http://localhost:" + PORT);
     });
     // WEBSOCKET CONNECTION
     initSocket(httpServer);

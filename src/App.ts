@@ -32,7 +32,7 @@ async function startServer() {
   app.set("views", "src/views");
   app.set("view engine", "handlebars");
   // SETTING MIDDLEWARES
-  app.use(compression())
+  app.use(compression());
   app.use("/static", express.static("src/public"));
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
@@ -54,11 +54,11 @@ async function startServer() {
   app.use("/api/carts", cartsRouter);
   app.use("/api/products", productsRouter);
   app.use("/api/sessions", sessionsRouter);
-  app.use("/", mockingRouter)
+  app.use("/", mockingRouter);
   app.use("/", viewsRouter);
   // SETTING SERVER
   const httpServer = app.listen(PORT, () => {
-    console.log("Server running AT: http://localhost:" + PORT);
+    if (process.env.NODE_ENV === "DEVELOPMENT") console.log("Server running AT: http://localhost:" + PORT);
   });
   // WEBSOCKET CONNECTION
   initSocket(httpServer);
