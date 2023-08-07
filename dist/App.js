@@ -1,17 +1,19 @@
+import compression from "compression";
 import cookieParser from "cookie-parser";
+import cors from "cors";
+import dotenv from "dotenv";
 import express from "express";
 import handlebars from "express-handlebars";
 import session from "express-session";
+import passport from "passport";
+import { factoryStore, initFactory } from "./DAO/factory.js";
+import initPassport from "./config/passport.config.js";
 import cartsRouter from "./routes/carts.router.js";
+import mockingRouter from "./routes/mocking.router.js";
 import productsRouter from "./routes/products.router.js";
 import sessionsRouter from "./routes/sessions.router.js";
 import viewsRouter from "./routes/views.router.js";
 import { initSocket } from "./utils.js";
-import passport from "passport";
-import initPassport from "./config/passport.config.js";
-import dotenv from "dotenv";
-import cors from "cors";
-import { initFactory, factoryStore } from "./DAO/factory.js";
 // loading .env file for environment variables
 dotenv.config();
 const PORT = process.env.PORT || 8080;
@@ -28,6 +30,7 @@ async function startServer() {
     app.set("views", "src/views");
     app.set("view engine", "handlebars");
     // SETTING MIDDLEWARES
+    app.use(compression());
     app.use("/static", express.static("src/public"));
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
@@ -46,10 +49,11 @@ async function startServer() {
     app.use("/api/carts", cartsRouter);
     app.use("/api/products", productsRouter);
     app.use("/api/sessions", sessionsRouter);
+    app.use("/", mockingRouter);
     app.use("/", viewsRouter);
     // SETTING SERVER
     const httpServer = app.listen(PORT, () => {
-        console.log("Server http://localhost/ is running on port " + PORT);
+        console.log("Server running AT: http://localhost:" + PORT);
     });
     // WEBSOCKET CONNECTION
     initSocket(httpServer);

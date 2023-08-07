@@ -32,3 +32,5 @@ declare global {
     }
   }
 }
+
+declare module 'express-compression';

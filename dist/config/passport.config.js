@@ -13,11 +13,9 @@ export default function initPassport() {
         try {
             const user = (await UserModel.findOne({ email: username }));
             if (!user) {
-                console.log("User Not Found with username (email) " + username);
                 return done(null, false);
             }
             if (!compareHash(password, user.password)) {
-                console.log("Invalid Password");
                 return done(null, false);
             }
             return done(null, user);
@@ -35,7 +33,6 @@ export default function initPassport() {
             const user = await UserModel.findOne({ email: username });
             // check if user already exists
             if (user) {
-                console.log("User already exists");
                 return done(null, false);
             }
             const cartId = await generateCartId();
@@ -49,12 +46,9 @@ export default function initPassport() {
                 cartId,
             };
             const userCreated = (await UserModel.create(newUser));
-            // console.log(userCreated);
-            // console.log("User Registration succesful");
             return done(null, userCreated);
         }
         catch (e) {
-            console.log("Error in register");
             return done(e);
         }
     }));
@@ -80,7 +74,6 @@ export default function initPassport() {
                 return done(new Error("cannot get a valid email for this user"));
             }
             profile.email = emailDetail.email;
-            console.log(profile);
             const user = (await UserModel.findOne({ email: profile.email }));
             // if user does not exists, create a new one
             if (!user) {
@@ -93,16 +86,13 @@ export default function initPassport() {
                     cartId,
                 };
                 const userCreated = (await UserModel.create(newUser));
-                console.log("User Registration succesful");
                 return done(null, userCreated);
             }
             else {
-                console.log("User already exists. Not creating another one!");
                 return done(null, user);
             }
         }
         catch (e) {
-            console.log("Error in Auth GitHub!");
             return done(e);
         }
     }));
