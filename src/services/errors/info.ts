@@ -12,3 +12,7 @@ export const generateProductErrorInfo = (product: Product) => {
 export const generateProductAlreadyExistsErrorInfo = (product: Product) => {
   return `The product with code ${product.code} already exists.`;
 }
+
+export const geneateCartOwnershipError = (userCartId: string | undefined, cartId: string) => {
+  return `This user owns the cart ${userCartId}. And does not match with request cart with id ${cartId}`;
+}
