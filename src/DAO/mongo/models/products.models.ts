@@ -17,7 +17,7 @@ interface ProductModel<T extends Document> extends Model<T> {
 
 const productSchema = new Schema(
   {
-    title: { type: String, required: true, max: 100, unique: true },
+    title: { type: String, required: true, max: 100 },
     description: { type: String, required: true, max: 500 },
     price: { type: Number, required: true },
     code: { type: String, required: true, max: 255, unique: true },

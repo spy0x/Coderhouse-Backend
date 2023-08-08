@@ -14,6 +14,7 @@ import productsRouter from "./routes/products.router.js";
 import sessionsRouter from "./routes/sessions.router.js";
 import viewsRouter from "./routes/views.router.js";
 import { initSocket } from "./utils.js";
+import errorHandler from "./middlewares/errorHandler.js";
 
 // loading .env file for environment variables
 dotenv.config();
@@ -56,6 +57,8 @@ async function startServer() {
   app.use("/api/sessions", sessionsRouter);
   app.use("/", mockingRouter);
   app.use("/", viewsRouter);
+  // SETTING ERROR HANDLER
+  app.use(errorHandler);
   // SETTING SERVER
   const httpServer = app.listen(PORT, () => {
     if (process.env.NODE_ENV === "DEVELOPMENT") console.log("Server running AT: http://localhost:" + PORT);

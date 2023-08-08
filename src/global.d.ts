@@ -27,6 +27,7 @@ interface Result {
   status: string;
   message?: string;
   payload?: any;
+  code?: number;
 }
 
 type ResResult = {
@@ -80,4 +81,6 @@ type ErrorCustom = {
   cause: string;
   message: string;
   code: number;
+  status: number;
 };
+

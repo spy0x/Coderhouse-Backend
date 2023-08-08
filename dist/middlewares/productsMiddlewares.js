@@ -45,6 +45,7 @@ export const productValid = async (req, res, next) => {
                 message: "Product already exists",
                 code: EErrors.PRODUCT_ALREADY_EXISTS,
                 cause: generateProductAlreadyExistsErrorInfo(product),
+                status: 400
             });
         }
         // Check if product has all required properties
@@ -54,19 +55,13 @@ export const productValid = async (req, res, next) => {
                 message: "Product is missing required properties",
                 code: EErrors.PRODUCT_MISSING_PROPERTIES,
                 cause: generateProductErrorInfo(product),
+                status: 400
             });
         }
         return next();
     }
-    catch (error) {
-        switch (error.code) {
-            case 2:
-                return res.status(400).json({ status: error.name, message: error.message });
-            case 3:
-                return res.status(400).json({ status: error.name, message: error.message });
-            default:
-                return res.status(500).json({ status: "error", message: "Unknown error" });
-        }
+    catch (err) {
+        return next(err);
     }
 };
 export const productsValidQueries = async (req, res, next) => {

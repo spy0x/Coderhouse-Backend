@@ -15,3 +15,4 @@ productsRouter.post("/", isAdmin, productValid, productsController.addProduct);
 productsRouter.delete("/:pid", isAdmin, productExists, productsController.deleteProduct);
 
 productsRouter.put("/:pid", isAdmin, productExists, productsController.updateProduct);
+

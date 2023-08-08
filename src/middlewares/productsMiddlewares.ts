@@ -49,6 +49,7 @@ export const productValid = async (req: Request, res: Response, next: NextFuncti
         message: "Product already exists",
         code: EErrors.PRODUCT_ALREADY_EXISTS,
         cause: generateProductAlreadyExistsErrorInfo(product),
+        status: 400
       });
     }
     // Check if product has all required properties
@@ -58,21 +59,14 @@ export const productValid = async (req: Request, res: Response, next: NextFuncti
         message: "Product is missing required properties",
         code: EErrors.PRODUCT_MISSING_PROPERTIES,
         cause: generateProductErrorInfo(product),
+        status: 400
       });
     }
     return next();
-  } catch (error: any) {
-    switch(error.code){
-      case 2:
-        return res.status(400).json({ status: error.name, message: error.message });
-      case 3:
-        return res.status(400).json({ status: error.name, message: error.message });
-      default:
-        return res.status(500).json({ status: "error", message: "Unknown error" });
-    }
-    
+  } catch (err) {
+    return next(err);
   }
-}
+};
 
 export const productsValidQueries = async (req: any, res: Response, next: NextFunction) => {
   const sort = req.query.sort;

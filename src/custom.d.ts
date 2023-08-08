@@ -19,6 +19,7 @@ declare global {
   interface Error {
     code?: number;
     cause?: string;
+    status?: number;
   }
   namespace Express {
     interface User {
