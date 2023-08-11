@@ -8,13 +8,15 @@ import session from "express-session";
 import passport from "passport";
 import { factoryStore, initFactory } from "./DAO/factory.js";
 import initPassport from "./config/passport.config.js";
+import errorHandler from "./middlewares/errorHandler.js";
 import cartsRouter from "./routes/carts.router.js";
 import mockingRouter from "./routes/mocking.router.js";
 import productsRouter from "./routes/products.router.js";
 import sessionsRouter from "./routes/sessions.router.js";
 import viewsRouter from "./routes/views.router.js";
 import { initSocket } from "./utils.js";
-import errorHandler from "./middlewares/errorHandler.js";
+import path from "path";
+import { __dirname } from "./utils.js";
 // loading .env file for environment variables
 dotenv.config();
 const PORT = process.env.PORT || 8080;
@@ -33,6 +35,7 @@ async function startServer() {
     // SETTING MIDDLEWARES
     app.use(compression());
     app.use("/static", express.static("src/public"));
+    app.use(express.static(path.join(__dirname, "frontend_react")));
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
     app.use(cors());
