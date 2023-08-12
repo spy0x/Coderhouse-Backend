@@ -36,7 +36,7 @@ export default function Home() {
         ) : (
           <Box>
             <Typography align="center" variant="h1">Welcome, Guest!</Typography>
-            <Typography align="center" variant="h6"><span><Link to='/?login=true'>Sign in</Link> </span>or Register <Link to="/?register=true" className="font-bold text-red-500">here</Link></Typography>
+            <Typography align="center" variant="h6"><span className="font-bold text-red-500"><Link to='/?login=true'>Sign in</Link> </span>or Register <Link to="/?register=true" className="font-bold text-red-500">here</Link></Typography>
           </Box>
         )}
       </Stack>
