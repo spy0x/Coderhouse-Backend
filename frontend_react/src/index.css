@@ -16,6 +16,12 @@ body {
   min-height: 100vh;
 }
 
+.swal-background {
+  background-color: #00111f; /* Dark blue background color */
+  color: #fff; /* Light text color */
+  border: .25px solid orange;
+}
+
 
 
 
