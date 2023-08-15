@@ -1,6 +1,9 @@
+import { logger } from '../utils/logger.js';
 const errorHandler = (err, req, res, next) => {
     if (err) {
-        console.log(err.cause);
+        logger.warn(err.message);
+        if (err.cause)
+            logger.warn(err.cause);
         const response = {
             status: err.name,
             message: err.message,

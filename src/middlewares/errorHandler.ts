@@ -1,8 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
+import { logger } from '../utils/logger.js';
 
 const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
     if (err) {
-        console.log(err.cause);
+        logger.warn(err.message);
+        if (err.cause) logger.warn(err.cause);
         const response: Result = {
             status: err.name,
             message: err.message,
