@@ -15,9 +15,9 @@ import mockingRouter from "./routes/mocking.router.js";
 import productsRouter from "./routes/products.router.js";
 import sessionsRouter from "./routes/sessions.router.js";
 import viewsRouter from "./routes/views.router.js";
+import loggerRouter from "./routes/logger.router.js";
 import { initSocket } from "./utils.js";
 import { initLogger, logger } from "./utils/logger.js";
-import { log } from "winston";
 
 // loading .env file for environment variables
 dotenv.config();
@@ -58,10 +58,11 @@ async function startServer() {
   app.use(passport.session());
 
   // SETTING ROUTES
+  app.use("/loggerTest", loggerRouter);
   app.use("/api/carts", cartsRouter);
   app.use("/api/products", productsRouter);
   app.use("/api/sessions", sessionsRouter);
-  app.use("/", mockingRouter);
+  app.use("/mockingproducts", mockingRouter);
   app.use("/", viewsRouter);
   // SETTING ERROR HANDLER
   app.use(errorHandler);
