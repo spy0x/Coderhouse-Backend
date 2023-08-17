@@ -2,9 +2,6 @@ version: "3"
 services:
   nodejs:
     image: spy0x/nodejs-coderhouse
-    build:
-      context: .
-      dockerfile: Dockerfile
     container_name: nodejs-dev
     working_dir: /usr/src/app
     volumes:
@@ -14,15 +11,20 @@ services:
       - app-network
     ports:
       - "8080:8080"
+    depends_on:
+      - typescript
+      
   typescript:
     image: spy0x/nodejs-coderhouse
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: typescript-dev
     working_dir: /usr/src/app
     volumes:
       - .:/usr/src/app
     command: sh -c "npm run ts"
-    depends_on:
-      - nodejs
+
   react:
     image: spy0x/nodejs-coderhouse
     container_name: react-dev
