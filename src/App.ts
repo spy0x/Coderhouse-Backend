@@ -17,6 +17,8 @@ import sessionsRouter from "./routes/sessions.router.js";
 import viewsRouter from "./routes/views.router.js";
 import loggerRouter from "./routes/logger.router.js";
 import { initSocket } from "./utils.js";
+import path from "path";
+import { __dirname } from "./utils.js";
 import { initLogger, logger } from "./utils/logger.js";
 
 // loading .env file for environment variables
@@ -41,9 +43,16 @@ async function startServer() {
   app.use(loggerMiddleware);
   app.use(compression());
   app.use("/static", express.static("src/public"));
+  app.use(express.static(path.join(__dirname, "frontend_react")));
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
-  app.use(cors());
+  const allowedOrigins = ["http://localhost:3000", "http://localhost:8080", "http://localhost:5173"];
+  app.use(
+    cors({
+      origin: allowedOrigins,
+      credentials: true, // Allow cookies to be sent with requests
+    })
+  );
   app.use(cookieParser());
   app.use(
     session({
