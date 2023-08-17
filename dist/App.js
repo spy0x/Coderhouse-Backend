@@ -9,16 +9,19 @@ import passport from "passport";
 import { factoryStore, initFactory } from "./DAO/factory.js";
 import initPassport from "./config/passport.config.js";
 import errorHandler from "./middlewares/errorHandler.js";
+import loggerMiddleware from "./middlewares/logger.middleware.js";
 import cartsRouter from "./routes/carts.router.js";
 import mockingRouter from "./routes/mocking.router.js";
 import productsRouter from "./routes/products.router.js";
 import sessionsRouter from "./routes/sessions.router.js";
 import viewsRouter from "./routes/views.router.js";
+import loggerRouter from "./routes/logger.router.js";
 import { initSocket } from "./utils.js";
 import path from "path";
 import { __dirname } from "./utils.js";
-// loading .env file for environment variables
 dotenv.config();
+// setting Logger System
+initLogger();
 const PORT = process.env.PORT || 8080;
 const app = express();
 // setting DAO System
@@ -33,6 +36,7 @@ async function startServer() {
     app.set("views", "src/views");
     app.set("view engine", "handlebars");
     // SETTING MIDDLEWARES
+    app.use(loggerMiddleware);
     app.use(compression());
     app.use("/static", express.static("src/public"));
     app.use(express.static(path.join(__dirname, "frontend_react")));
@@ -54,17 +58,18 @@ async function startServer() {
     app.use(passport.initialize());
     app.use(passport.session());
     // SETTING ROUTES
+    app.use("/loggerTest", loggerRouter);
     app.use("/api/carts", cartsRouter);
     app.use("/api/products", productsRouter);
     app.use("/api/sessions", sessionsRouter);
-    app.use("/", mockingRouter);
+    app.use("/mockingproducts", mockingRouter);
     app.use("/", viewsRouter);
     // SETTING ERROR HANDLER
     app.use(errorHandler);
     // SETTING SERVER
+    logger.debug("Starting NodeJS Express Server...");
     const httpServer = app.listen(PORT, () => {
-        if (process.env.NODE_ENV === "DEVELOPMENT")
-            console.log("Server running AT: http://localhost:" + PORT);
+        logger.info("Server running AT: http://localhost:" + PORT);
     });
     // WEBSOCKET CONNECTION
     initSocket(httpServer);

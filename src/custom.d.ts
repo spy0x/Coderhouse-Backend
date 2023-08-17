@@ -1,4 +1,5 @@
 import { SessionData } from 'express-session';
+import winston from 'winston';
 
 declare module 'express-session' {
   interface SessionData {
@@ -34,6 +35,7 @@ declare global {
     }
     interface Request {
       cart: Cart; // Replace "any" with the actual type of the "cart" object
+      logger: winston.Logger;
     }
   }
 }

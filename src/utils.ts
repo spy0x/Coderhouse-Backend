@@ -1,5 +1,4 @@
-// DB CONNECTION //
-
+import { logger } from "./utils/logger.js";
 import { Server } from "socket.io";
 
 // MULTER CONFIG //
@@ -27,7 +26,7 @@ export const uploader = multer({ storage });
 export function initSocket(httpServer: any) {
   const socketServer = new Server(httpServer);
   socketServer.on("connection", async (socket) => {
-    console.log(`New client ${socket.id} connected`);
+    logger.info(`New client ${socket.id} connected`);
     const { result } = await productService.getProducts();
     socket.emit("getProducts", result);
     socket.emit("getMessages", await messageService.getAllMessages());
