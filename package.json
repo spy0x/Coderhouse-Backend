@@ -4,6 +4,9 @@
   "description": "",
   "main": "App.js",
   "type": "module",
+  "engines": {
+    "node": "18.x"
+  },
   "scripts": {
     "start": "node ./dist/App.js",
     "dev": "nodemon ./dist/App.js",
