@@ -19,6 +19,8 @@ import loggerRouter from "./routes/logger.router.js";
 import { initSocket } from "./utils.js";
 import path from "path";
 import { __dirname } from "./utils.js";
+import { initLogger, logger } from "./utils/logger.js";
+// loading .env file for environment variables
 dotenv.config();
 // setting Logger System
 initLogger();

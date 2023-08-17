@@ -1,0 +1,42 @@
+version: "3"
+services:
+  nodejs:
+    image: spy0x/nodejs-coderhouse
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nodejs-dev
+    working_dir: /usr/src/app
+    volumes:
+      - .:/usr/src/app
+    command: sh -c "npm install && npm run dev && npm run ts"
+    networks:
+      - app-network
+    ports:
+      - "8080:8080"
+  typescript:
+    image: spy0x/nodejs-coderhouse
+    container_name: typescript-dev
+    working_dir: /usr/src/app
+    volumes:
+      - .:/usr/src/app
+    command: sh -c "npm run ts"
+    depends_on:
+      - nodejs
+  react:
+    image: spy0x/nodejs-coderhouse
+    container_name: react-dev
+    working_dir: /usr/src/app/frontend_react
+    volumes:
+      - ./frontend_react:/usr/src/app/frontend_react
+    command: sh -c "npm install && npm run dev"
+    ports:
+      - "5173:5173"
+    networks:
+      - app-network
+    depends_on:
+      - nodejs
+
+networks:
+  app-network:
+    driver: bridge
