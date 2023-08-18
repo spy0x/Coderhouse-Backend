@@ -3,6 +3,8 @@ import { FormEvent, useState } from "react";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import Swal from "sweetalert2";
 
+
+
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -93,7 +95,7 @@ export default function Login() {
             label="Password"
             type="password"
           />
-          <Button type="submit" variant="outlined">
+          <Button type="submit" variant="contained">
             Login
           </Button>
           <Button startIcon={<GitHubIcon />} color="error" variant="contained" onClick={handleGithubLogin}>
