@@ -7,12 +7,12 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const apiUrl = import.meta.env.VITE_URL;
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = { email, password };
     setLoading(true);
-    const apiUrl = import.meta.env.VITE_URL;
     fetch(`${apiUrl}/api/sessions/login`, {
       method: "POST",
       headers: {
@@ -67,8 +67,8 @@ export default function Login() {
   };
   const handleGithubLogin = () => {
     setLoading(true);
-    window.location.href = "http://localhost:8080/api/sessions/github"
-  }
+    window.location.href = `${apiUrl}/api/sessions/github`;
+  };
   return (
     <Container>
       <form onSubmit={handleSubmit}>
@@ -96,12 +96,7 @@ export default function Login() {
           <Button type="submit" variant="outlined">
             Login
           </Button>
-          <Button
-            startIcon={<GitHubIcon />}
-            color="error"
-            variant="contained"
-            onClick={handleGithubLogin}
-          >
+          <Button startIcon={<GitHubIcon />} color="error" variant="contained" onClick={handleGithubLogin}>
             Login with GitHub
           </Button>
         </Stack>
