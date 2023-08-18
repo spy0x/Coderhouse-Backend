@@ -6,6 +6,7 @@ import { UserModel } from "../DAO/mongo/models/users.models.js";
 import cartService from "../services/carts.services.js";
 import { compareHash, createHash } from "../utils/passwordCrypt.js";
 import { Request } from "express";
+import { API_URL } from "../App.js";
 
 
 const LocalStrategy = local.Strategy;
@@ -72,7 +73,7 @@ export default function initPassport() {
       {
         clientID: GITHUB_CLIENT_ID,
         clientSecret: GITHUB_CLIENT_SECRET,
-        callbackURL: "http://localhost:8080/api/sessions/githubcallback",
+        callbackURL: `${API_URL}/api/sessions/githubcallback`,
         passReqToCallback: true,
       },
       async (req: Request, accesToken: any, refreshToken: any, profile: any, done: any) => {

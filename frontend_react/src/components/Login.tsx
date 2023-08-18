@@ -12,7 +12,8 @@ export default function Login() {
     event.preventDefault();
     const formData = { email, password };
     setLoading(true);
-    fetch("http://localhost:8080/api/sessions/login", {
+    const apiUrl = import.meta.env.VITE_URL;
+    fetch(`${apiUrl}/api/sessions/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

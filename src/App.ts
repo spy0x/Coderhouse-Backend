@@ -26,6 +26,7 @@ dotenv.config();
 // setting Logger System
 initLogger();
 const PORT = process.env.PORT || 8080;
+export const API_URL = process.env.NODE_ENV === "PRODUCTION" ? process.env.PROD_URL : `http://localhost:${PORT}`;
 const app = express();
 // setting DAO System
 initFactory();
@@ -46,7 +47,7 @@ async function startServer() {
   app.use(express.static(path.join(__dirname, "frontend_react")));
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
-  const allowedOrigins = ["http://localhost:3000", "http://localhost:8080", "http://localhost:5173"];
+  const allowedOrigins = [ API_URL as string, "http://localhost:3000"];
   app.use(
     cors({
       origin: allowedOrigins,
@@ -78,7 +79,7 @@ async function startServer() {
   // SETTING SERVER
   logger.debug("Starting NodeJS Express Server...");
   const httpServer = app.listen(PORT, () => {
-    logger.info("Server running AT: http://localhost:" + PORT);
+    logger.info(`Server running AT: ${API_URL}`);
   });
   // WEBSOCKET CONNECTION
   initSocket(httpServer);

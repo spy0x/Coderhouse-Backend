@@ -8,7 +8,8 @@ export default function LogOutButton() {
   const handleLogout = async () => {
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:8080/api/sessions/logout");
+      const apiUrl = import.meta.env.VITE_URL;
+      const response = await fetch(`${apiUrl}/api/sessions/logout`);
       const data = await response.json();
       console.log(data);
       setLoading(false);
