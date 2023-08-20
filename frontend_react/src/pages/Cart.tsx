@@ -19,6 +19,7 @@ export default function Cart() {
   const { updateCurrentUser, currentUser, isLoading } = useContext(UserContext) as UserContextType;
   useLayoutEffect(() => {
     updateCurrentUser();
+    document.title = "Cart | Los Tres Primos";
   }, []);
   if (isLoading)
     return (

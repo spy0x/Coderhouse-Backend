@@ -17,8 +17,9 @@ export default function Products() {
 
   useLayoutEffect(() => {
     getProducts();
+    document.title = "Products | Los Tres Primos";
   }, []);
-  
+
   if (loadingProducts)
     return (
       <Stack height="50vh" justifyContent="center" alignItems="center">

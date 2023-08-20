@@ -1,4 +1,5 @@
-import { Box, Button, Card, CardActions, CardContent, CardMedia, Grid, Stack, Typography } from "@mui/material";
+import { Box, Card, CardActions, CardContent, CardMedia, Grid, Stack, Typography } from "@mui/material";
+import AddToCartButton from "./AddToCartButton";
 
 export default function ProductCard({ product }: { product: Product }) {
   return (
@@ -22,7 +23,7 @@ export default function ProductCard({ product }: { product: Product }) {
             </CardContent>
           </Box>
           <CardActions>
-            <Button variant='outlined' size="large" sx={{display: 'block', marginLeft: 'auto'}}>Add to Cart</Button>
+            <AddToCartButton product={product} />
           </CardActions>
         </Stack>
       </Card>
