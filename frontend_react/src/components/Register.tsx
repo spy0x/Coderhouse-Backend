@@ -1,6 +1,7 @@
-import { Backdrop, Button, CircularProgress, Container, Stack, TextField, Typography } from "@mui/material";
+import { Button, Container, Stack, TextField, Typography } from "@mui/material";
 import React, { FormEvent, useRef, useState } from "react";
 import Swal from "sweetalert2";
+import Loading from "./Loading";
 
 export default function Register() {
   const [loading, setLoading] = React.useState(false);
@@ -138,9 +139,7 @@ export default function Register() {
           </Button>
         </Stack>
       </form>
-      <Backdrop sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>
-        <CircularProgress color="inherit" />
-      </Backdrop>
+      <Loading loading={loading} />
     </Container>
   );
 }

@@ -1,34 +1,17 @@
 import { Container, Typography, Stack, Box, CircularProgress } from "@mui/material";
-import { useLayoutEffect, useState } from "react";
+import { useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Login from "../components/Login";
 import Register from "../components/Register";
 import Profile from "../components/Profile";
-import { UserContext } from "../components/Contexts";
+import { UserContext } from "../components/UserContext";
 
 export default function Home() {
-  const [currentUser, setCurrentUser] = useState(undefined);
-  const [isLoading, setIsLoading] = useState(false);
+  const { currentUser, isLoading } = useContext(UserContext) as UserContextType;
   const urlParams = new URLSearchParams(useLocation().search);
   const login = urlParams.get("login");
   const register = urlParams.get("register");
 
-  const getCurrentUser = async () => {
-    try {
-      setIsLoading(true);
-      const apiUrl = import.meta.env.VITE_URL;
-      const response = await fetch(`${apiUrl}/api/sessions/current`);
-      const data = await response.json();
-      if (response.status == 200) setCurrentUser(data.payload);
-      setIsLoading(false);
-      console.log(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  useLayoutEffect(() => {
-    getCurrentUser();
-  }, []);
   if (isLoading)
     return (
       <Stack height="50vh" justifyContent="center" alignItems="center">
@@ -37,11 +20,7 @@ export default function Home() {
     );
   if (currentUser) {
     document.title = "Profile | Los Tres Primos";
-    return (
-      <UserContext.Provider value={currentUser}>
-        <Profile />
-      </UserContext.Provider>
-    );
+    return <Profile />;
   }
   if (login && !currentUser) {
     document.title = "Login | Los Tres Primos";
@@ -51,6 +30,7 @@ export default function Home() {
     document.title = "Register | Los Tres Primos";
     return <Register />;
   }
+  document.title = "Los Tres Primos 3D Market";
   return (
     <Container>
       <Stack direction="row" justifyContent="center" alignItems="center">

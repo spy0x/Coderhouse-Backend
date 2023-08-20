@@ -1,10 +1,13 @@
-import { Backdrop, Box, Button, CircularProgress } from "@mui/material";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Swal from "sweetalert2";
+import { UserContext } from "./UserContext";
+import Loading from "./Loading";
+import { Box, Button } from "@mui/material";
 
 export default function LogOutButton() {
+  const { setCurrentUser } = useContext(UserContext) as UserContextType;
   const [loading, setLoading] = useState(false);
-  
+
   const handleLogout = async () => {
     try {
       setLoading(true);
@@ -13,6 +16,7 @@ export default function LogOutButton() {
       const data = await response.json();
       console.log(data);
       setLoading(false);
+      setCurrentUser(undefined);
       if (response.status == 200) {
         Swal.fire({
           icon: "success",
@@ -56,10 +60,8 @@ export default function LogOutButton() {
   };
   return (
     <Box>
-      <Button onClick={handleLogout}>Logout</Button>
-      <Backdrop sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>
-        <CircularProgress color="inherit" />
-      </Backdrop>
+      <Button variant='contained' onClick={handleLogout}>Logout</Button>
+      <Loading loading={loading} />
     </Box>
   );
 }

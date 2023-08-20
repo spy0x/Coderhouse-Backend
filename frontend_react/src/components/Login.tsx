@@ -1,7 +1,8 @@
-import { Container, Stack, Typography, TextField, Button, Backdrop, CircularProgress } from "@mui/material";
+import { Container, Stack, Typography, TextField, Button } from "@mui/material";
 import { FormEvent, useState } from "react";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import Swal from "sweetalert2";
+import Loading from "./Loading";
 
 
 
@@ -103,9 +104,7 @@ export default function Login() {
           </Button>
         </Stack>
       </form>
-      <Backdrop sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>
-        <CircularProgress color="inherit" />
-      </Backdrop>
+      <Loading loading={loading} />
     </Container>
   );
 }

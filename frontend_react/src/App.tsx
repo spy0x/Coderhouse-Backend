@@ -3,6 +3,8 @@ import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import "./App.css";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
+import UserProvider from "./components/UserContext";
+import Cart from "./pages/Cart";
 
 function App() {
   const theme = createTheme({
@@ -11,8 +13,8 @@ function App() {
         styleOverrides: {
           input: {
             "&:-webkit-autofill": {
-              "-webkit-box-shadow": "0 0 0 50px rgba(0,0,0,1) inset",
-              "-webkit-text-fill-color": "primary",
+              "WebkitBoxShadow": "0 0 0 50px rgba(0,0,0,1) inset",
+              "WebkitTextFillColor": "primary",
             },
           },
         },
@@ -27,19 +29,22 @@ function App() {
         main: "#ffa500",
       },
       background: {
-        default: '#121212',
+        default: "#121212",
       },
     },
   });
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline/>
+      <CssBaseline />
+      <UserProvider>
         <BrowserRouter>
           <Navbar />
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/carts/:cid" element={<Cart />} />
           </Routes>
         </BrowserRouter>
+      </UserProvider>
     </ThemeProvider>
   );
 }
