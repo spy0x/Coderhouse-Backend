@@ -31,11 +31,12 @@ class ViewsController {
     // res.render("carts", context);
   }
   async error(req: Request, res: Response) {
-    const error = {
-      status: "ERROR 404",
-      message: "Page Not found",
-    };
-    res.render("error", error);
+    res.sendFile(path.join(__dirname, "frontend_react/index.html"));
+    // const error = {
+    //   status: "ERROR 404",
+    //   message: "Page Not found",
+    // };
+    // res.render("error", error);
   }
 }
 

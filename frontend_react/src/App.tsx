@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import UserProvider from "./components/UserContext";
 import Cart from "./pages/Cart";
 import Products from "./pages/Products";
+import Error from "./pages/Error";
 
 function App() {
   const theme = createTheme({
@@ -44,6 +45,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/carts/:cid" element={<Cart />} />
             <Route path="/products" element={<Products />} />
+            <Route path="*" element={<Error error={{status: "ERROR 404", message: "Page Not found"}}/>} />
           </Routes>
         </BrowserRouter>
       </UserProvider>

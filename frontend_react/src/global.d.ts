@@ -1,3 +1,8 @@
+type ErrorMessage = {
+  status: string;
+  message: string;
+}
+
 type UserForm = {
   first_name: string;
   last_name: string;

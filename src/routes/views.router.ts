@@ -1,6 +1,6 @@
 import { Router } from "express";
 import viewsController from "../controllers/views.controller.js";
-import { isLogged, isAdmin, isUser } from "../middlewares/auth.js";
+import { isLogged, isAdmin, isUser, isCartOwner } from "../middlewares/auth.js";
 import { cartExists } from "../middlewares/cartsMiddlewares.js";
 import { productsValidQueries } from "../middlewares/productsMiddlewares.js";
 
@@ -13,7 +13,7 @@ viewsRouter.get("/", viewsController.index);
 
 viewsRouter.get("/products", productsValidQueries, viewsController.products);
 
-viewsRouter.get("/carts/:cid", isLogged, cartExists, viewsController.cart);
+viewsRouter.get("/carts/:cid", isLogged, cartExists, isCartOwner, viewsController.cart);
 
 viewsRouter.get("/chat", isUser, (req, res) => {
   res.render("chat");

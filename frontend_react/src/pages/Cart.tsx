@@ -39,18 +39,25 @@ export default function Cart() {
               Your cart is empty.
             </Typography>
           ) : (
-            <List>
-              {currentUser?.cartId.productos.map((product) => (
-                <ListItem secondaryAction={<Typography>x{product.quantity}</Typography>}>
-                  <ListItemAvatar>
-                    <Avatar>
-                      <InventoryIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText primary={product.idProduct.title} secondary={product.idProduct.category} />
-                </ListItem>
-              ))}
-            </List>
+            <>
+              <List>
+                {currentUser?.cartId.productos.map((product) => (
+                  <ListItem>
+                    <ListItemAvatar>
+                      <Avatar>
+                        <InventoryIcon />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText primary={product.idProduct.title} secondary={product.idProduct.category} />
+                    <Typography mx={4}>x{product.quantity}</Typography>
+                    <Typography variant="body2" fontWeight="bold">${product.idProduct.price * product.quantity}</Typography>
+                  </ListItem>
+                ))}
+              </List>
+              <Typography variant="overline" fontWeight="bold" display="block" marginLeft="auto" align="right">
+                Total: ${currentUser?.cartId.productos.reduce((acc, value) => acc + value.quantity * value.idProduct.price, 0)}
+              </Typography>
+            </>
           )}
         </Paper>
         <PurchaseButton currentUser={currentUser as User} />
