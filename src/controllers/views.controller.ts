@@ -15,11 +15,12 @@ class ViewsController {
     // res.render("index", context);
   }
   async products(req: any, res: Response) {
-    const { limit, page, query, sort } = req.query;
-    const { result } = await productService.getProducts(limit, query, sort, page);
-    const user = req.session.user;
-    const context = { user, ...result };
-    res.render("products", context);
+    res.sendFile(path.join(__dirname, "frontend_react/index.html"));
+    // const { limit, page, query, sort } = req.query;
+    // const { result } = await productService.getProducts(limit, query, sort, page);
+    // const user = req.session.user;
+    // const context = { user, ...result };
+    // res.render("products", context);
   }
   async cart(req: Request, res: Response) {
     res.sendFile(path.join(__dirname, "frontend_react/index.html"));

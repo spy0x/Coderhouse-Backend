@@ -1,4 +1,3 @@
-import productService from "../services/products.services.js";
 import { __dirname } from "../utils.js";
 import path from "path";
 class ViewsController {
@@ -12,11 +11,12 @@ class ViewsController {
         // res.render("index", context);
     }
     async products(req, res) {
-        const { limit, page, query, sort } = req.query;
-        const { result } = await productService.getProducts(limit, query, sort, page);
-        const user = req.session.user;
-        const context = { user, ...result };
-        res.render("products", context);
+        res.sendFile(path.join(__dirname, "frontend_react/index.html"));
+        // const { limit, page, query, sort } = req.query;
+        // const { result } = await productService.getProducts(limit, query, sort, page);
+        // const user = req.session.user;
+        // const context = { user, ...result };
+        // res.render("products", context);
     }
     async cart(req, res) {
         res.sendFile(path.join(__dirname, "frontend_react/index.html"));

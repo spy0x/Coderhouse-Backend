@@ -5,6 +5,7 @@ import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import UserProvider from "./components/UserContext";
 import Cart from "./pages/Cart";
+import Products from "./pages/Products";
 
 function App() {
   const theme = createTheme({
@@ -42,6 +43,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/carts/:cid" element={<Cart />} />
+            <Route path="/products" element={<Products />} />
           </Routes>
         </BrowserRouter>
       </UserProvider>
