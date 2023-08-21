@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 import Loading from "./Loading";
 
 export default function AddToCartButton({ product }: { product: Product }) {
-  const { currentUser } = useContext(UserContext) as UserContextType;
+  const { currentUser, updateCurrentUser } = useContext(UserContext) as UserContextType;
   const [loading, setLoading] = useState(false);
   const [cartId] = useState(currentUser?.cartId._id);
 
@@ -32,6 +32,7 @@ export default function AddToCartButton({ product }: { product: Product }) {
         body: JSON.stringify({}),
       });
       setLoading(false);
+      updateCurrentUser();
       const result = await Swal.fire({
         icon: response.status == 202 ? "success" : "error",
         title: response.status == 202 ? "Success!" : "Oops...",

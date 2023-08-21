@@ -1,11 +1,12 @@
 import { Button } from "@mui/material";
-import Loading from "./Loading";
-import { useState } from "react";
 import Swal from "sweetalert2";
 
-export default function PurchaseButton({ currentUser }: { currentUser: User }) {
-  const [loading, setLoading] = useState(false);
+type PurchaseButtonPropsType = {
+  currentUser: User;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
+export default function PurchaseButton({ currentUser, setLoading }: PurchaseButtonPropsType) {
   const handlePurchase = () => {
     setLoading(true);
     fetch(`/api/carts/${currentUser.cartId._id}/purchase`, {
@@ -70,11 +71,8 @@ export default function PurchaseButton({ currentUser }: { currentUser: User }) {
   };
 
   return (
-    <>
-      <Button variant="contained" onClick={handlePurchase}>
-        Purchase
-      </Button>
-      <Loading loading={loading} />
-    </>
+    <Button variant="contained" onClick={handlePurchase}>
+      Purchase
+    </Button>
   );
 }

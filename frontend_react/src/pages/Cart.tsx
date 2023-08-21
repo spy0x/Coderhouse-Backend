@@ -1,4 +1,4 @@
-import { useContext, useLayoutEffect } from "react";
+import { useContext, useLayoutEffect, useState } from "react";
 import { UserContext } from "../components/UserContext";
 import {
   Avatar,
@@ -14,9 +14,11 @@ import {
 } from "@mui/material";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import PurchaseButton from "../components/PurchaseButton";
+import Loading from "../components/Loading";
 
 export default function Cart() {
   const { updateCurrentUser, currentUser, isLoading } = useContext(UserContext) as UserContextType;
+  const [loadingPurchase, setLoadingPurchase] = useState(false);
   useLayoutEffect(() => {
     updateCurrentUser();
     document.title = "Cart | Los Tres Primos";
@@ -60,8 +62,9 @@ export default function Cart() {
             </>
           )}
         </Paper>
-        <PurchaseButton currentUser={currentUser as User} />
+        <PurchaseButton currentUser={currentUser as User} setLoading={setLoadingPurchase} />
       </Stack>
+      <Loading loading={loadingPurchase} />
     </Container>
   );
 }

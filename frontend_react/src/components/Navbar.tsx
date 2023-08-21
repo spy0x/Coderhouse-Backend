@@ -16,6 +16,7 @@ import { Link } from "react-router-dom";
 import ViewInArIcon from "@mui/icons-material/ViewInAr";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import LogOutButton from "./LogOutButton";
+import { Badge } from "@mui/material";
 
 const pages: Page[] = [
   { name: "Home", url: "/" },
@@ -136,12 +137,14 @@ export default function Navbar() {
             {currentUser && (
               <Tooltip title="View Cart">
                 <Link to={`/carts/${currentUser.cartId._id}`}>
-                  <ShoppingCartIcon sx={{ mr: 2 }} />
+                <Badge badgeContent={currentUser.cartId.productos.length} color="error">
+                  <ShoppingCartIcon />
+                </Badge>
                 </Link>
               </Tooltip>
             )}
             <Tooltip title="User Settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0, ml: 2 }}>
                 <Avatar alt={currentUser ? currentUser.first_name : "User Settings"} src={currentUser ? "/static/images/avatar/2.jpg" : ""} />
               </IconButton>
             </Tooltip>
