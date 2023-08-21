@@ -17,6 +17,7 @@ import ViewInArIcon from "@mui/icons-material/ViewInAr";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import LogOutButton from "./LogOutButton";
 import { Badge } from "@mui/material";
+import { motion } from "framer-motion";
 
 const pages: Page[] = [
   { name: "Home", url: "/" },
@@ -47,25 +48,32 @@ export default function Navbar() {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <ViewInArIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-              flexGrow: 0.75,
-            }}
+          <motion.div style={{ display: "flex" }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}>
+            <ViewInArIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, x: -200 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ type: "spring", stiffness: 200, damping: 20 }}
           >
-            <Link to="/" style={{ textDecoration: "none" }}>
-              LTP Market
-            </Link>
-          </Typography>
+            <Typography
+              variant="h6"
+              noWrap
+              sx={{
+                mr: 2,
+                display: { xs: "none", md: "flex" },
+                fontFamily: "monospace",
+                fontWeight: 700,
+                letterSpacing: ".3rem",
+                color: "inherit",
+                textDecoration: "none",
+              }}
+            >
+              <Link to="/" style={{ textDecoration: "none" }}>
+                LTP Market
+              </Link>
+            </Typography>
+          </motion.div>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
@@ -105,48 +113,62 @@ export default function Navbar() {
               ))}
             </Menu>
           </Box>
-          <ViewInArIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
-          <Typography
-            variant="h5"
-            noWrap
-            sx={{
-              mr: 2,
-              display: { xs: "flex", md: "none" },
-              flexGrow: 1,
-              fontSize: { xs: 14, sm: 20 },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}>
+            <ViewInArIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1}} />
+          </motion.div>
+          <motion.div
+            style={{ flexGrow: 1 }}
+            initial={{ opacity: 0, x: -200 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ type: "spring", stiffness: 200, damping: 20 }}
           >
-            <Link to="/" style={{ textDecoration: "none" }}>
-              LTP Market
-            </Link>
-          </Typography>
+            <Typography
+              variant="h5"
+              noWrap
+              sx={{
+                mr: 2,
+                display: { xs: "flex", md: "none" },
+                flexGrow: 1,
+                fontSize: { xs: 14, sm: 20 },
+                fontFamily: "monospace",
+                fontWeight: 700,
+                letterSpacing: ".3rem",
+                color: "inherit",
+                textDecoration: "none",
+              }}
+            >
+              <Link to="/" style={{ textDecoration: "none" }}>
+                LTP Market
+              </Link>
+            </Typography>
+          </motion.div>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
-              <Link key={page.name} to={page.url}>
-                <Button onClick={handleCloseNavMenu} sx={{ my: 2, color: "white", display: "block" }}>
-                  {page.name}
-                </Button>
-              </Link>
+              <motion.div key={page.name} whileHover={{ scale: 1.2 }}>
+                <Link to={page.url}>
+                  <Button onClick={handleCloseNavMenu} sx={{ my: 2, color: "white", display: "block" }}>
+                    {page.name}
+                  </Button>
+                </Link>
+              </motion.div>
             ))}
           </Box>
           <Box sx={{ flexGrow: 0 }}>
             {currentUser && (
               <Tooltip title="View Cart">
                 <Link to={`/carts/${currentUser.cartId._id}`}>
-                <Badge badgeContent={currentUser.cartId.productos.length} color="error">
-                  <ShoppingCartIcon />
-                </Badge>
+                  <Badge badgeContent={currentUser.cartId.productos.length} color="error">
+                    <ShoppingCartIcon />
+                  </Badge>
                 </Link>
               </Tooltip>
             )}
             <Tooltip title="User Settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0, ml: 2 }}>
-                <Avatar alt={currentUser ? currentUser.first_name : "User Settings"} src={currentUser ? "/static/images/avatar/2.jpg" : ""} />
+                <Avatar
+                  alt={currentUser ? currentUser.first_name : "User Settings"}
+                  src={currentUser ? "/static/images/avatar/2.jpg" : ""}
+                />
               </IconButton>
             </Tooltip>
             <Menu
@@ -174,7 +196,7 @@ export default function Navbar() {
                     </Link>,
                     <Box px={2} py={1}>
                       <LogOutButton key="logout" />
-                    </Box>
+                    </Box>,
                   ]
                 : [
                     <Link key="login" to="/?login=true">
