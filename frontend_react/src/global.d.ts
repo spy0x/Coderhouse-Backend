@@ -55,3 +55,16 @@ type Page = {
   name: string;
   url: string;
 }
+
+type ProductsQuery = {
+  status: string;
+  payload: Array<Product>;
+  totalPages: number;
+  prevPage: number;
+  nextPage: number;
+  page: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+  prevPageUrl: string;
+  nextPageUrl: string;
+}
