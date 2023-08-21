@@ -113,6 +113,7 @@ export default function Navbar() {
               mr: 2,
               display: { xs: "flex", md: "none" },
               flexGrow: 1,
+              fontSize: { xs: 14, sm: 20 },
               fontFamily: "monospace",
               fontWeight: 700,
               letterSpacing: ".3rem",

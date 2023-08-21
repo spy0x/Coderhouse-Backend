@@ -1,7 +1,8 @@
-import { CircularProgress, Container, Stack, Typography, Grid } from "@mui/material";
+import { CircularProgress, Container, Stack, Grid } from "@mui/material";
 import { useLayoutEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
 import { useLocation } from "react-router-dom";
+import TitlePage from "../components/TitlePage";
 
 export default function Products() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -35,10 +36,8 @@ export default function Products() {
       </Stack>
     );
   return (
-    <Container disableGutters maxWidth={false}>
-      <Typography display="block" mx="auto" align="center" variant="h1">
-        Products
-      </Typography>
+    <Container disableGutters maxWidth={false} sx={{p:5}}>
+      <TitlePage title="Products"/>
       <Grid p={3} container spacing={3} direction="row" justifyContent="center" alignItems="stretch">
         {products && products.map((product) => (
           <ProductCard key={product._id} product={product} />

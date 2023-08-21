@@ -7,6 +7,7 @@ import UserProvider from "./components/UserContext";
 import Cart from "./pages/Cart";
 import Products from "./pages/Products";
 import Error from "./pages/Error";
+import "./fonts.css"
 
 function App() {
   const theme = createTheme({

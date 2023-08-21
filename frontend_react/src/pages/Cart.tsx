@@ -15,6 +15,7 @@ import {
 import InventoryIcon from "@mui/icons-material/Inventory";
 import PurchaseButton from "../components/PurchaseButton";
 import Loading from "../components/Loading";
+import TitlePage from "../components/TitlePage";
 
 export default function Cart() {
   const { updateCurrentUser, currentUser, isLoading } = useContext(UserContext) as UserContextType;
@@ -30,11 +31,9 @@ export default function Cart() {
       </Stack>
     );
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="lg" sx={{ p: 5 }}>
+      <TitlePage title="Cart" />
       <Stack justifyContent="center" alignItems="center" p={3} spacing={3}>
-        <Typography align="center" variant="h1">
-          My Cart
-        </Typography>
         <Paper sx={{ p: 3 }}>
           {currentUser?.cartId.productos.length === 0 ? (
             <Typography align="center" variant="h6">
@@ -52,7 +51,9 @@ export default function Cart() {
                     </ListItemAvatar>
                     <ListItemText primary={product.idProduct.title} secondary={product.idProduct.category} />
                     <Typography mx={4}>x{product.quantity}</Typography>
-                    <Typography variant="body2" fontWeight="bold">${product.idProduct.price * product.quantity}</Typography>
+                    <Typography variant="body2" fontWeight="bold">
+                      ${product.idProduct.price * product.quantity}
+                    </Typography>
                   </ListItem>
                 ))}
               </List>

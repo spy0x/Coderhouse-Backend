@@ -1,10 +1,9 @@
-import { Container, Stack, Typography, TextField, Button } from "@mui/material";
+import { Container, Stack, TextField, Button } from "@mui/material";
 import { FormEvent, useState } from "react";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import Swal from "sweetalert2";
 import Loading from "./Loading";
-
-
+import TitlePage from "./TitlePage";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -73,12 +72,10 @@ export default function Login() {
     window.location.href = `${apiUrl}/api/sessions/github`;
   };
   return (
-    <Container>
+    <Container sx={{ p: 5 }}>
+      <TitlePage title="Login" />
       <form onSubmit={handleSubmit}>
         <Stack justifyContent="center" alignItems="center" p={3} spacing={3}>
-          <Typography align="center" variant="h1">
-            Login
-          </Typography>
           <TextField
             value={email}
             onChange={(event) => setEmail(event.target.value)}

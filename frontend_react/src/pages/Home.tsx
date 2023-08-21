@@ -1,4 +1,4 @@
-import { Container, Typography, Stack, Box, CircularProgress } from "@mui/material";
+import { Container, Typography, Stack, CircularProgress, Paper } from "@mui/material";
 import { useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Login from "../components/Login";
@@ -30,24 +30,24 @@ export default function Home() {
     document.title = "Register | Los Tres Primos";
     return <Register />;
   }
-  document.title = "Los Tres Primos 3D Market";
+  document.title = "Los Tres Primos Market";
   return (
-    <Container>
+    <Container sx={{p:5}}>
       <Stack direction="row" justifyContent="center" alignItems="center">
-        <Box>
-          <Typography align="center" variant="h1">
+        <Paper sx={{p: 5, borderRadius: 4, mx: 'auto', border: 'solid 1px rgba(255, 165, 0, 0.2)' }}>
+          <Typography fontSize={{xs: 52, sm: 62}} fontFamily="'Lato', sans-serif" align="center" variant="h1">
             Welcome, Guest!
           </Typography>
-          <Typography align="center" variant="h6">
+          <Typography mt={5} fontSize={25} align="center" variant="h6">
             <span className="font-bold text-red-500">
               <Link to="/?login=true">Sign in</Link>{" "}
             </span>
             or Register{" "}
             <Link to="/?register=true" className="font-bold text-red-500">
-              here
+              here!
             </Link>
           </Typography>
-        </Box>
+        </Paper>
       </Stack>
     </Container>
   );

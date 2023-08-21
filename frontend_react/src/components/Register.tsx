@@ -1,7 +1,8 @@
-import { Button, Container, Stack, TextField, Typography } from "@mui/material";
+import { Button, Container, Stack, TextField } from "@mui/material";
 import React, { FormEvent, useRef, useState } from "react";
 import Swal from "sweetalert2";
 import Loading from "./Loading";
+import TitlePage from "./TitlePage";
 
 export default function Register() {
   const [loading, setLoading] = React.useState(false);
@@ -72,12 +73,10 @@ export default function Register() {
     }
   };
   return (
-    <Container>
+    <Container sx={{ p: 5 }}>
+      <TitlePage title="Register" />
       <form ref={formRef} onSubmit={handleSubmit}>
         <Stack justifyContent="center" alignItems="center" p={3} spacing={3}>
-          <Typography align="center" variant="h1">
-            Register
-          </Typography>
           <TextField
             value={first_name}
             onChange={(event) => setFirstName(event.target.value)}
