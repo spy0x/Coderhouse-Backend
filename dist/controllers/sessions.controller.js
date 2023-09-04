@@ -66,7 +66,7 @@ class SessionsController {
                 from: "Los Tres Primos <fvd.coderbackend@gmail.com>",
                 to: email,
                 subject: "Password Recovery",
-                html: `<h1>LTP Password Recovery</h1><p>Click <a href='${URL}/recovery?code=${response.result.payload._id}'>here</a> to recover your password</p>`,
+                html: `<h1>LTP Password Recovery</h1><p>Click <a href='${URL}/recovery?code=${response.result.payload._id}'>here</a> to recover your password</p><caption>Link expires in 60 minutes</caption>`,
             });
         }
         return res.status(response.code).json(response.result);
