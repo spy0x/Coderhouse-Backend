@@ -10,6 +10,11 @@ interface FactoryStore {
 
 interface UserDAOInterface {
   getUser: (id: string) => Promise<User>;
+  createRecoveryTicket: (email: string) => Promise<PassRecoveryTicket>;
+  getRecoveryTicketByEmail: (email: string) => Promise<PassRecoveryTicket>;
+  getRecoveryTicketById: (id: string) => Promise<PassRecoveryTicket>;
+  deleteRecoveryTicket: (id: string) => Promise<void>;
+  updatePassword: (email: string, password: string) => Promise<void>;
 }
 interface ProductDAOInterface {
   createProduct: (product: Product) => Promise<void>;

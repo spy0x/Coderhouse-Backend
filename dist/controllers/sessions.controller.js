@@ -1,5 +1,6 @@
 import sessionService from "../services/sessions.services.js";
 import SessionsDTO from "../DAO/DTOs/sessions.dto.js";
+import transporter from "../utils/nodemailer.js";
 class SessionsController {
     register(req, res) {
         return res.status(201).json({ status: "success", message: "User created successfully", payload: req.user });
@@ -44,7 +45,7 @@ class SessionsController {
     async getSessionData(req, res) {
         try {
             if (req.session.user) {
-                const user = await sessionService.getCurrentUser(req.session.user._id);
+                const user = (await sessionService.getCurrentUser(req.session.user._id));
                 const cleanUser = new SessionsDTO(user);
                 return res.status(200).json({ status: "success", message: "User found", payload: cleanUser.user });
             }
@@ -55,6 +56,25 @@ class SessionsController {
         catch (e) {
             return res.status(400).json({ status: "error", message: "Couldn't get user" });
         }
+    }
+    async sendRecoveryMail(req, res) {
+        const { email } = req.body;
+        const response = await sessionService.createRecoveryTicket(email);
+        const URL = process.env.NODE_ENV === "PRODUCTION" ? process.env.PROD_URL : "http://localhost:8080";
+        if (response.code == 201) {
+            await transporter.sendMail({
+                from: "Los Tres Primos <fvd.coderbackend@gmail.com>",
+                to: email,
+                subject: "Password Recovery",
+                html: `<h1>LTP Password Recovery</h1><p>Click <a href='${URL}/recovery?code=${response.result.payload._id}'>here</a> to recover your password</p>`,
+            });
+        }
+        return res.status(response.code).json(response.result);
+    }
+    async updatePassword(req, res) {
+        const { code, password } = req.body;
+        const response = await sessionService.updatePassword(password, code);
+        return res.status(response.code).json(response.result);
     }
 }
 const sessionsController = new SessionsController();

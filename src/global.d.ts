@@ -1,4 +1,9 @@
 
+type PassRecoveryTicket = {
+  readonly _id: string | ObjectTypes.ObjectId;
+  email: string;
+};
+
 type Product = {
   readonly _id?: string;
   title: string;

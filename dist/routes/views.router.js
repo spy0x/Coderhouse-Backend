@@ -14,4 +14,5 @@ viewsRouter.get("/chat", isUser, (req, res) => {
 viewsRouter.get("/realtimeproducts", isAdmin, (req, res) => {
     res.render("realTimeProducts");
 });
+viewsRouter.get("/recovery", viewsController.recovery);
 viewsRouter.get("*", viewsController.error);

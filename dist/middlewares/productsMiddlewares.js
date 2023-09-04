@@ -6,9 +6,12 @@ import { generateProductAlreadyExistsErrorInfo, generateProductErrorInfo } from 
 import productService from "../services/products.services.js";
 export const productExists = async (req, res, next) => {
     const id = req.params.pid;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(404).json({ status: "error", message: "Invalid product ID" });
+    }
     // Check if product exists and has valid id
     const product = await ProductModel.findById(id);
-    if (mongoose.Types.ObjectId.isValid(id) && product) {
+    if (product) {
         return next();
     }
     return res.status(404).json({ status: "error", message: "Product not found" });

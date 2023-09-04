@@ -1,13 +1,14 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Navbar from "./components/Navbar";
-import Home from "./pages/Home";
 import UserProvider from "./components/UserContext";
+import "./fonts.css";
 import Cart from "./pages/Cart";
-import Products from "./pages/Products";
 import Error from "./pages/Error";
-import "./fonts.css"
+import Home from "./pages/Home";
+import Products from "./pages/Products";
+import Recovery from "./pages/Recovery";
 
 function App() {
   const theme = createTheme({
@@ -46,6 +47,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/carts/:cid" element={<Cart />} />
             <Route path="/products" element={<Products />} />
+            <Route path="/recovery" element={<Recovery />} />
             <Route path="*" element={<Error error={{status: "ERROR 404", message: "Page Not found"}}/>} />
           </Routes>
         </BrowserRouter>

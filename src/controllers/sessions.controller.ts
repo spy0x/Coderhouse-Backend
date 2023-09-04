@@ -1,6 +1,7 @@
 import sessionService from "../services/sessions.services.js";
 import SessionsDTO from "../DAO/DTOs/sessions.dto.js";
 import { Request, Response } from "express";
+import transporter from "../utils/nodemailer.js";
 class SessionsController {
   register(req: Request, res: Response) {
     return res.status(201).json({ status: "success", message: "User created successfully", payload: req.user });
@@ -14,7 +15,7 @@ class SessionsController {
     }
     req.session.user = req.user;
     const cleanUser = new SessionsDTO(req.session.user);
-    return res.status(200).json({ status: "success", message: "User logged in successfully", payload: cleanUser.user});
+    return res.status(200).json({ status: "success", message: "User logged in successfully", payload: cleanUser.user });
   }
   failLogin(req: Request, res: Response) {
     return res.status(400).json({ status: "error", message: "Wrong user or password" });
@@ -44,7 +45,7 @@ class SessionsController {
   async getSessionData(req: Request, res: Response) {
     try {
       if (req.session.user) {
-        const user = await sessionService.getCurrentUser(req.session.user._id) as Express.User;
+        const user = (await sessionService.getCurrentUser(req.session.user._id)) as Express.User;
         const cleanUser = new SessionsDTO(user);
         return res.status(200).json({ status: "success", message: "User found", payload: cleanUser.user });
       } else {
@@ -53,6 +54,25 @@ class SessionsController {
     } catch (e) {
       return res.status(400).json({ status: "error", message: "Couldn't get user" });
     }
+  }
+  async sendRecoveryMail(req: Request, res: Response) {
+    const { email } = req.body;
+    const response: ResResult = await sessionService.createRecoveryTicket(email as string);
+    const URL = process.env.NODE_ENV === "PRODUCTION" ? process.env.PROD_URL : "http://localhost:8080";
+    if (response.code == 201) {
+      await transporter.sendMail({
+        from: "Los Tres Primos <fvd.coderbackend@gmail.com>",
+        to: email as string,
+        subject: "Password Recovery",
+        html: `<h1>LTP Password Recovery</h1><p>Click <a href='${URL}/recovery?code=${response.result.payload._id}'>here</a> to recover your password</p>`,
+      });
+    }
+    return res.status(response.code).json(response.result);
+  }
+  async updatePassword(req: Request, res: Response) {
+    const { code, password } = req.body;
+    const response: ResResult = await sessionService.updatePassword(password, code);
+    return res.status(response.code).json(response.result);
   }
 }
 

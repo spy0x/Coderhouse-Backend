@@ -1,9 +1,10 @@
-import { Container, Stack, TextField, Button } from "@mui/material";
+import { Container, Stack, TextField, Button, Typography } from "@mui/material";
 import { FormEvent, useState } from "react";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import Swal from "sweetalert2";
 import Loading from "./Loading";
 import TitlePage from "./TitlePage";
+import { Link } from "react-router-dom";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -101,6 +102,12 @@ export default function Login() {
           </Button>
         </Stack>
       </form>
+      <Typography mt={5} display='block' m='auto' fontSize={"1.5rem"} align="center" variant="caption">
+        Did you forget your password?
+        <span className="font-bold text-red-500 hover:text-orange-500">
+          <Link to="/recovery"> Click here</Link>{" "}
+        </span>
+      </Typography>
       <Loading loading={loading} />
     </Container>
   );

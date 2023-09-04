@@ -3,11 +3,10 @@ import viewsController from "../controllers/views.controller.js";
 import { isLogged, isAdmin, isUser, isCartOwner } from "../middlewares/auth.js";
 import { cartExists } from "../middlewares/cartsMiddlewares.js";
 import { productsValidQueries } from "../middlewares/productsMiddlewares.js";
-
+import transporter from "../utils/nodemailer.js";
 
 const viewsRouter = Router();
 export default viewsRouter;
-
 
 viewsRouter.get("/", viewsController.index);
 
@@ -21,7 +20,5 @@ viewsRouter.get("/chat", isUser, (req, res) => {
 viewsRouter.get("/realtimeproducts", isAdmin, (req, res) => {
   res.render("realTimeProducts");
 });
+viewsRouter.get("/recovery", viewsController.recovery);
 viewsRouter.get("*", viewsController.error);
-
-
-

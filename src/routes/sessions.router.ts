@@ -1,6 +1,7 @@
 import { Router } from "express";
 import passport from "passport";
 import sessionsController from "../controllers/sessions.controller.js";
+import { emailExists, recoveryTicketExists } from "../middlewares/recovery.middlewares.js";
 
 const sessionsRouter = Router();
 export default sessionsRouter;
@@ -35,3 +36,7 @@ sessionsRouter.get("/logout", sessionsController.logout);
 sessionsRouter.get("/cart", sessionsController.getSessionCart);
 
 sessionsRouter.get("/current", sessionsController.getSessionData);
+
+sessionsRouter.post("/recovery", emailExists, sessionsController.sendRecoveryMail);
+
+sessionsRouter.put("/recovery", recoveryTicketExists, sessionsController.updatePassword);

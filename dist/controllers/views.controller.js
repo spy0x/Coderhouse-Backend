@@ -26,6 +26,9 @@ class ViewsController {
         // const context = { user, ...result };
         // res.render("carts", context);
     }
+    async recovery(req, res) {
+        res.sendFile(path.join(__dirname, "frontend_react/index.html"));
+    }
     async error(req, res) {
         res.sendFile(path.join(__dirname, "frontend_react/index.html"));
         // const error = {
