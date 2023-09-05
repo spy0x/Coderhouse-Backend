@@ -19,7 +19,7 @@ export default function NewPassForm({ setLoading, code }: NewPassFormProps) {
       const apiUrl = import.meta.env.VITE_URL;
       const formData = { code, password };
       const response = await fetch(`${apiUrl}/api/sessions/recovery`, {
-        method: "PUT",
+        method: "DELETE",
         headers: {
           "Content-Type": "application/json",
         },
@@ -41,6 +41,15 @@ export default function NewPassForm({ setLoading, code }: NewPassFormProps) {
             // Redirect to another URL after the specified time
             window.location.href = "/?login=true";
           },
+          customClass: {
+            popup: "swal-background", // Apply your custom class here
+          },
+        });
+      } else if (response.status == 400) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "You can't use the same previous password!",
           customClass: {
             popup: "swal-background", // Apply your custom class here
           },
