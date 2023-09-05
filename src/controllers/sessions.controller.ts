@@ -3,6 +3,10 @@ import SessionsDTO from "../DAO/DTOs/sessions.dto.js";
 import { Request, Response } from "express";
 import transporter from "../utils/nodemailer.js";
 class SessionsController {
+  async updateRole(req: Request, res: Response) {
+    const response = await sessionService.updateRole(req.params.uid);
+    return res.status(response.code).json(response.result);
+  }
   register(req: Request, res: Response) {
     return res.status(201).json({ status: "success", message: "User created successfully", payload: req.user });
   }

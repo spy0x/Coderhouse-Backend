@@ -13,6 +13,7 @@ type Product = {
   code: string;
   stock: number;
   category: string;
+  owner?: string;
   status?: boolean;
 };
 

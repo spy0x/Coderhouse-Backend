@@ -17,6 +17,7 @@ class ProductsController {
   }
   async addProduct(req: Request, res: Response) {
     const product = req.body as Product;
+    product.owner = req.session?.user?._id;
     const response = await productService.addProduct(product);
     return res.status(response.code).json(response.result);
   }

@@ -42,3 +42,5 @@ sessionsRouter.post("/recovery", emailExists, sessionsController.sendRecoveryMai
 sessionsRouter.put("/recovery", recoveryTicketExists, sessionsController.canGetRecoveryTicket);
 
 sessionsRouter.delete("/recovery", recoveryTicketExists, isSamePassword, sessionsController.updatePassword);
+
+sessionsRouter.get("/premium/:uid", sessionsController.updateRole);

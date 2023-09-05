@@ -2,6 +2,10 @@ import sessionService from "../services/sessions.services.js";
 import SessionsDTO from "../DAO/DTOs/sessions.dto.js";
 import transporter from "../utils/nodemailer.js";
 class SessionsController {
+    async updateRole(req, res) {
+        const response = await sessionService.updateRole(req.params.uid);
+        return res.status(response.code).json(response.result);
+    }
     register(req, res) {
         return res.status(201).json({ status: "success", message: "User created successfully", payload: req.user });
     }

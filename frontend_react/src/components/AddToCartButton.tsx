@@ -1,5 +1,5 @@
 import { Button } from "@mui/material";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "./UserContext";
 import Swal from "sweetalert2";
 import Loading from "./Loading";
@@ -7,7 +7,11 @@ import Loading from "./Loading";
 export default function AddToCartButton({ product }: { product: Product }) {
   const { currentUser, updateCurrentUser } = useContext(UserContext) as UserContextType;
   const [loading, setLoading] = useState(false);
-  const [cartId] = useState(currentUser?.cartId._id);
+  const [cartId, setCartId] = useState(currentUser?.cartId._id);
+  
+  useEffect(() => {
+    setCartId(currentUser?.cartId._id)
+  }, [currentUser]);
 
   const handleClick = async () => {
     try {
@@ -32,28 +36,51 @@ export default function AddToCartButton({ product }: { product: Product }) {
         body: JSON.stringify({}),
       });
       setLoading(false);
-      updateCurrentUser();
-      const result = await Swal.fire({
-        icon: response.status == 202 ? "success" : "error",
-        title: response.status == 202 ? "Success!" : "Oops...",
-        text: response.status == 202 ? "Product added to cart!" : "Something went wrong!",
-        showCancelButton: true,
-        confirmButtonText: response.status == 202 ? "View Cart" : undefined,
-        cancelButtonText: "Close",
-        customClass: {
-          popup: "swal-background", // Apply your custom class here
-        },
-      });
-      if (result.isConfirmed) {
-        // Redirect to the cart URL
-        window.location.href = `/carts/${cartId}`;
+      if (response.status == 202) {
+        updateCurrentUser();
+        Swal.fire({
+          icon: "success",
+          title: "Success!",
+          text: "Product added to cart!",
+          showCancelButton: true,
+          confirmButtonText: "View Cart",
+          cancelButtonText: "Close",
+          customClass: {
+            popup: "swal-background", // Apply your custom class here
+          },
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // Redirect to the cart URL
+            window.location.href = `/carts/${cartId}`;
+          }
+        });
+      } else if (response.status == 403) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "You can't add your own product to cart!",
+          cancelButtonText: "Close",
+          customClass: {
+            popup: "swal-background", // Apply your custom class here
+          },
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          cancelButtonText: "Close",
+          customClass: {
+            popup: "swal-background", // Apply your custom class here
+          },
+        });
       }
     } catch (error) {
       setLoading(false);
       Swal.fire({
         icon: "error",
         title: "Oops...",
-        text: "Something went wrong!",
+        text: "Something went wrong! Try again later!",
         customClass: {
           popup: "swal-background", // Apply your custom class here
         },

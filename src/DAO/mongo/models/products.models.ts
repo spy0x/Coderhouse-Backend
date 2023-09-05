@@ -9,6 +9,7 @@ interface ProductDocument extends Document {
   stock: number;
   category: string;
   thumbnail: Array<String>;
+  owner: string;
   status: boolean;
 }
 interface ProductModel<T extends Document> extends Model<T> {
@@ -24,6 +25,7 @@ const productSchema = new Schema(
     stock: { type: Number, required: true },
     category: { type: String, required: true, max: 100 },
     thumbnail: { type: Array<String> },
+    owner: { type: String, max: 100, default: "admin"},
     status: { type: Boolean },
   },
   { versionKey: false }

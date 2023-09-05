@@ -1,5 +1,6 @@
 import { CartModel } from "../DAO/mongo/models/carts.models.js";
 import mongoose from "mongoose";
+import { productsDao } from "../DAO/factory.js";
 export const cartExists = async (req, res, next) => {
     const id = req.params.cid;
     // Check if cart exists
@@ -22,4 +23,20 @@ export const productInCart = async (req, res, next) => {
         return res.status(404).json({ status: "error", message: "Product not found in cart" });
     }
     return next();
+};
+export const notProductOwner = async (req, res, next) => {
+    try {
+        if (req.session?.user?.role === "admin")
+            return next();
+        const productID = req.params.pid;
+        const product = await productsDao.findProduct(productID);
+        if (product?.owner != req.session?.user?._id) {
+            return next();
+        }
+        // return "Cant add your own product to cart"
+        return res.status(403).json({ status: "error", message: "You can't add your own product!" });
+    }
+    catch (error) {
+        next(error);
+    }
 };

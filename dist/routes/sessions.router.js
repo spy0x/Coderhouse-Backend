@@ -17,3 +17,4 @@ sessionsRouter.get("/current", sessionsController.getSessionData);
 sessionsRouter.post("/recovery", emailExists, sessionsController.sendRecoveryMail);
 sessionsRouter.put("/recovery", recoveryTicketExists, sessionsController.canGetRecoveryTicket);
 sessionsRouter.delete("/recovery", recoveryTicketExists, isSamePassword, sessionsController.updatePassword);
+sessionsRouter.get("/premium/:uid", sessionsController.updateRole);

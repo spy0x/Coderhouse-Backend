@@ -31,6 +31,9 @@ class UsersDao {
     const hashedPassword = createHash(password);
     await UserModel.updateOne({ email }, { password: hashedPassword });
   }
+  async updateRole(userId: string, role: string) {
+    await UserModel.updateOne({ _id: userId }, { role });
+  }
 }
 const usersDao = new UsersDao();
 export default usersDao;

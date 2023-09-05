@@ -25,6 +25,21 @@ class SessionService {
       return { code: 400, result: { status: "error", message: "Error updating password" } };
     }
   }
+  async updateRole(userId: string) {
+    try {
+      const user = await usersDao.getUser(userId);
+      const currentRole = user.role;
+      if (currentRole == "admin") return { code: 400, result: { status: "error", message: "This user is ADMIN!" } };
+      const changeToRole = currentRole == "user" ? "premium" : "user";
+      await usersDao.updateRole(userId, changeToRole);
+      return {
+        code: 200,
+        result: { status: "success", message: `Role updated successfully from ${currentRole} to ${changeToRole}` },
+      };
+    } catch (error) {
+      return { code: 400, result: { status: "error", message: "Error updating role" } };
+    }
+  }
 }
 
 const sessionService = new SessionService();
