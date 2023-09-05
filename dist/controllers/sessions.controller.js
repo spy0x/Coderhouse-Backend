@@ -76,6 +76,9 @@ class SessionsController {
         const response = await sessionService.updatePassword(password, code);
         return res.status(response.code).json(response.result);
     }
+    async canGetRecoveryTicket(req, res) {
+        return res.status(200).json({ status: "success", message: "Ticket found" });
+    }
 }
 const sessionsController = new SessionsController();
 export default sessionsController;

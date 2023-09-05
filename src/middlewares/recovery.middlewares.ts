@@ -21,5 +21,5 @@ export const recoveryTicketExists = async (req: Request, res: Response, next: Ne
   if (ticket) {
     return next();
   }
-  return res.status(404).json({ status: "error", message: "Ticket not found" });
+  return res.status(404).json({ status: "error", message: "Ticket not found or has expired." });
 }

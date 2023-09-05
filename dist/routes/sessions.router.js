@@ -15,4 +15,5 @@ sessionsRouter.get("/logout", sessionsController.logout);
 sessionsRouter.get("/cart", sessionsController.getSessionCart);
 sessionsRouter.get("/current", sessionsController.getSessionData);
 sessionsRouter.post("/recovery", emailExists, sessionsController.sendRecoveryMail);
-sessionsRouter.put("/recovery", recoveryTicketExists, sessionsController.updatePassword);
+sessionsRouter.put("/recovery", recoveryTicketExists, sessionsController.canGetRecoveryTicket);
+sessionsRouter.delete("/recovery", recoveryTicketExists, sessionsController.updatePassword);

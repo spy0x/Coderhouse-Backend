@@ -27,6 +27,15 @@ class SessionService {
             return { code: 400, result: { status: "error", message: "Error updating password" } };
         }
     }
+    async getRecoveryTicket(code) {
+        try {
+            const ticket = await usersDao.getRecoveryTicketById(code);
+            return { code: 200, result: { status: "success", message: "Ticket found", payload: ticket } };
+        }
+        catch (error) {
+            return { code: 400, result: { status: "error", message: "Error getting ticket" } };
+        }
+    }
 }
 const sessionService = new SessionService();
 export default sessionService;
