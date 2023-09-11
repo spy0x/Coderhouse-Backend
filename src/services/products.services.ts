@@ -67,7 +67,7 @@ class ProductService {
       const product = await productsDao.findProduct(pid);
       await productsDao.deleteProduct(pid);
       return {
-        code: 200,
+        code: 204,
         result: { status: "success", message: "Product deleted successfully", payload: product },
       };
     } catch {

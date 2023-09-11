@@ -1,0 +1,347 @@
+paths:
+  /api/products/:
+    get:
+      summary: "Get Products"
+      tags:
+        - Products
+      responses: 
+        "200":
+          description: Success. Got products!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductsResponse'
+        "404": 
+          description: No products found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "400":
+          description: "Error getting products"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Add a new product
+      tags:
+        - Products
+      description: Add a new product to the system.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      requestBody:
+        description: Product data to be added.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+      responses:
+        201:
+          description: Product added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductResponse'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/products/{pid}:
+    parameters:
+      - name: pid
+        in: path
+        required: true
+        type: integer
+        description: The ID of the product to retrieve.
+        example: 64f7396b1a5c386e509b6c05
+    get:
+      summary: Get a product by ID
+      description: Retrieve a product by its unique ID.
+      tags:
+        - Products
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductResponse'
+        404:
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        400: 
+          description: "Error getting product"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update a product by ID
+      tags:
+        - Products
+      description: Update an existing product by its unique ID.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      requestBody:
+        description: Updated product data.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+      responses:
+        200:
+          description: Product updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductResponse'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete a product by ID
+      tags:
+        - Products
+      description: Delete an existing product by its unique ID.
+      responses:
+        204:
+          description: Product deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductResponse'
+        404:
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    ProductsResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status of the response, should be "success".
+          example: success
+        payload:
+          type: array
+          items:
+            type: object
+            properties:
+              _id:
+                type: string
+                description: The unique ID of the product.
+                example: 64f7396b1a5c386e509b6c05
+              title:
+                type: string
+                description: The title of the product.
+                example: Fantastic Granite Gloves
+              description:
+                type: string
+                description: A description of the product.
+                example: The Nagasaki Lander is the trademarked name of several series of Nagasaki sport bikes, that started with the 1984 ABC800J
+              price:
+                type: number
+                format: float
+                description: The price of the product.
+                example: 818
+              code:
+                type: string
+                description: A unique identifier for the product.
+                example: 5f95dd71-b9a7-4f06-8a65-8fe552db2c32
+              stock:
+                type: integer
+                description: The current stock quantity.
+                example: 41
+              category:
+                type: string
+                description: The category of the product.
+                example: Grocery
+              thumbnail:
+                type: array
+                items:
+                  type: string
+                  description: URLs to product thumbnails.
+                  example:
+                    - https://loremflickr.com/640/480?lock=3786240946077696
+              owner:
+                type: string
+                description: The owner or creator of the product.
+                example: admin
+        totalPages:
+          type: integer
+          description: Total number of pages available in the paginated result.
+          example: 25
+        prevPage:
+          type: integer
+          description: The previous page number in the paginated result, or null if there is no previous page.
+          example: null
+        nextPage:
+          type: integer
+          description: The next page number in the paginated result, or null if there is no next page.
+          example: 2
+        page:
+          type: integer
+          description: The current page number.
+          example: 1
+        hasNextPage:
+          type: boolean
+          description: Indicates whether there is a next page in the paginated result.
+          example: true
+        hasPrevPage:
+          type: boolean
+          description: Indicates whether there is a previous page in the paginated result.
+          example: false
+        prevPageUrl:
+          type: string
+          description: URL to the previous page, or false if there is no previous page.
+          example: false
+        nextPageUrl:
+          type: string
+          description: URL to the next page, or false if there is no next page.
+          example: /products?page=2&limit=2
+    ProductResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status of the response, should be "success".
+          example: success
+        payload:
+          type: object
+          description: The product data.
+          properties:
+            _id:
+              type: string
+              description: The unique ID of the product.
+              example: 64f7396b1a5c386e509b6c05
+            title:
+              type: string
+              description: The title of the product.
+              example: Fantastic Granite Gloves
+            description:
+              type: string
+              description: A description of the product.
+              example: The Nagasaki Lander is the trademarked name of several series of Nagasaki sport bikes, that started with the 1984 ABC800J
+            price:
+              type: number
+              format: float
+              description: The price of the product.
+              example: 818
+            code:
+              type: string
+              description: A unique identifier for the product.
+              example: 5f95dd71-b9a7-4f06-8a65-8fe552db2c32
+            stock:
+              type: integer
+              description: The current stock quantity.
+              example: 41
+            category:
+              type: string
+              description: The category of the product.
+              example: Grocery
+            thumbnail:
+              type: array
+              items:
+                type: string
+                description: URLs to product thumbnails.
+                example:
+                  - https://loremflickr.com/640/480?lock=3786240946077696
+            owner:
+              type: string
+              description: The owner or creator of the product.
+              example: admin
+    Error:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status of the response, should be "error".
+          example: error
+        message:
+          type: string
+          description: A message describing the error.
+          example: A message describing the error.
+    ProductRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          description: The title of the product.
+          example: Fantastic Granite Gloves
+        description:
+          type: string
+          description: A description of the product.
+          example: The Nagasaki Lander is the trademarked name of several series of Nagasaki sport bikes, that started with the 1984 ABC800J
+        price:
+          type: number
+          format: float
+          description: The price of the product.
+          example: 818
+        code:
+          type: string
+          description: A unique identifier for the product.
+          example: 5f95dd71-b9a7-4f06-8a65-8fe552db2c32
+        stock:
+          type: integer
+          description: The current stock quantity.
+          example: 41
+        category:
+          type: string
+          description: The category of the product.
+          example: Grocery
+        thumbnail:
+          type: array
+          example: 
+            - https://loremflickr.com/640/480?lock=3786240946077696
+          items:
+            type: string
+            description: URLs to product thumbnails.
+        owner:
+          type: string
+          description: The owner or creator of the product.
+          example: admin

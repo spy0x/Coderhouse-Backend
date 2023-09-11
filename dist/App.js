@@ -6,20 +6,21 @@ import express from "express";
 import handlebars from "express-handlebars";
 import session from "express-session";
 import passport from "passport";
+import path from "path";
+import swaggerUiExpress from "swagger-ui-express";
 import { factoryStore, initFactory } from "./DAO/factory.js";
 import initPassport from "./config/passport.config.js";
 import errorHandler from "./middlewares/errorHandler.js";
 import loggerMiddleware from "./middlewares/logger.middleware.js";
 import cartsRouter from "./routes/carts.router.js";
+import loggerRouter from "./routes/logger.router.js";
 import mockingRouter from "./routes/mocking.router.js";
 import productsRouter from "./routes/products.router.js";
 import sessionsRouter from "./routes/sessions.router.js";
 import viewsRouter from "./routes/views.router.js";
-import loggerRouter from "./routes/logger.router.js";
-import { initSocket } from "./utils.js";
-import path from "path";
-import { __dirname } from "./utils.js";
+import { __dirname, initSocket } from "./utils.js";
 import { initLogger, logger } from "./utils/logger.js";
+import specs from "./utils/swagger.js";
 // loading .env file for environment variables
 dotenv.config();
 // setting Logger System
@@ -61,6 +62,7 @@ async function startServer() {
     app.use(passport.initialize());
     app.use(passport.session());
     // SETTING ROUTES
+    app.use("/apidocs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
     app.use("/loggerTest", loggerRouter);
     app.use("/api/carts", cartsRouter);
     app.use("/api/products", productsRouter);
