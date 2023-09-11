@@ -1,0 +1,462 @@
+paths:
+  /api/carts:
+    post:
+      tags:
+        - Carts
+      summary: Create a new cart
+      description: Create a new cart.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        201:
+          description: Cart created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartResponse'
+  /api/carts/{cid}:
+    parameters:
+      - name: cid
+        in: path
+        required: true
+        type: string
+        description: The ID of the cart to retrieve products from.
+        example: 64ab3bbec7936221c286e298
+    get:
+      tags:
+        - Carts
+      summary: Get products in a cart
+      description: Retrieve products in a specific cart by its unique ID.
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartProductsResponse'
+        404:
+          description: Cart not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      tags:
+        - Carts
+      summary: Update the product list in a cart
+      description: Update the list of products in a specific cart by its unique ID.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      requestBody:
+        description: List of products and quantities to update in the cart.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartProductUpdateRequest'
+      responses:
+        200:
+          description: Cart product list updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartProductUpdateResponse'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Cart not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+        - Carts
+      summary: Clear the product list in a cart
+      description: Clear the list of products in a specific cart by its unique ID.
+      responses:
+        200:
+          description: Cart cleared
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartClearResponse'
+        404:
+          description: Cart not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/carts/{cid}/product/{pid}:
+    parameters:
+      - name: cid
+        in: path
+        required: true
+        type: string
+        description: The ID of the cart to which the product will be added.
+        example: 64ab3bbec7936221c286e298
+      - name: pid
+        in: path
+        required: true
+        type: string
+        description: The ID of the product to be added to the cart.
+        example: 64f7396d1a5c386e509b6c1b
+    post:
+      tags:
+        - Carts
+      summary: Add a product to a cart
+      description: Add a product to a specific cart by their unique IDs.
+      produces:
+        - application/json
+      responses:
+        201:
+          description: Product added to cart
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartProductAddResponse'
+        404:
+          description: Cart or product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+        - Carts
+      summary: Delete a product from a cart
+      description: Delete a product from a specific cart by their unique IDs.
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Product deleted from cart
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartProductDeleteResponse'
+        404:
+          description: Cart or product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      tags:
+        - Carts
+      summary: Update product quantity in a cart
+      description: Update the quantity of a specific product in a cart by their unique IDs.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      requestBody:
+        description: New quantity of the product in the cart.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartProductQuantityUpdateRequest'
+      responses:
+        200:
+          description: Product quantity updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartProductQuantityUpdateResponse'
+        404:
+          description: Cart or product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    CartResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status of the response, should be "success".
+          example: success
+        message:
+          type: string
+          description: A message indicating the success of cart creation.
+          example: Cart created successfully
+        payload:
+          type: object
+          properties:
+            productos:
+              type: array
+              description: An array of products in the cart.
+              example: []
+            _id:
+              type: string
+              description: The unique ID of the created cart.
+              example: 64fe84d5c4b20c241d31408f
+    CartProductsResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status of the response, should be "success".
+          example: success
+        payload:
+          type: array
+          description: An array of products in the cart with their quantities.
+          items:
+            type: object
+            properties:
+              idProduct:
+                type: object
+                description: The product information.
+                properties:
+                  _id:
+                    type: string
+                    description: The unique ID of the product.
+                  title:
+                    type: string
+                    description: The title of the product.
+                  description:
+                    type: string
+                    description: A description of the product.
+                  price:
+                    type: number
+                    format: float
+                    description: The price of the product.
+                  code:
+                    type: string
+                    description: A unique identifier for the product.
+                  stock:
+                    type: integer
+                    description: The current stock quantity.
+                  category:
+                    type: string
+                    description: The category of the product.
+                  thumbnail:
+                    type: array
+                    items:
+                      type: string
+                      description: URLs to product thumbnails.
+                  owner:
+                    type: string
+                    description: The owner or creator of the product.
+              quantity:
+                type: integer
+                description: The quantity of the product in the cart.
+    Error:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status of the response, should be "error".
+        message:
+          type: string
+          description: A message describing the error.
+
+    CartProductUpdateRequest:
+      type: array
+      description: List of products and quantities to update in the cart.
+      items:
+        type: object
+        properties:
+          idProduct:
+            type: string
+            description: The ID of the product to update in the cart.
+          quantity:
+            type: integer
+            description: The new quantity of the product in the cart.
+            minimum: 1
+            example: 1313
+      example:
+        - idProduct: 64fe84d5c4b20c241d31408f
+          quantity: 2
+        - idProduct: 64fe84d5c4b20c241d31408f
+          quantity: 1
+    CartProductUpdateResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status of the response, should be "success".
+          example: success
+        message:
+          type: string
+          description: A message indicating the success of cart product list update.
+          example: Cart product list updated
+        payload:
+          type: object
+          properties:
+            _id:
+              type: string
+              description: The unique ID of the updated cart.
+              example: 64fe84d5c4b20c241d31408f
+            productos:
+              type: array
+              description: An array of products in the updated cart with their quantities.
+              items:
+                type: object
+                properties:
+                  idProduct:
+                    type: string
+                    description: The ID of a product in the cart.
+                    example: 64fe84d5c4b20c241d31408f
+                  quantity:
+                    type: integer
+                    description: The quantity of the product in the cart.
+    CartClearResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status of the response, should be "success".
+          example: success
+        message:
+          type: string
+          description: A message indicating the success of cart clearing.
+          example: Cart cleared
+        payload:
+          type: object
+          properties:
+            _id:
+              type: string
+              description: The unique ID of the cleared cart.
+              example: 64fe84d5c4b20c241d31408f
+            productos:
+              type: array
+              description: An empty array indicating that the cart's product list has been cleared.
+              example: []
+    CartProductAddResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status of the response, should be "success".
+          example: success
+        message:
+          type: string
+          description: A message indicating the success of adding a product to the cart.
+          example: Product added to cart
+        payload:
+          type: object
+          properties:
+            _id:
+              type: string
+              description: The unique ID of the cart to which the product was added.
+            productos:
+              type: array
+              description: An array containing the added product and its quantity in the cart.
+              items:
+                type: object
+                properties:
+                  idProduct:
+                    type: string
+                    description: The ID of the added product in the cart.
+                  quantity:
+                    type: integer
+                    description: The quantity of the added product in the cart.
+      example:
+        status: success
+        message: Product added to cart
+        payload:
+          _id: "64ab3bbec7936221c286e298"
+          productos:
+            - idProduct: "64f7396d1a5c386e509b6c1b"
+              quantity: 1
+    CartProductDeleteResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status of the response, should be "success".
+          example: success
+        message:
+          type: string
+          description: A message indicating the success of deleting a product from the cart.
+          example: Product deleted from cart
+        payload:
+          type: object
+          properties:
+            _id:
+              type: string
+              description: The unique ID of the cart from which the product was deleted.
+            productos:
+              type: array
+              description: An array indicating that the product has been deleted from the cart.
+              items:
+                type: object
+                properties:
+                  idProduct:
+                    type: string
+                    description: The ID of the deleted product.
+                  quantity:
+                    type: integer
+                    description: The quantity of the deleted product (usually 0 after deletion).
+      example:
+        status: success
+        message: Product deleted from cart
+        payload:
+          _id: "64ab3bbec7936221c286e298"
+          productos: []
+    CartProductQuantityUpdateRequest:
+      type: object
+      properties:
+        quantity:
+          type: integer
+          description: The new quantity of the product in the cart.
+          minimum: 1
+          example: 75
+
+    CartProductQuantityUpdateResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status of the response, should be "success".
+          example: success
+        message:
+          type: string
+          description: A message indicating the success of updating the product quantity in the cart.
+          example: Product quantity updated
+        payload:
+          type: object
+          properties:
+            _id:
+              type: string
+              description: The unique ID of the cart containing the updated product.
+            productos:
+              type: array
+              description: An array containing the updated product and its new quantity in the cart.
+              items:
+                type: object
+                properties:
+                  idProduct:
+                    type: string
+                    description: The ID of the updated product in the cart.
+                  quantity:
+                    type: integer
+                    description: The new quantity of the updated product in the cart.
+      example:
+        status: success
+        message: Product quantity updated
+        payload:
+          _id: "64ab3bbec7936221c286e298"
+          productos:
+            - idProduct: "64f7396d1a5c386e509b6c1b"
+              quantity: 75
