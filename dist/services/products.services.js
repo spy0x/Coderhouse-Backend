@@ -9,8 +9,8 @@ class ProductService {
             if (!product.status)
                 product.status = true;
             // Add product
-            await productsDao.createProduct(product);
-            return { code: 201, result: { status: "success", message: "Product added successfully", payload: product } };
+            const productCreated = await productsDao.createProduct(product);
+            return { code: 201, result: { status: "success", message: "Product added successfully", payload: productCreated } };
         }
         catch (error) {
             return { code: 400, result: { status: "error", message: "Error adding product" } };

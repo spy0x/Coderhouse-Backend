@@ -29,6 +29,11 @@ type Cart = {
   productos: ProductIdOnly[];
 };
 
+type Cookie = {
+  name: string;
+  value: string;
+};
+
 interface Result {
   status: string;
   message?: string;
@@ -79,7 +84,7 @@ type User = {
   age?: number;
   password?: string;
   role?: string;
-  cartId: string;
+  cartId?: string;
 };
 
 type ErrorCustom = {

@@ -2,6 +2,8 @@ import { ProductModel } from "../models/products.models.js";
 class ProductsDao {
     async createProduct(product) {
         await ProductModel.create(product);
+        const productCreated = await ProductModel.findOne({ code: product.code });
+        return productCreated;
     }
     async findProduct(pid) {
         return await ProductModel.findById(pid);
