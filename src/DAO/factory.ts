@@ -18,7 +18,7 @@ interface UserDAOInterface {
   updateRole: (userId: string, role: string) => Promise<void>;
 }
 interface ProductDAOInterface {
-  createProduct: (product: Product) => Promise<void>;
+  createProduct: (product: Product) => Promise<Product>;
   findProduct: (pid: string) => Promise<Product>;
   getProducts: (limit: number, query: object, sort: string, pag: number) => Promise<any>;
   updateProduct: (pid: string, productAttributes: ProductKeys) => Promise<void>;
