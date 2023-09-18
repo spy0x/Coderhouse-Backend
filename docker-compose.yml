@@ -24,6 +24,8 @@ services:
     command: sh -c "npm run ts"
     depends_on:
       - react
+    networks:
+      - app-network
 
   react:
     image: spy0x/nodejs-coderhouse
