@@ -33,6 +33,9 @@ class UsersDao {
     async updateRole(userId, role) {
         await UserModel.updateOne({ _id: userId }, { role });
     }
+    async updateConnectionDate(userId) {
+        await UserModel.updateOne({ _id: userId }, { last_connection: Date.now() });
+    }
 }
 const usersDao = new UsersDao();
 export default usersDao;

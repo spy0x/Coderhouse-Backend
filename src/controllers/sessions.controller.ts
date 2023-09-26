@@ -13,12 +13,13 @@ class SessionsController {
   failRegister(req: Request, res: Response) {
     return res.status(400).json({ status: "error", message: "Error adding user" });
   }
-  login(req: Request, res: Response) {
+  async login(req: Request, res: Response) {
     if (!req.user) {
       return res.status(400).json({ error: "Invalid Credentials" });
     }
     req.session.user = req.user;
     const cleanUser = new SessionsDTO(req.session.user);
+    await sessionService.updateConnectionDate(req.session.user._id);
     return res.status(200).json({ status: "success", message: "User logged in successfully", payload: cleanUser.user });
   }
   failLogin(req: Request, res: Response) {
@@ -29,7 +30,10 @@ class SessionsController {
     req.session.user = req.user;
     res.redirect("/");
   }
-  logout(req: Request, res: Response) {
+  async logout(req: Request, res: Response) {
+    if (req.session.user) {
+      await sessionService.updateConnectionDate(req.session.user._id);
+    }
     req.session.destroy((err: any) => {
       if (err) {
         return res.status(500).json({ status: "error", message: "Error! Couldn't logout!" });

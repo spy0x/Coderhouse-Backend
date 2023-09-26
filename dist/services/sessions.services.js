@@ -44,6 +44,9 @@ class SessionService {
             return { code: 400, result: { status: "error", message: "Error updating role" } };
         }
     }
+    async updateConnectionDate(userId) {
+        await usersDao.updateConnectionDate(userId);
+    }
 }
 const sessionService = new SessionService();
 export default sessionService;
