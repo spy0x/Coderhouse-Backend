@@ -16,6 +16,7 @@ interface UserDAOInterface {
   deleteRecoveryTicket: (id: string) => Promise<void>;
   updatePassword: (email: string, password: string) => Promise<void>;
   updateRole: (userId: string, role: string) => Promise<void>;
+  updateConnectionDate: (userId: string) => Promise<void>;
 }
 interface ProductDAOInterface {
   createProduct: (product: Product) => Promise<Product>;
