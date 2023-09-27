@@ -48,4 +48,4 @@ sessionsRouter.delete("/recovery", recoveryTicketExists, isSamePassword, session
 
 sessionsRouter.get("/premium/:uid", sessionsController.updateRole);
 
-sessionsRouter.post("/:uid/documents", isLogged, isUserIdOwner, uploaderDocuments.array("documents", 3), isFileNotEmpty, sessionsController.uploadDocuments);
+sessionsRouter.post("/:uid/documents", uploaderDocuments.array("documents", 3), isFileNotEmpty, sessionsController.uploadDocuments);
