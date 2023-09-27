@@ -85,6 +85,11 @@ class SessionsController {
   async canGetRecoveryTicket(req: Request, res: Response) {
     return res.status(200).json({ status: "success", message: "Ticket found" });
   }
+  async uploadDocuments(req: Request, res: Response) {
+    const { uid } = req.params;
+    const response: ResResult = await sessionService.uploadDocuments(uid, req.files as Express.Multer.File[]);
+    return res.status(response.code).json(response.result);
+  }
 }
 
 const sessionsController = new SessionsController();

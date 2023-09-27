@@ -76,6 +76,11 @@ interface PaginateResult extends Result {
   nextPageUrl: string;
 }
 
+type UserDocuments = {
+  name: string;
+  reference: string;
+};
+
 type User = {
   readonly _id?: string;
   first_name: string;
@@ -85,6 +90,7 @@ type User = {
   password?: string;
   role?: string;
   cartId?: string;
+  documents?: UserDocuments[];
 };
 
 type ErrorCustom = {

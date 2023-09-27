@@ -17,6 +17,7 @@ interface UserDAOInterface {
   updatePassword: (email: string, password: string) => Promise<void>;
   updateRole: (userId: string, role: string) => Promise<void>;
   updateConnectionDate: (userId: string) => Promise<void>;
+  uploadDocuments: (userId: string, files: Express.Multer.File[]) => Promise<void>;
 }
 interface ProductDAOInterface {
   createProduct: (product: Product) => Promise<Product>;

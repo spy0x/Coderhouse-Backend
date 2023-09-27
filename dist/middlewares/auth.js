@@ -61,3 +61,10 @@ export const isProductOwner = async (req, res, next) => {
         next(error);
     }
 };
+export const isUserIdOwner = (req, res, next) => {
+    const uid = req.params.uid;
+    if (req.session?.user?._id === uid) {
+        return next();
+    }
+    return res.status(403).json({ status: "ERROR 403", message: "AUTHORIZATION DENIED" });
+};

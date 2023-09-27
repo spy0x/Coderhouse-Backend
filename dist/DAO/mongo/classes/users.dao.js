@@ -36,6 +36,12 @@ class UsersDao {
     async updateConnectionDate(userId) {
         await UserModel.updateOne({ _id: userId }, { last_connection: Date.now() });
     }
+    async uploadDocuments(userId, files) {
+        const documents = files.map((file) => {
+            return { name: file.filename, reference: file.path };
+        });
+        await UserModel.updateOne({ _id: userId }, { documents });
+    }
 }
 const usersDao = new UsersDao();
 export default usersDao;
