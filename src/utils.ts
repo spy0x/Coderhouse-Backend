@@ -1,26 +1,14 @@
-import { logger } from "./utils/logger.js";
 import { Server } from "socket.io";
+import { logger } from "./utils/logger.js";
 
-// MULTER CONFIG //
-import multer from "multer";
+import { dirname } from "path";
 import { fileURLToPath } from "url";
-import { dirname, join } from "path";
-import productService from "./services/products.services.js";
 import messageService from "./services/messages.services.js";
+import productService from "./services/products.services.js";
 
 const __filename = fileURLToPath(import.meta.url);
 export const __dirname = dirname(__filename);
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "./public/uploads/");
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.originalname);
-  },
-});
-
-export const uploader = multer({ storage });
 
 //WEBSOCKET CONNECTION
 export function initSocket(httpServer: any) {

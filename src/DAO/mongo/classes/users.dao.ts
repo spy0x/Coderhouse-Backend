@@ -37,6 +37,12 @@ class UsersDao {
   async updateConnectionDate(userId: string) {
     await UserModel.updateOne({ _id: userId }, { last_connection: Date.now() });
   }
+  async uploadDocuments(userId: string, files: Express.Multer.File[]) {
+    const documents = files.map((file) => {
+      return {name: file.filename, reference: file.path}
+    });
+    await UserModel.updateOne({ _id: userId }, { documents });
+  }
 }
 const usersDao = new UsersDao();
 export default usersDao;
