@@ -1,6 +1,6 @@
 
 // Removes field password from user object
-export default class SessionsDTO {
+export default class UsersDTO {
   
   user: User;
 

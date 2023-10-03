@@ -20,7 +20,7 @@ form.onsubmit = (e) => {
       Swal.showLoading();
     },
   });
-  fetch("/api/sessions/register", {
+  fetch("/api/users/register", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

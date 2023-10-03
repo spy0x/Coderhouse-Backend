@@ -13,10 +13,10 @@ describe("Testing LTP Market", () => {
   let cookie: Cookie;
   let product: Product;
   let user: User;
-  describe("Testing Sessions", () => {
+  describe("Testing Users", () => {
     it("Login as admin", async () => {
       const admin = { email: process.env.ADMIN_MAIL as string, password: process.env.ADMIN_PASS as string };
-      const response = await requester.post("/api/sessions/login").type("form").send(admin);
+      const response = await requester.post("/api/users/login").type("form").send(admin);
       user = response.body.payload;
       expect(response.status).to.equal(200);
       expect(response.body).to.have.property("status").be.equal("success");
@@ -34,12 +34,12 @@ describe("Testing LTP Market", () => {
         password: "test",
         email: faker.internet.email(),
       };
-      const response = await requester.post("/api/sessions/register").send(newUser);
+      const response = await requester.post("/api/users/register").send(newUser);
       expect(response.status).to.equal(201);
       expect(response.body).to.have.property("status").be.equal("success");
     });
     it("Get current user", async () => {
-      const response = await requester.get("/api/sessions/current").set("Cookie", [`${cookie.name}=${cookie.value}`]);
+      const response = await requester.get("/api/users/current").set("Cookie", [`${cookie.name}=${cookie.value}`]);
       expect(response.status).to.equal(200);
       expect(response.body).to.have.property("status").be.equal("success");
     });

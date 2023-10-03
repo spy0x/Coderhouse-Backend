@@ -1,6 +1,6 @@
 import { usersDao } from "../DAO/factory.js";
 
-class SessionService {
+class UserService {
   async getCurrentUser(id: string) {
     const user = await usersDao.getUser(id);
     return user;
@@ -58,5 +58,5 @@ class SessionService {
   }
 }
 
-const sessionService = new SessionService();
-export default sessionService;
+const userService = new UserService();
+export default userService;

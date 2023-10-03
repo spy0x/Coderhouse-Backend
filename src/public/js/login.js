@@ -24,7 +24,7 @@ loginForm.onsubmit = (e) => {
       Swal.showLoading();
     },
   });
-  fetch("/api/sessions/login", {
+  fetch("/api/users/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

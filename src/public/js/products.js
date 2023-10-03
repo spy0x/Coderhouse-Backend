@@ -4,7 +4,7 @@ SetCartID();
 
 async function SetCartID() {
   try {
-    const result = await fetch("/api/sessions/cart");
+    const result = await fetch("/api/users/cart");
     const data = await result.json();
     const cartID = data.payload;
     setProductButtons(cartID);
@@ -82,7 +82,7 @@ if (logoutBtn) {
           Swal.showLoading();
         },
       });
-      await fetch("/api/sessions/logout");
+      await fetch("/api/users/logout");
       loadingAlert.close();
       Swal.fire({
         icon: "success",
