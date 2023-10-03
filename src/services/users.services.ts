@@ -31,7 +31,8 @@ class UserService {
       /* if is role user, check that documents lenght is 3 
       (has to have Identificacion, Comprobante Domicilio and Comprobante de estado de cuenta). 
       If not, return error. */
-      if (user.role == "user" && user.documents?.length != 3) return { code: 400, result: { status: "error", message: "Documents are required" } };
+      if (user.role == "user" && user.documents?.length != 3)
+        return { code: 400, result: { status: "error", message: "Documents are required" } };
       const currentRole = user.role;
       if (currentRole == "admin") return { code: 400, result: { status: "error", message: "This user is ADMIN!" } };
       const changeToRole = currentRole == "user" ? "premium" : "user";
@@ -54,6 +55,25 @@ class UserService {
       return { code: 200, result: { status: "success", message: "Documents uploaded successfully" } };
     } catch (error) {
       return { code: 400, result: { status: "error", message: "Error uploading documents" } };
+    }
+  }
+  async getAllUsers() {
+    try {
+      const users = await usersDao.getAllUsers();
+      const cleanAllUsers = users.map((user) => {
+        const cleanUser = {
+          id: user._id,
+          email: user.email,
+          first_name: user.first_name,
+          last_name: user.last_name,
+          role: user.role,
+          last_connection: user.last_connection,
+        };
+        return cleanUser;
+      });
+      return { code: 200, result: { status: "success", message: "Users found", payload: cleanAllUsers } };
+    } catch (error) {
+      return { code: 400, result: { status: "error", message: "Error getting users" } };
     }
   }
 }

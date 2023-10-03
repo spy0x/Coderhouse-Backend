@@ -91,6 +91,7 @@ type User = {
   role?: string;
   cartId?: string;
   documents?: UserDocuments[];
+  last_connection?: Date;
 };
 
 type ErrorCustom = {

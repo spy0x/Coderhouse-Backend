@@ -42,6 +42,10 @@ class UsersDao {
         });
         await UserModel.updateOne({ _id: userId }, { documents });
     }
+    async getAllUsers() {
+        const users = await UserModel.find();
+        return users;
+    }
 }
 const usersDao = new UsersDao();
 export default usersDao;

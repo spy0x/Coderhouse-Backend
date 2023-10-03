@@ -92,6 +92,10 @@ class UsersController {
         const response = await userService.uploadDocuments(uid, req.files);
         return res.status(response.code).json(response.result);
     }
+    async getAllUsers(req, res) {
+        const response = await userService.getAllUsers();
+        return res.status(response.code).json(response.result);
+    }
 }
 const usersController = new UsersController();
 export default usersController;

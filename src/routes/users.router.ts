@@ -49,3 +49,5 @@ usersRouter.delete("/recovery", recoveryTicketExists, isSamePassword, usersContr
 usersRouter.get("/premium/:uid", usersController.updateRole);
 
 usersRouter.post("/:uid/documents", uploaderDocuments.array("documents", 3), isFileNotEmpty, usersController.uploadDocuments);
+
+usersRouter.get("/", usersController.getAllUsers);

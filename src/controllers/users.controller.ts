@@ -90,6 +90,10 @@ class UsersController {
     const response: ResResult = await userService.uploadDocuments(uid, req.files as Express.Multer.File[]);
     return res.status(response.code).json(response.result);
   }
+  async getAllUsers(req: Request, res: Response) {
+    const response: ResResult = await userService.getAllUsers();
+    return res.status(response.code).json(response.result);
+  }
 }
 
 const usersController = new UsersController();
