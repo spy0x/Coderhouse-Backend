@@ -21,7 +21,7 @@ export default function Register() {
       const formData: UserForm = { first_name, last_name, age, email, password };
       setLoading(true);
       const apiUrl = import.meta.env.VITE_URL;
-      const response = await fetch(`${apiUrl}/api/sessions/register`, {
+      const response = await fetch(`${apiUrl}/api/users/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

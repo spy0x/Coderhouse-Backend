@@ -94,6 +94,10 @@ class UsersController {
     const response: ResResult = await userService.getAllUsers();
     return res.status(response.code).json(response.result);
   }
+  async cleanUsers(req: Request, res: Response) {
+    const response: ResResult = await userService.cleanUsers();
+    return res.status(response.code).json(response.result);
+  }
 }
 
 const usersController = new UsersController();

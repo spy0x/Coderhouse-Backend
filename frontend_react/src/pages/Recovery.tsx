@@ -18,7 +18,7 @@ export default function Recovery() {
     const ticketExists = async () => {
       setLoading(true);
       const apiUrl = import.meta.env.VITE_URL;
-      const response = await fetch(`${apiUrl}/api/sessions/recovery`, {
+      const response = await fetch(`${apiUrl}/api/users/recovery`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

@@ -16,7 +16,7 @@ export default function Login() {
     event.preventDefault();
     const formData = { email, password };
     setLoading(true);
-    fetch(`${apiUrl}/api/sessions/login`, {
+    fetch(`${apiUrl}/api/users/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -70,7 +70,7 @@ export default function Login() {
   };
   const handleGithubLogin = () => {
     setLoading(true);
-    window.location.href = `${apiUrl}/api/sessions/github`;
+    window.location.href = `${apiUrl}/api/users/github`;
   };
   return (
     <Container sx={{ p: 5 }}>

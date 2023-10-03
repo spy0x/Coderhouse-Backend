@@ -14,7 +14,7 @@ export default function RecoveryForm({ setLoading }: RecoveryFormProps) {
       setLoading(true);
       const apiUrl = import.meta.env.VITE_URL;
       const formData = { email };
-      const response = await fetch(`${apiUrl}/api/sessions/recovery`, {
+      const response = await fetch(`${apiUrl}/api/users/recovery`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

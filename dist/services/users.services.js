@@ -82,6 +82,24 @@ class UserService {
             return { code: 400, result: { status: "error", message: "Error getting users" } };
         }
     }
+    async cleanUsers() {
+        try {
+            const allUsers = await usersDao.getAllUsers();
+            // Get all users with last connection is more than 2 days. Ignore role admin and premium
+            const usersToDelete = allUsers.filter((user) => {
+                const today = new Date();
+                const lastConnection = new Date(user.last_connection);
+                const diffTime = Math.abs(today.getTime() - lastConnection.getTime());
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                return diffDays > 2 && user.role == "user";
+            });
+            await usersDao.deleteUsers(usersToDelete);
+            return { code: 200, result: { status: "success", message: `Deleted ${usersToDelete.length} users!` } };
+        }
+        catch (error) {
+            return { code: 400, result: { status: "error", message: "Error cleaning users" } };
+        }
+    }
 }
 const userService = new UserService();
 export default userService;
