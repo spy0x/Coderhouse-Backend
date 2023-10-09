@@ -6,6 +6,10 @@ class UsersController {
         const response = await userService.updateRole(req.params.uid);
         return res.status(response.code).json(response.result);
     }
+    async updateToRole(req, res) {
+        const response = await userService.updateToRole(req.params.uid, req.body.role);
+        return res.status(response.code).json(response.result);
+    }
     register(req, res) {
         return res.status(201).json({ status: "success", message: "User created successfully", payload: req.user });
     }
@@ -98,6 +102,11 @@ class UsersController {
     }
     async cleanUsers(req, res) {
         const response = await userService.cleanUsers();
+        return res.status(response.code).json(response.result);
+    }
+    async deleteUser(req, res) {
+        const { uid } = req.params;
+        const response = await userService.deleteUser(uid);
         return res.status(response.code).json(response.result);
     }
 }

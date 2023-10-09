@@ -22,4 +22,6 @@ usersRouter.delete("/recovery", recoveryTicketExists, isSamePassword, usersContr
 usersRouter.get("/premium/:uid", usersController.updateRole);
 usersRouter.post("/:uid/documents", uploaderDocuments.array("documents", 3), isFileNotEmpty, usersController.uploadDocuments);
 usersRouter.get("/", usersController.getAllUsers); // TODO add middlewares, like only admin can access.
-usersRouter.delete("/", usersController.cleanUsers);
+usersRouter.delete("/", usersController.cleanUsers); // TODO add middlewares, like only admin can access.
+usersRouter.patch("/:uid", usersController.updateToRole); // TODO add middlewares, like only admin can access.
+usersRouter.delete("/:uid", usersController.deleteUser); // TODO add middlewares, like only admin can access.

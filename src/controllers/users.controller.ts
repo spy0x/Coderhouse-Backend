@@ -7,6 +7,10 @@ class UsersController {
     const response = await userService.updateRole(req.params.uid);
     return res.status(response.code).json(response.result);
   }
+  async updateToRole(req: Request, res: Response) {
+    const response = await userService.updateToRole(req.params.uid, req.body.role);
+    return res.status(response.code).json(response.result);
+  }
   register(req: Request, res: Response) {
     return res.status(201).json({ status: "success", message: "User created successfully", payload: req.user });
   }
@@ -96,6 +100,11 @@ class UsersController {
   }
   async cleanUsers(req: Request, res: Response) {
     const response: ResResult = await userService.cleanUsers();
+    return res.status(response.code).json(response.result);
+  }
+  async deleteUser(req: Request, res: Response) {
+    const { uid } = req.params;
+    const response: ResResult = await userService.deleteUser(uid);
     return res.status(response.code).json(response.result);
   }
 }

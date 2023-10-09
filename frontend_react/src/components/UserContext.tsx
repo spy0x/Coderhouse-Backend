@@ -13,7 +13,6 @@ export default function UserProvider({ children }: { children: ReactNode }) {
     const data = await response.json();
     if (response.status == 200) setCurrentUser(data.payload);
     setIsLoading(false);
-    console.log(data);
   };
 
   function updateCurrentUser() {

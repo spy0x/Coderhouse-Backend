@@ -1,5 +1,5 @@
-import { use } from "chai";
 import { usersDao } from "../DAO/factory.js";
+import transporter from "../utils/nodemailer.js";
 
 class UserService {
   async getCurrentUser(id: string) {
@@ -46,6 +46,17 @@ class UserService {
       return { code: 400, result: { status: "error", message: "Error updating role" } };
     }
   }
+  async updateToRole(userId: string, role: string) {
+    try {
+      await usersDao.updateRole(userId, role);
+      return {
+        code: 200,
+        result: { status: "success", message: `Role updated successfully to ${role}` },
+      };
+    } catch (error) {
+      return { code: 400, result: { status: "error", message: "Error updating role" } };
+    }
+  }
   async updateConnectionDate(userId: string) {
     await usersDao.updateConnectionDate(userId);
   }
@@ -62,8 +73,8 @@ class UserService {
     try {
       const users = await usersDao.getAllUsers();
       const cleanAllUsers = users.map((user) => {
-        const cleanUser = {
-          id: user._id,
+        const cleanUser: User = {
+          _id: user._id,
           email: user.email,
           first_name: user.first_name,
           last_name: user.last_name,
@@ -77,10 +88,12 @@ class UserService {
       return { code: 400, result: { status: "error", message: "Error getting users" } };
     }
   }
+  /* 
+  Delete all users with last connection is more than 2 days. Ignore role admin and premium 
+  */
   async cleanUsers() {
     try {
       const allUsers = await usersDao.getAllUsers();
-      // Get all users with last connection is more than 2 days. Ignore role admin and premium
       const usersToDelete = allUsers.filter((user) => {
         const today = new Date();
         const lastConnection = new Date(user.last_connection as Date);
@@ -89,9 +102,25 @@ class UserService {
         return diffDays > 2 && user.role == "user";
       });
       await usersDao.deleteUsers(usersToDelete);
+      usersToDelete.forEach(async (user) => {
+        await transporter.sendMail({
+          from: "Los Tres Primos <fvd.coderbackend@gmail.com>",
+          to: user.email,
+          subject: "Account deleted",
+          html: `<h1>LTP NOTICE</h1><p>Your account has been deleted because you have not logged in for more than 2 days.</p>`,
+        });
+      });
       return { code: 200, result: { status: "success", message: `Deleted ${usersToDelete.length} users!` } };
     } catch (error) {
       return { code: 400, result: { status: "error", message: "Error cleaning users" } };
+    }
+  }
+  async deleteUser(userId: string) {
+    try {
+      await usersDao.deleteUser(userId);
+      return { code: 200, result: { status: "success", message: "User deleted successfully" } };
+    } catch (error) {
+      return { code: 400, result: { status: "error", message: "Error deleting user" } };
     }
   }
 }

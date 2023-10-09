@@ -55,6 +55,9 @@ class UsersDao {
     };
     await UserModel.deleteMany(deleteManyQuery);
   }
+  async deleteUser(userId: string) {
+    await UserModel.findByIdAndDelete(userId);
+  }
 }
 
 const usersDao = new UsersDao();

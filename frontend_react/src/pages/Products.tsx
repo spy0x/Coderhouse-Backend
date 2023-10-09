@@ -20,7 +20,6 @@ export default function Products() {
     const data = await response.json();
     setLoadingProducts(false);
     setProducts(data);
-    console.log(data);
   };
 
   const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
