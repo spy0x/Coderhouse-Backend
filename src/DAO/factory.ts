@@ -18,6 +18,9 @@ interface UserDAOInterface {
   updateRole: (userId: string, role: string) => Promise<void>;
   updateConnectionDate: (userId: string) => Promise<void>;
   uploadDocuments: (userId: string, files: Express.Multer.File[]) => Promise<void>;
+  getAllUsers: () => Promise<User[]>;
+  deleteUsers: (users: User[]) => Promise<void>;
+  deleteUser: (userId: string) => Promise<void>;
 }
 interface ProductDAOInterface {
   createProduct: (product: Product) => Promise<Product>;
@@ -50,10 +53,12 @@ export async function initFactory() {
   switch (process.env.DAO) {
     case "MONGO":
       const MONGO_PASSWORD = process.env.MONGO_PASSWORD as string;
-      connectMongo(MONGO_PASSWORD);
+      const MONGO_USER = process.env.MONGO_USER as string;
+      const MONGO_URL = process.env.MONGO_URL as string;
+      connectMongo(MONGO_USER, MONGO_PASSWORD, MONGO_URL);
       factoryStore = {
         store: MongoStore.create({
-          mongoUrl: `mongodb+srv://spy0x:${MONGO_PASSWORD}@cluster0.7hatvzm.mongodb.net/ecommerce?retryWrites=true&w=majority`,
+          mongoUrl: `mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_URL}?retryWrites=true&w=majority`,
           ttl: 1000,
         }),
       };

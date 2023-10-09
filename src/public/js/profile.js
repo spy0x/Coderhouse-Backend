@@ -11,7 +11,7 @@ if (logoutBtn) {
         },
       });
       localStorage.removeItem("cartID");
-      await fetch("/api/sessions/logout");
+      await fetch("/api/users/logout");
       loadingAlert.close();
       Swal.fire({
         icon: "success",

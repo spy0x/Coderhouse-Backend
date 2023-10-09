@@ -12,9 +12,7 @@ export default function LogOutButton() {
     try {
       setLoading(true);
       const apiUrl = import.meta.env.VITE_URL;
-      const response = await fetch(`${apiUrl}/api/sessions/logout`);
-      const data = await response.json();
-      console.log(data);
+      const response = await fetch(`${apiUrl}/api/users/logout`);
       setLoading(false);
       setCurrentUser(undefined);
       if (response.status == 200) {

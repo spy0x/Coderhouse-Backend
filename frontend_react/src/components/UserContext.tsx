@@ -9,11 +9,10 @@ export default function UserProvider({ children }: { children: ReactNode }) {
   const getCurrentUser = async () => {
     setIsLoading(true);
     const apiUrl = import.meta.env.VITE_URL;
-    const response = await fetch(`${apiUrl}/api/sessions/current`);
+    const response = await fetch(`${apiUrl}/api/users/current`);
     const data = await response.json();
     if (response.status == 200) setCurrentUser(data.payload);
     setIsLoading(false);
-    console.log(data);
   };
 
   function updateCurrentUser() {

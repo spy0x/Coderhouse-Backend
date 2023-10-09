@@ -18,7 +18,7 @@ export default function NewPassForm({ setLoading, code }: NewPassFormProps) {
       setLoading(true);
       const apiUrl = import.meta.env.VITE_URL;
       const formData = { code, password };
-      const response = await fetch(`${apiUrl}/api/sessions/recovery`, {
+      const response = await fetch(`${apiUrl}/api/users/recovery`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

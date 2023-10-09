@@ -111,10 +111,17 @@ export default function Navbar() {
                   </Link>
                 </MenuItem>
               ))}
+              {currentUser?.role == "admin" && (
+                <MenuItem onClick={handleCloseNavMenu}>
+                  <Link to={"/users"}>
+                    <Typography textAlign="center">Users Manager</Typography>
+                  </Link>
+                </MenuItem>
+              )}
             </Menu>
           </Box>
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}>
-            <ViewInArIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1}} />
+            <ViewInArIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
           </motion.div>
           <motion.div
             style={{ flexGrow: 1 }}
@@ -152,6 +159,15 @@ export default function Navbar() {
                 </Link>
               </motion.div>
             ))}
+            {currentUser?.role == "admin" && (
+              <motion.div whileHover={{ scale: 1.2 }}>
+                <Link to={"/users"}>
+                  <Button onClick={handleCloseNavMenu} sx={{ my: 2, color: "white", display: "block" }}>
+                    Users Manager
+                  </Button>
+                </Link>
+              </motion.div>
+            )}
           </Box>
           <Box sx={{ flexGrow: 0 }}>
             {currentUser && (

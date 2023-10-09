@@ -4,7 +4,7 @@ SetCartID();
 async function SetCartID() {
   try {
     if (!cartButton) return;
-    const result = await fetch("/api/sessions/cart");
+    const result = await fetch("/api/users/cart");
     const data = await result.json();
     if (!data.payload) return;
     const cartID = data.payload;

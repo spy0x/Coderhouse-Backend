@@ -58,7 +58,7 @@ export default function initPassport() {
     new GitHubStrategy({
         clientID: GITHUB_CLIENT_ID,
         clientSecret: GITHUB_CLIENT_SECRET,
-        callbackURL: `${API_URL}/api/sessions/githubcallback`,
+        callbackURL: `${API_URL}/api/users/githubcallback`,
         passReqToCallback: true,
     }, async (req, accesToken, refreshToken, profile, done) => {
         try {

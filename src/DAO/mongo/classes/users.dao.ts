@@ -3,25 +3,25 @@ import { PassRecoveryModel } from "../models/passrecovery.models.js";
 import { UserModel } from "../models/users.models.js";
 
 class UsersDao {
-  async getUser(id: string){
-    const user = await UserModel.findById(id).populate({
+  async getUser(id: string) {
+    const user = (await UserModel.findById(id).populate({
       path: "cartId",
       populate: {
         path: "productos.idProduct",
       },
-    }) as User;
+    })) as User;
     return user;
   }
   async createRecoveryTicket(email: string) {
-    const ticket = await PassRecoveryModel.create({ email }) as PassRecoveryTicket;
+    const ticket = (await PassRecoveryModel.create({ email })) as PassRecoveryTicket;
     return ticket;
   }
   async getRecoveryTicketByEmail(email: string) {
-    const ticket = await PassRecoveryModel.findOne({ email }) as PassRecoveryTicket;
+    const ticket = (await PassRecoveryModel.findOne({ email })) as PassRecoveryTicket;
     return ticket;
   }
   async getRecoveryTicketById(id: string) {
-    const ticket = await PassRecoveryModel.findById(id) as PassRecoveryTicket;
+    const ticket = (await PassRecoveryModel.findById(id)) as PassRecoveryTicket;
     return ticket;
   }
   async deleteRecoveryTicket(id: string) {
@@ -39,10 +39,26 @@ class UsersDao {
   }
   async uploadDocuments(userId: string, files: Express.Multer.File[]) {
     const documents = files.map((file) => {
-      return {name: file.filename, reference: file.path}
+      return { name: file.filename, reference: file.path };
     });
     await UserModel.updateOne({ _id: userId }, { documents });
   }
+  async getAllUsers() {
+    const users = (await UserModel.find()) as User[];
+    return users;
+  }
+  async deleteUsers(users: User[]) {
+    const deleteManyQuery = {
+      _id: {
+        $in: users.map((user) => user._id),
+      },
+    };
+    await UserModel.deleteMany(deleteManyQuery);
+  }
+  async deleteUser(userId: string) {
+    await UserModel.findByIdAndDelete(userId);
+  }
 }
+
 const usersDao = new UsersDao();
 export default usersDao;

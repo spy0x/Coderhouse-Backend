@@ -1,10 +1,14 @@
-import sessionService from "../services/sessions.services.js";
-import SessionsDTO from "../DAO/DTOs/sessions.dto.js";
+import userService from "../services/users.services.js";
+import UsersDTO from "../DAO/DTOs/users.dto.js";
 import { Request, Response } from "express";
 import transporter from "../utils/nodemailer.js";
-class SessionsController {
+class UsersController {
   async updateRole(req: Request, res: Response) {
-    const response = await sessionService.updateRole(req.params.uid);
+    const response = await userService.updateRole(req.params.uid);
+    return res.status(response.code).json(response.result);
+  }
+  async updateToRole(req: Request, res: Response) {
+    const response = await userService.updateToRole(req.params.uid, req.body.role);
     return res.status(response.code).json(response.result);
   }
   register(req: Request, res: Response) {
@@ -18,8 +22,8 @@ class SessionsController {
       return res.status(400).json({ error: "Invalid Credentials" });
     }
     req.session.user = req.user;
-    const cleanUser = new SessionsDTO(req.session.user);
-    await sessionService.updateConnectionDate(req.session.user._id);
+    const cleanUser = new UsersDTO(req.session.user);
+    await userService.updateConnectionDate(req.session.user._id);
     return res.status(200).json({ status: "success", message: "User logged in successfully", payload: cleanUser.user });
   }
   failLogin(req: Request, res: Response) {
@@ -32,7 +36,7 @@ class SessionsController {
   }
   async logout(req: Request, res: Response) {
     if (req.session.user) {
-      await sessionService.updateConnectionDate(req.session.user._id);
+      await userService.updateConnectionDate(req.session.user._id);
     }
     req.session.destroy((err: any) => {
       if (err) {
@@ -53,8 +57,8 @@ class SessionsController {
   async getSessionData(req: Request, res: Response) {
     try {
       if (req.session.user) {
-        const user = (await sessionService.getCurrentUser(req.session.user._id)) as Express.User;
-        const cleanUser = new SessionsDTO(user);
+        const user = (await userService.getCurrentUser(req.session.user._id)) as Express.User;
+        const cleanUser = new UsersDTO(user);
         return res.status(200).json({ status: "success", message: "User found", payload: cleanUser.user });
       } else {
         return res.status(400).json({ status: "error", message: "User not found" });
@@ -65,7 +69,7 @@ class SessionsController {
   }
   async sendRecoveryMail(req: Request, res: Response) {
     const { email } = req.body;
-    const response: ResResult = await sessionService.createRecoveryTicket(email as string);
+    const response: ResResult = await userService.createRecoveryTicket(email as string);
     const URL = process.env.NODE_ENV === "PRODUCTION" ? process.env.PROD_URL : "http://localhost:8080";
     if (response.code == 201) {
       await transporter.sendMail({
@@ -79,7 +83,7 @@ class SessionsController {
   }
   async updatePassword(req: Request, res: Response) {
     const { code, password } = req.body;
-    const response: ResResult = await sessionService.updatePassword(password, code);
+    const response: ResResult = await userService.updatePassword(password, code);
     return res.status(response.code).json(response.result);
   }
   async canGetRecoveryTicket(req: Request, res: Response) {
@@ -87,10 +91,23 @@ class SessionsController {
   }
   async uploadDocuments(req: Request, res: Response) {
     const { uid } = req.params;
-    const response: ResResult = await sessionService.uploadDocuments(uid, req.files as Express.Multer.File[]);
+    const response: ResResult = await userService.uploadDocuments(uid, req.files as Express.Multer.File[]);
+    return res.status(response.code).json(response.result);
+  }
+  async getAllUsers(req: Request, res: Response) {
+    const response: ResResult = await userService.getAllUsers();
+    return res.status(response.code).json(response.result);
+  }
+  async cleanUsers(req: Request, res: Response) {
+    const response: ResResult = await userService.cleanUsers();
+    return res.status(response.code).json(response.result);
+  }
+  async deleteUser(req: Request, res: Response) {
+    const { uid } = req.params;
+    const response: ResResult = await userService.deleteUser(uid);
     return res.status(response.code).json(response.result);
   }
 }
 
-const sessionsController = new SessionsController();
-export default sessionsController;
+const usersController = new UsersController();
+export default usersController;

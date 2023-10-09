@@ -16,7 +16,7 @@ import cartsRouter from "./routes/carts.router.js";
 import loggerRouter from "./routes/logger.router.js";
 import mockingRouter from "./routes/mocking.router.js";
 import productsRouter from "./routes/products.router.js";
-import sessionsRouter from "./routes/sessions.router.js";
+import usersRouter from "./routes/users.router.js";
 import viewsRouter from "./routes/views.router.js";
 import { __dirname, initSocket } from "./utils.js";
 import { initLogger, logger } from "./utils/logger.js";
@@ -33,8 +33,6 @@ initFactory();
 // starting server
 startServer();
 async function startServer() {
-    // await productManager.loadData();
-    // await cartManager.loadData();
     // SETTING HANDLEBARS
     app.engine("handlebars", handlebars.engine());
     app.set("views", "src/views");
@@ -43,7 +41,7 @@ async function startServer() {
     app.use(loggerMiddleware);
     app.use(compression());
     app.use("/static", express.static("src/public"));
-    app.use(express.static(path.join(__dirname, "frontend_react")));
+    app.use(express.static(path.join(__dirname, "frontend_react"))); // url = ./dist/frontend_react
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
     const allowedOrigins = [API_URL, "http://localhost:3000"];
@@ -66,7 +64,7 @@ async function startServer() {
     app.use("/loggerTest", loggerRouter);
     app.use("/api/carts", cartsRouter);
     app.use("/api/products", productsRouter);
-    app.use("/api/sessions", sessionsRouter);
+    app.use("/api/users", usersRouter);
     app.use("/mockingproducts", mockingRouter);
     app.use("/", viewsRouter);
     // SETTING ERROR HANDLER
