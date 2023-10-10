@@ -1,4 +1,5 @@
-import { productsDao } from "../DAO/factory.js";
+import { productsDao, usersDao } from "../DAO/factory.js";
+import transporter from "../utils/nodemailer.js";
 class ProductService {
     async addProduct(product) {
         try {
@@ -66,9 +67,22 @@ class ProductService {
     async deleteProduct(pid) {
         try {
             const product = await productsDao.findProduct(pid);
+            const productOwner = product.owner;
             await productsDao.deleteProduct(pid);
+            // If product owner is a premium user, send email delete notification
+            if (productOwner != "admin") {
+                const user = await usersDao.getUser(productOwner);
+                if (user.role == "premium") {
+                    transporter.sendMail({
+                        from: "Los Tres Primos <fvd.coderbackend@gmail.com>",
+                        to: user.email,
+                        subject: "Product deleted",
+                        html: `<h1>Product deleted</h1><p>Product ${product.title} has been deleted</p>`,
+                    });
+                }
+            }
             return {
-                code: 204,
+                code: 200,
                 result: { status: "success", message: "Product deleted successfully", payload: product },
             };
         }
