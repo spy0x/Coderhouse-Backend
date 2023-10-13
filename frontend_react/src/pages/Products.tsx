@@ -8,7 +8,7 @@ export default function Products() {
   const [products, setProducts] = useState<ProductsQuery>();
   const [loadingProducts, setLoadingProducts] = useState(false);
   const urlParams = new URLSearchParams(useLocation().search);
-  const limit = urlParams.get("limit") || "10";
+  const limit = urlParams.get("limit") || "4";
   const page = urlParams.get("page") || "1";
   const query = urlParams.get("query") ? `&query=${urlParams.get("query")}` : "";
   const sort = urlParams.get("sort") ? `&sort=${urlParams.get("sort")}` : "";

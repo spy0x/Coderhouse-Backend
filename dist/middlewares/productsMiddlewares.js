@@ -69,7 +69,7 @@ export const productValid = async (req, res, next) => {
 };
 export const productsValidQueries = async (req, res, next) => {
     const sort = req.query.sort;
-    req.query.limit = req.query.limit || 10;
+    req.query.limit = req.query.limit || 4;
     req.query.page = req.query.page || 1;
     req.query.query = req.query.query ? { category: req.query.query } : {};
     // If limit not a number, return error.
