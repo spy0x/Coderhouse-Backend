@@ -28,9 +28,10 @@ class UsersController {
     failLogin(req, res) {
         return res.status(400).json({ status: "error", message: "Wrong user or password" });
     }
-    githubLogin(req, res) {
+    async githubLogin(req, res) {
         // Successful authentication, redirect home.
         req.session.user = req.user;
+        await userService.updateConnectionDate(req.session?.user?._id);
         res.redirect("/");
     }
     async logout(req, res) {
