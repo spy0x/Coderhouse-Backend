@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button, useMediaQuery } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "./UserContext";
 import Swal from "sweetalert2";
@@ -87,9 +87,13 @@ export default function AddToCartButton({ product }: { product: Product }) {
       });
     }
   };
+  const setButtonSize = () => {
+    const isXs = useMediaQuery('(max-width: 1200px)');
+    return isXs ? 'small' : 'large';
+  };
   return (
     <>
-      <Button onClick={handleClick} variant="outlined" size="large" sx={{ display: "block", marginLeft: "auto" }}>
+      <Button onClick={handleClick} variant="outlined" size={setButtonSize()} sx={{ display: "block", marginLeft: "auto" }}>
         Add to Cart
       </Button>
       <Loading loading={loading} />

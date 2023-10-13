@@ -83,7 +83,7 @@ export default function Cart() {
                       </Avatar>
                     </ListItemAvatar>
                     <ListItemText primary={product.idProduct.title} secondary={product.idProduct.category} />
-                    <Typography variant="body2" fontWeight="bold" paddingLeft={15} paddingRight={5} align="right">
+                    <Typography variant="body2" fontWeight="bold" paddingLeft={{xs: 3, md: 15}} paddingRight={{xs: 3, md: 5}} align="right">
                       ${product.idProduct.price}
                     </Typography>
                   </ListItem>
