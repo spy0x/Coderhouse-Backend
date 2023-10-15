@@ -40,3 +40,13 @@ export const notProductOwner = async (req, res, next) => {
         next(error);
     }
 };
+export const productNotInCart = async (req, res, next) => {
+    const productID = req.params.pid;
+    const cart = req.cart;
+    // Check if product is not in cart
+    const productInCartIndex = cart.productos.findIndex((product) => product.idProduct.toString() === productID);
+    if (productInCartIndex !== -1) {
+        return res.status(404).json({ status: "error", message: "Product already in cart" });
+    }
+    return next();
+};
