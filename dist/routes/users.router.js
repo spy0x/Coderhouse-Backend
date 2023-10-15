@@ -3,6 +3,7 @@ import passport from "passport";
 import usersController from "../controllers/users.controller.js";
 import { emailExists, isSamePassword, recoveryTicketExists } from "../middlewares/recovery.middlewares.js";
 import { uploaderDocuments } from "../utils/multer.js";
+import { isLogged, isUserIdOwner } from "../middlewares/auth.js";
 import { isFileEmpty as isFileNotEmpty } from "../middlewares/multer.middleware.js";
 const usersRouter = Router();
 export default usersRouter;
@@ -25,3 +26,4 @@ usersRouter.get("/", usersController.getAllUsers); // TODO add middlewares, like
 usersRouter.delete("/", usersController.cleanUsers); // TODO add middlewares, like only admin can access.
 usersRouter.patch("/:uid", usersController.updateToRole); // TODO add middlewares, like only admin can access.
 usersRouter.delete("/:uid", usersController.deleteUser); // TODO add middlewares, like only admin can access.
+usersRouter.get("/:uid/tickets", isLogged, isUserIdOwner, usersController.getUserTickets);

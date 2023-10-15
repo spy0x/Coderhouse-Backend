@@ -21,6 +21,9 @@ class ViewsController {
   users(req: Request, res: Response) {
     res.sendFile(path.join(__dirname, "frontend_react/index.html"));
   }
+  orders(req: Request, res: Response) {
+    res.sendFile(path.join(__dirname, "frontend_react/index.html"));
+  }
 }
 
 const viewsController = new ViewsController();
