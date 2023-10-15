@@ -8,9 +8,9 @@ export default function AddToCartButton({ product }: { product: Product }) {
   const { currentUser, updateCurrentUser } = useContext(UserContext) as UserContextType;
   const [loading, setLoading] = useState(false);
   const [cartId, setCartId] = useState(currentUser?.cartId._id);
-  
+
   useEffect(() => {
-    setCartId(currentUser?.cartId._id)
+    setCartId(currentUser?.cartId._id);
   }, [currentUser]);
 
   const handleClick = async () => {
@@ -64,6 +64,26 @@ export default function AddToCartButton({ product }: { product: Product }) {
             popup: "swal-background", // Apply your custom class here
           },
         });
+      } else if (response.status == 404) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "This product is already in your cart!",
+          cancelButtonText: "Close",
+          customClass: {
+            popup: "swal-background", // Apply your custom class here
+          },
+        });
+      } else if (response.status == 409) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "You've already purchased this before. Search in your orders!",
+          cancelButtonText: "Close",
+          customClass: {
+            popup: "swal-background", // Apply your custom class here
+          },
+        });
       } else {
         Swal.fire({
           icon: "error",
@@ -88,8 +108,8 @@ export default function AddToCartButton({ product }: { product: Product }) {
     }
   };
   const setButtonSize = () => {
-    const isXs = useMediaQuery('(max-width: 1536px)');
-    return isXs ? 'small' : 'large';
+    const isXs = useMediaQuery("(max-width: 1536px)");
+    return isXs ? "small" : "large";
   };
   return (
     <>

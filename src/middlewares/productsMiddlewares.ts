@@ -5,6 +5,7 @@ import CustomError from "../services/errors/CustomError.js";
 import EErrors from "../services/errors/enums.js";
 import { generateProductAlreadyExistsErrorInfo, generateProductErrorInfo } from "../services/errors/info.js";
 import productService from "../services/products.services.js";
+import userService from "../services/users.services.js";
 
 export const productExists = async (req: Request, res: Response, next: NextFunction) => {
   const id = req.params.pid;
@@ -52,7 +53,7 @@ export const productValid = async (req: Request, res: Response, next: NextFuncti
         message: "Product already exists",
         code: EErrors.PRODUCT_ALREADY_EXISTS,
         cause: generateProductAlreadyExistsErrorInfo(product),
-        status: 400
+        status: 400,
       });
     }
     // Check if product has all required properties
@@ -62,7 +63,7 @@ export const productValid = async (req: Request, res: Response, next: NextFuncti
         message: "Product is missing required properties",
         code: EErrors.PRODUCT_MISSING_PROPERTIES,
         cause: generateProductErrorInfo(product),
-        status: 400
+        status: 400,
       });
     }
     return next();
@@ -84,6 +85,20 @@ export const productsValidQueries = async (req: any, res: Response, next: NextFu
   if (sort) {
     const validSort = sort === "asc" || sort === "desc";
     if (!validSort) return res.status(400).json({ status: "error", message: "Invalid sort parameter" });
+  }
+  return next();
+};
+
+export const productNotPurchased = async (req: Request, res: Response, next: NextFunction) => {
+  const productID = req.params.pid;
+  const tickets = await userService.getUserTickets(req.session?.user?._id);
+  for (const ticket of tickets.result.payload as Ticket[]) {
+    for (const product of ticket.products) {
+      const productInfo = product.idProduct as Product;
+      if (productInfo._id == productID) {
+        return res.status(409).json({ status: "error", message: "Product already purchased" });
+      }
+    }
   }
   return next();
 };
