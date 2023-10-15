@@ -79,7 +79,7 @@ describe("Testing LTP Market", () => {
         });
         it("Delete a product", async () => {
             const response = await requester.delete(`/api/products/${product._id}`).set("Cookie", [`${cookie.name}=${cookie.value}`]);
-            expect(response.status).to.equal(204);
+            expect(response.status).to.equal(200);
         });
     });
 });
