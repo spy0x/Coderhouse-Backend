@@ -20,7 +20,7 @@ type Product = {
 type ProductKeys = Partial<Omit<Product, "id">>;
 
 type ProductIdOnly = {
-  idProduct: string;
+  idProduct: string | Product;
   quantity: number;
 };
 
@@ -101,4 +101,13 @@ type ErrorCustom = {
   code: number;
   status: number;
 };
+
+type Ticket = {
+  readonly _id?: string;
+  code: string;
+  purchase_datetime: Date;
+  amount: number;
+  purchaser: User;
+  products: ProductIdOnly[];
+}
 

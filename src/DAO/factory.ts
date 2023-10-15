@@ -21,6 +21,7 @@ interface UserDAOInterface {
   getAllUsers: () => Promise<User[]>;
   deleteUsers: (users: User[]) => Promise<void>;
   deleteUser: (userId: string) => Promise<void>;
+  getUserTickets: (userId: string) => Promise<Ticket[]>;
 }
 interface ProductDAOInterface {
   createProduct: (product: Product) => Promise<Product>;
@@ -39,7 +40,7 @@ interface CartsDAO {
 }
 
 interface TicketsDAO {
-  createTicket: (purchase: string, totalAmount: number) => Promise<any>;
+  createTicket: (user: Express.User, totalAmount: number, productsPurchased: ProductIdOnly[]) => Promise<any>;
 }
 
 export let factoryStore: FactoryStore;

@@ -10,6 +10,7 @@ import Home from "./pages/Home";
 import Products from "./pages/Products";
 import Recovery from "./pages/Recovery";
 import Users from "./pages/Users";
+import Orders from "./pages/Orders";
 
 function App() {
   const theme = createTheme({
@@ -50,6 +51,7 @@ function App() {
             <Route path="/products" element={<Products />} />
             <Route path="/recovery" element={<Recovery />} />
             <Route path="/users" element={<Users />} />
+            <Route path="/orders" element={<Orders />} />
             <Route path="*" element={<Error error={{status: "ERROR 404", message: "Page Not found"}}/>} />
           </Routes>
         </BrowserRouter>

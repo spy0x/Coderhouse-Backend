@@ -22,4 +22,5 @@ viewsRouter.get("/realtimeproducts", isAdmin, (req, res) => {
 });
 viewsRouter.get("/recovery", viewsController.recovery);
 viewsRouter.get("/users", isAdmin, viewsController.users);
+viewsRouter.get("/orders", isLogged, viewsController.orders);
 viewsRouter.get("*", viewsController.error);

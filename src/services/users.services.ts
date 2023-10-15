@@ -123,6 +123,14 @@ class UserService {
       return { code: 400, result: { status: "error", message: "Error deleting user" } };
     }
   }
+  async getUserTickets(userId: string) {
+    try {
+      const tickets = await usersDao.getUserTickets(userId);
+      return { code: 200, result: { status: "success", message: "Tickets found", payload: tickets } };
+    } catch (error) {
+      return { code: 400, result: { status: "error", message: "Error getting tickets" } };
+    }
+  }
 }
 
 const userService = new UserService();

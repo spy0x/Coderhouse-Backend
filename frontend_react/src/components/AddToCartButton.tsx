@@ -88,7 +88,7 @@ export default function AddToCartButton({ product }: { product: Product }) {
     }
   };
   const setButtonSize = () => {
-    const isXs = useMediaQuery('(max-width: 1200px)');
+    const isXs = useMediaQuery('(max-width: 1536px)');
     return isXs ? 'small' : 'large';
   };
   return (

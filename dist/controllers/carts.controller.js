@@ -42,7 +42,7 @@ class CartsController {
     }
     async purchase(req, res) {
         const cartID = req.params.cid;
-        const response = await ticketService.purchase(req.session.user?.email, cartID);
+        const response = await ticketService.purchase(req.session.user, cartID);
         return res.status(response.code).json(response.result);
     }
 }

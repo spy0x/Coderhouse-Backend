@@ -1,7 +1,7 @@
-import ViewInArIcon from "@mui/icons-material/ViewInAr";
 import {
   Alert,
   Avatar,
+  CardMedia,
   CircularProgress,
   Container,
   List,
@@ -58,10 +58,10 @@ export default function Cart() {
     }
   };
   return (
-    <Container maxWidth="lg" sx={{ p: 5 }}>
+    <Container maxWidth="lg" sx={{ p: {xs: 2, md: 5} }}>
       <TitlePage title="Cart" />
-      <Stack justifyContent="center" alignItems="center" p={3} spacing={3}>
-        <Paper sx={{ p: 3 }}>
+      <Stack justifyContent="center" alignItems="center" p={{xs: 1, md: 3}} spacing={3}>
+        <Paper sx={{ p: {xs: 1, md: 3} }}>
           {currentUser?.cartId.productos.length === 0 ? (
             <Typography align="center" variant="h6">
               Your cart is empty.
@@ -78,12 +78,27 @@ export default function Cart() {
                     }
                   >
                     <ListItemAvatar>
-                      <Avatar>
-                        <ViewInArIcon />
+                      <Avatar sx={{ width: {xs: 50, md: 100}, height: {xs:50, md: 100}, marginRight: 1 }}>
+                        <CardMedia
+                          component="img"
+                          alt={product.idProduct.title}
+                          sx={{ width: {xs: 50, md: 100}, height: {xs: 50, md: 100} }}
+                          image={
+                            product.idProduct.thumbnail && product.idProduct.thumbnail.length > 0
+                              ? product.idProduct.thumbnail[0]
+                              : "/assets/img/product_sample.png"
+                          }
+                        />
                       </Avatar>
                     </ListItemAvatar>
                     <ListItemText primary={product.idProduct.title} secondary={product.idProduct.category} />
-                    <Typography variant="body2" fontWeight="bold" paddingLeft={{xs: 3, md: 15}} paddingRight={{xs: 3, md: 5}} align="right">
+                    <Typography
+                      variant="body2"
+                      fontWeight="bold"
+                      paddingLeft={{ xs: 3, md: 15 }}
+                      paddingRight={{ xs: 3, md: 5 }}
+                      align="right"
+                    >
                       ${product.idProduct.price}
                     </Typography>
                   </ListItem>
