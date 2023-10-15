@@ -83,7 +83,7 @@ export default function Orders() {
                       <ListItemIcon>
                         <ListAltIcon />
                       </ListItemIcon>
-                      <ListItemText primary={ticket._id as string} />
+                      <ListItemText primary={ticket.code as string} />
                       {ticketsOpen[ticket._id as string] ? <ExpandLess /> : <ExpandMore />}
                     </ListItemButton>
                   </Tooltip>
