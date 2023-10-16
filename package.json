@@ -8,7 +8,8 @@
     "start": "node ./dist/App.js",
     "dev": "nodemon --ext js,json,yaml,yml ./dist/App.js",
     "ts": "tsc-watch",
-    "tw": "npx tailwindcss -i ./src/tailwind.css -o ./src/public/css/output.css --watch"
+    "tw": "npx tailwindcss -i ./src/tailwind.css -o ./src/public/css/output.css --watch",
+    "test": "npx mocha ./dist/tests/Supertest.test.js"
   },
   "repository": {
     "type": "git",
