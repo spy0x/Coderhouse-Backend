@@ -105,11 +105,11 @@ export default function Navbar() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page.name} onClick={handleCloseNavMenu}>
-                  <Link to={page.url}>
+                <Link key={page.name} to={page.url}>
+                  <MenuItem onClick={handleCloseNavMenu}>
                     <Typography textAlign="center">{page.name}</Typography>
-                  </Link>
-                </MenuItem>
+                  </MenuItem>
+                </Link>
               ))}
               {currentUser?.role == "admin" && (
                 <MenuItem onClick={handleCloseNavMenu}>
