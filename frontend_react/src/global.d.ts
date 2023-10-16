@@ -24,7 +24,7 @@ type Product = {
 };
 
 type Products = {
-  idProduct: Product
+  idProduct: Product;
   quantity: number;
 };
 
@@ -67,4 +67,13 @@ type ProductsQuery = {
   hasPrevPage: boolean;
   prevPageUrl: string;
   nextPageUrl: string;
+}
+
+type Ticket = {
+  readonly _id?: string;
+  code: string;
+  purchase_datetime: Date | string;
+  amount: number;
+  purchaser: User;
+  products: Products[];
 }

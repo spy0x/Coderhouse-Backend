@@ -2,6 +2,7 @@ import userService from "../services/users.services.js";
 import UsersDTO from "../DAO/DTOs/users.dto.js";
 import { Request, Response } from "express";
 import transporter from "../utils/nodemailer.js";
+import ticketService from "../services/tickets.services.js";
 class UsersController {
   async updateRole(req: Request, res: Response) {
     const response = await userService.updateRole(req.params.uid);
@@ -106,6 +107,11 @@ class UsersController {
   async deleteUser(req: Request, res: Response) {
     const { uid } = req.params;
     const response: ResResult = await userService.deleteUser(uid);
+    return res.status(response.code).json(response.result);
+  }
+  async getUserTickets(req: Request, res: Response) {
+    const { uid } = req.params;
+    const response: ResResult = await userService.getUserTickets(uid);
     return res.status(response.code).json(response.result);
   }
 }

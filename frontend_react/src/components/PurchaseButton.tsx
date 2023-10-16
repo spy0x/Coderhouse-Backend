@@ -30,21 +30,22 @@ export default function PurchaseButton({ currentUser, setLoading }: PurchaseButt
         } else if (result.status === "success") {
           Swal.fire({
             icon: "success",
-            timer: 2500,
-            title: "Redirecting to Products Page...",
-            text: "Purchase successful!",
-            allowOutsideClick: false,
-            timerProgressBar: true,
+            title: "Purchase successful!",
+            text: "Thank you!",
+            showConfirmButton: true,
+            confirmButtonText: "View Orders",
+            showCancelButton: true,
+            cancelButtonText: "Continue Shopping!",
             customClass: {
               popup: "swal-background", // Apply your custom class here
             },
-            didOpen: () => {
-              Swal.showLoading();
-            },
-            willClose: () => {
-              // Redirect to another URL after the specified time
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.location.href = "/orders";
+            }
+            else if (result.isDismissed) {
               window.location.href = "/products";
-            },
+            }
           });
         } else {
           Swal.fire({

@@ -210,6 +210,11 @@ export default function Navbar() {
                         <Typography textAlign="center">Profile</Typography>
                       </MenuItem>
                     </Link>,
+                    <Link key="orders" to="/orders">
+                      <MenuItem onClick={handleCloseUserMenu}>
+                        <Typography textAlign="center">My Orders</Typography>
+                      </MenuItem>
+                    </Link>,
                     <Box px={2} py={1}>
                       <LogOutButton key="logout" />
                     </Box>,

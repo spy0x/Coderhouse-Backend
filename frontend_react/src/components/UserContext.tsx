@@ -15,8 +15,8 @@ export default function UserProvider({ children }: { children: ReactNode }) {
     setIsLoading(false);
   };
 
-  function updateCurrentUser() {
-    getCurrentUser();
+  async function updateCurrentUser() {
+    await getCurrentUser();
   }
 
   useLayoutEffect(() => {

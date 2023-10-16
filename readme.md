@@ -1,23 +1,59 @@
-# Tercera Entrega Curso Programación Backend
-## Coderhouse
+# Los Tres Primos Market
 
-##### Documentación ONLINE de Postman para testear el programa:
-[https://documenter.getpostman.com/view/19344400/2s9XxvTEr6](https://documenter.getpostman.com/view/19344400/2s9XxvTEr6)
+## Coderhouse Final Project - Backend Development
 
-#### PARA EJECUTAR EL PROGRAMA:
+### OVERVIEW
+Los Tres Primos Market is a 3D Assets Ecommerce Store Application.
+- NodeJS with Express
+- MongoDB with Mongoose
+- Typescript
+- Tailwind CSS
+- ReactJS with MUI (Frontend)
+- Full Responsive
+
+## DEPLOY
+- [https://coderbackend-ltp.onrender.com/](https://coderbackend-ltp.onrender.com/)  
+- [https://fvd-coderhouse.glitch.me/](https://fvd-coderhouse.glitch.me/)
+
+> ###### PS. It takes a while for loading the first time, because of Render.com and Glitch.com Inactive Systems.
+
+## Documentation
+
+##### Swagger UI API Documentation:
+- [https://coderbackend-ltp.onrender.com/apidocs](https://coderbackend-ltp.onrender.com/apidocs)
+- [https://fvd-coderhouse.glitch.me/apidocs](https://fvd-coderhouse.glitch.me/apidocs)
+
+##### POSTMAN Online API Documentation:
+>[https://documenter.getpostman.com/view/19344400/2s9XxvTEr6](https://documenter.getpostman.com/view/19344400/2s9XxvTEr6)
+##### POSTMAN JSON Collection file:
+>[DOWNLOAD](https://drive.google.com/file/d/1EtcL6qChZSYwAKGpKFmodre4eP-Kj_87/view?usp=sharing)
+
+## LOCAL INSTRUCTIONS
+
+#### RUN THE APP:
 `npm start` (node ./dist/App.js)
+
+#### TEST THE APP:
+`npm test` (npx mocha ./dist/tests/Supertest.test.js)
 
 ------------
 
-> ###### PD. Para este proyecto se está utilizando TypeScript con sus archivos .ts en la carpeta "src", y los archivos de JavaScript transpilados, por convención, son alojados en la carpeta "dist".
+> ###### PS. This project is using Typescript in "src" folder and "dist" for javascript transpiled files. Folder "frontend_react" contains frontend source files.
+> ###### PS2. This project needs an environment variable .env file for correctly work.
 
-## Funciones
+## Features
 
-##### El programa permite al administrador crear, modificar, eliminar y ver productos. 
-##### Sistema de registro y login de usuarios con librería Passport.
-##### Sistema de login vía terceros (Github.com).
-##### La aplicación permite ver productos, agregar al carrito y comprar si es que se está logueado.
+The App allows the admin and premium users to **CREATE**, **READ**, **UPDATE** and **DELETE** products.
+Users can view products, add to cart, make a purchase and see orders.
 
-> *PD2 Se instaló el package multer en el proyecto y se añadió el archivo utils.js para utilizarlo, pero actualmente no está implementado para esta entrega, lamentablemente.
+- Register and login (Passport API with local or GitHub Third-party system).
+- Display products with pagination.
+- Order products by category or price.
+- Add, view, delete and clear products in cart.
+- Purchase products and see orders.
+- Notification system purchase confirmation (with Nodemailer).
+- User Manager view only for admin (can delete or promote users).
+
+#### USER MANAGER VIEW: `/users`
 
 

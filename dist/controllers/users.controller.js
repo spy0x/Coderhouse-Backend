@@ -110,6 +110,11 @@ class UsersController {
         const response = await userService.deleteUser(uid);
         return res.status(response.code).json(response.result);
     }
+    async getUserTickets(req, res) {
+        const { uid } = req.params;
+        const response = await userService.getUserTickets(uid);
+        return res.status(response.code).json(response.result);
+    }
 }
 const usersController = new UsersController();
 export default usersController;

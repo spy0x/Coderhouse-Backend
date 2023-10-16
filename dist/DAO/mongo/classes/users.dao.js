@@ -1,5 +1,6 @@
 import { createHash } from "../../../utils/passwordCrypt.js";
 import { PassRecoveryModel } from "../models/passrecovery.models.js";
+import { TicketModel } from "../models/tickets.models.js";
 import { UserModel } from "../models/users.models.js";
 class UsersDao {
     async getUser(id) {
@@ -56,6 +57,10 @@ class UsersDao {
     }
     async deleteUser(userId) {
         await UserModel.findByIdAndDelete(userId);
+    }
+    async getUserTickets(userId) {
+        const tickets = await TicketModel.find({ userId }).populate("products.idProduct");
+        return tickets;
     }
 }
 const usersDao = new UsersDao();

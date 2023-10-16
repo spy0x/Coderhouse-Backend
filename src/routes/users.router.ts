@@ -57,3 +57,5 @@ usersRouter.delete("/", usersController.cleanUsers); // TODO add middlewares, li
 usersRouter.patch("/:uid", usersController.updateToRole); // TODO add middlewares, like only admin can access.
 
 usersRouter.delete("/:uid", usersController.deleteUser); // TODO add middlewares, like only admin can access.
+
+usersRouter.get("/:uid/tickets", isLogged, isUserIdOwner, usersController.getUserTickets);

@@ -2,9 +2,9 @@ import { TicketModel } from "../models/tickets.models.js";
 import { v4 as uuidGenerator } from "uuid";
 
 class TicketsDao {
-  async createTicket(purchaser: string, amount: number) {
+  async createTicket(user: Express.User, amount: number, products: ProductIdOnly[]) {
     const code = uuidGenerator();
-    return await TicketModel.create({ purchaser, amount, code });
+    return await TicketModel.create({ purchaser: user.email, userId: user._id, amount, code, products });
   }
 }
 
