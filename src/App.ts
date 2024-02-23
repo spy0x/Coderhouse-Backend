@@ -42,7 +42,7 @@ async function startServer() {
   // SETTING MIDDLEWARES
   app.use(loggerMiddleware);
   app.use(compression());
-  app.use("/static", express.static("src/public"));
+  app.use("/static", express.static("public"));
   app.use(express.static(path.join(__dirname, "frontend_react"))); // url = ./dist/frontend_react
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
