@@ -1,64 +1,133 @@
 # Los Tres Primos Market
 
-## Coderhouse Final Project - Backend Development
+Backend-focused final project for Coderhouse: an e-commerce platform for 3D assets with authentication, product/cart management, purchases, and admin features.
 
-### OVERVIEW
-Los Tres Primos Market is a 3D Assets Ecommerce Store Application.
-- NodeJS with Express
-- MongoDB with Mongoose
-- Typescript
+## Tech Stack
+
+- Node.js + Express
+- TypeScript (`src`) with transpiled JavaScript output (`dist`)
+- MongoDB + Mongoose
+- Passport (local + GitHub auth)
+- Socket.IO
+- Swagger (API docs)
 - Tailwind CSS
-- ReactJS with MUI (Frontend)
-- Full Responsive
+- React + Vite frontend source in `frontend_react/`
 
-## DEPLOY
-- [https://coderbackend-ltp.onrender.com/](https://coderbackend-ltp.onrender.com/)  
-- [https://fvd-coderhouse.glitch.me/](https://fvd-coderhouse.glitch.me/)
+## Deployments
 
-> ###### GitHub Login only working with Render.com Deployment.
+- Render: <https://coderbackend-ltp.onrender.com/>
+- Glitch: <https://fvd-coderhouse.glitch.me/>
 
-> ###### PS. It takes a while for loading the first time, because of Render.com and Glitch.com Inactive Systems.
+> GitHub login is only configured for the Render deployment.
 
-## Documentation
+## API Documentation
 
-##### Swagger UI API Documentation:
-- [https://coderbackend-ltp.onrender.com/apidocs](https://coderbackend-ltp.onrender.com/apidocs)
-- [https://fvd-coderhouse.glitch.me/apidocs](https://fvd-coderhouse.glitch.me/apidocs)
+- Swagger UI:
+  - <https://coderbackend-ltp.onrender.com/apidocs>
+  - <https://fvd-coderhouse.glitch.me/apidocs>
+- Postman docs: <https://documenter.getpostman.com/view/19344400/2s9XxvTEr6>
+- Postman collection JSON: <https://drive.google.com/file/d/1EtcL6qChZSYwAKGpKFmodre4eP-Kj_87/view?usp=sharing>
 
-##### POSTMAN Online API Documentation:
->[https://documenter.getpostman.com/view/19344400/2s9XxvTEr6](https://documenter.getpostman.com/view/19344400/2s9XxvTEr6)
-##### POSTMAN JSON Collection file:
->[DOWNLOAD](https://drive.google.com/file/d/1EtcL6qChZSYwAKGpKFmodre4eP-Kj_87/view?usp=sharing)
+## Main Features
 
-## LOCAL INSTRUCTIONS
+- User register/login/logout (local + GitHub OAuth)
+- Product catalog with pagination/filter/sort
+- Cart management (add/update/remove/clear items)
+- Purchase flow with ticket/order generation
+- Email notifications (Nodemailer)
+- Role-based actions (user / premium / admin)
+- User administration endpoints and views
+- Logger testing endpoint and mocking products endpoint
 
-#### RUN THE APP:
-`npm start` (node ./dist/App.js)
+## Project Structure
 
-#### TEST THE APP:
-`npm test` (npx mocha ./dist/tests/Supertest.test.js)
+- `src/` → TypeScript backend source code
+- `dist/` → transpiled backend output used to run the app
+- `frontend_react/` → React frontend source code
+- `public/` → static assets
 
-------------
+## Local Setup
 
-> ###### PS. This project is using Typescript in "src" folder and "dist" for javascript transpiled files. Folder "frontend_react" contains frontend source files.
-> ###### PS2. This project needs an environment variable .env file for correctly work.
+### 1) Install dependencies
 
-## Features
+```bash
+npm install
+```
 
-The App allows the admin and premium users to **CREATE**, **READ**, **UPDATE** and **DELETE** products.
-Users can view products, add to cart, make a purchase and see orders.
+### 2) Configure environment variables
 
-- Register and login (Passport API with local or GitHub Third-party system).
-- Display products with pagination.
-- Order products by category or price.
-- Add, view, delete and clear products in cart.
-- Purchase products and see orders.
-- Notification system purchase confirmation (with Nodemailer).
-- User Manager view only for admin (can delete or promote users).
+Create a `.env` file at project root.
 
-> ###### GitHub Login only working with Render.com Deployment.
+Required/used variables in this repository:
 
-#### USER MANAGER VIEW: 
-`/users`
+```env
+PORT=8080
+NODE_ENV=DEVELOPMENT
+PROD_URL=http://localhost:8080
+SESSION_SECRET=your_session_secret
 
+DAO=MONGO
+MONGO_USER=your_mongo_user
+MONGO_PASSWORD=your_mongo_password
+MONGO_URL=your_mongo_cluster_url
 
+GITHUB_CLIENT_ID=your_github_client_id
+GITHUB_CLIENT_SECRET=your_github_client_secret
+
+MAIL_USER=your_mail_user
+MAIL_PASS=your_mail_password
+
+ADMIN_MAIL=admin_email_for_tests
+ADMIN_PASS=admin_password_for_tests
+```
+
+### 3) Run the app
+
+```bash
+npm start
+```
+
+`npm start` runs the server from `dist/App.js`.
+
+### 4) Run tests
+
+```bash
+npm test
+```
+
+Tests run against `dist/tests/Supertest.test.js`.
+
+## Useful Routes
+
+### API
+
+- `GET /api/products`
+- `GET /api/products/:pid`
+- `POST /api/products`
+- `PUT /api/products/:pid`
+- `DELETE /api/products/:pid`
+- `POST /api/carts`
+- `GET /api/carts/:cid`
+- `POST /api/carts/:cid/product/:pid`
+- `PUT /api/carts/:cid/product/:pid`
+- `DELETE /api/carts/:cid/product/:pid`
+- `POST /api/carts/:cid/purchase`
+- `POST /api/users/register`
+- `POST /api/users/login`
+- `GET /api/users/current`
+- `GET /api/users/github`
+- `GET /api/users/githubcallback`
+
+### Views
+
+- `/products`
+- `/carts/:cid`
+- `/chat`
+- `/realtimeproducts`
+- `/users`
+- `/orders`
+
+## Notes
+
+- First startup on free hosting providers can be slow due to cold starts.
+- This repository includes both source (`src`) and transpiled output (`dist`).
