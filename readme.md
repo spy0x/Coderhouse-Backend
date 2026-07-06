@@ -7,6 +7,19 @@
 [![MongoDB](https://img.shields.io/badge/MongoDB-Mongoose-47A248?logo=mongodb&logoColor=white)](https://mongoosejs.com/)
 [![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
 [![Live Demo](https://img.shields.io/badge/Live-Render-46E3B7?logo=render&logoColor=white)](https://coderbackend-ltp.onrender.com/)
+[![API Docs](https://img.shields.io/badge/API%20Docs-Swagger-85EA2D?logo=swagger&logoColor=black)](https://coderbackend-ltp.onrender.com/apidocs)
+
+---
+
+## Live Deployments
+
+![Demo screenshot](ecommercedemo.png)
+
+| Provider | URL | Notes |
+|---|---|---|
+| Render | <https://coderbackend-ltp.onrender.com/> | GitHub OAuth works here |
+
+> Free-tier deployment may have a cold-start delay of ~30 seconds on the first request.
 
 ---
 
@@ -282,18 +295,6 @@ The API will be accessible at `http://localhost:8080` and the React dev server a
 
 ## API Documentation
 
-- **Swagger UI (Render):** <https://coderbackend-ltp.onrender.com/apidocs>
-- **Swagger UI (Glitch):** <https://fvd-coderhouse.glitch.me/apidocs>
+- **Swagger UI:** <https://coderbackend-ltp.onrender.com/apidocs>
 - **Postman Online Docs:** <https://documenter.getpostman.com/view/19344400/2s9XxvTEr6>
 - **Postman Collection JSON:** <https://drive.google.com/file/d/1EtcL6qChZSYwAKGpKFmodre4eP-Kj_87/view?usp=sharing>
-
----
-
-## Live Deployments
-
-| Provider | URL | Notes |
-|---|---|---|
-| Render | <https://coderbackend-ltp.onrender.com/> | GitHub OAuth works here |
-| Glitch | <https://fvd-coderhouse.glitch.me/> | GitHub OAuth not configured |
-
-> Both free-tier deployments may have a cold-start delay of ~30 seconds on the first request.
